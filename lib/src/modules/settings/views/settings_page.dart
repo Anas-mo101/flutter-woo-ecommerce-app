@@ -3,6 +3,7 @@ import 'package:flutter_ecommerce_app/src/themes/light_color.dart';
 import 'package:flutter_ecommerce_app/src/themes/theme.dart';
 import 'package:flutter_ecommerce_app/src/widgets/extentions.dart';
 import 'package:flutter_ecommerce_app/src/widgets/title_text.dart';
+import 'package:flutter_ecommerce_app/src/widgets/topbar.dart';
 import 'package:get/get.dart';
 import '../../../config/route.dart';
 import '../../cart/controller/cart_controller.dart';
@@ -54,7 +55,7 @@ class SettingsPage extends StatelessWidget {
                   BoxShadow(color: Color(0xfff8f8f8), blurRadius: 10, spreadRadius: 10),
                 ],
               ),
-              child: Image.asset("assets/user.png"),
+                child: Icon(Icons.person, color: Colors.black54),
             ),
           )
         ],
@@ -89,7 +90,7 @@ class SettingsPage extends StatelessWidget {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            _appBar(context),
+                            TopBar('Settings',Icons.arrow_back_sharp,() => Get.back() ),
                             Expanded(
                               child: Container(
                                 padding: AppTheme.padding,

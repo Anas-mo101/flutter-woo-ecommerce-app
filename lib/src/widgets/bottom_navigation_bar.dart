@@ -10,7 +10,7 @@ class NavController extends GetxController {
 
   int _selectedIndex = 0;
 
-  void toggleNavBar(int index){
+  void toggleNavBar(int index, {String argument}){
     if(_selectedIndex == index){
       return;
     }
@@ -21,7 +21,7 @@ class NavController extends GetxController {
         Get.offAndToNamed(Routes.home);
         break;
       case 1:
-        Get.offAndToNamed(Routes.search);
+        Get.offAndToNamed(Routes.search, arguments: argument);
         break;
       case 2:
         Get.offAndToNamed(Routes.cart);

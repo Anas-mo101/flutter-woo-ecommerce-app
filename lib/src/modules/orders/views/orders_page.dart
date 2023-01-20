@@ -7,6 +7,7 @@ import 'package:flutter_ecommerce_app/src/widgets/title_text.dart';
 import 'package:get/get.dart';
 import '../../../config/route.dart';
 import '../../../widgets/bottom_navigation_bar.dart';
+import '../../../widgets/topbar.dart';
 import '../controller/orders_controller.dart';
 
 class OrderPage extends StatelessWidget {
@@ -52,7 +53,7 @@ class OrderPage extends StatelessWidget {
                   BoxShadow(color: Color(0xfff8f8f8), blurRadius: 10, spreadRadius: 10),
                 ],
               ),
-              child: Image.asset("assets/user.png"),
+                child: Icon(Icons.person, color: Colors.black54),
             ),
           ).ripple(() {}, borderRadius: BorderRadius.all(Radius.circular(13)))
         ],
@@ -84,7 +85,7 @@ class OrderPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    _appBar(context),
+                    TopBar('Orders',Icons.sort,() => Get.toNamed(Routes.settings)),
                     Expanded(
                       child: Container(
                         padding: AppTheme.padding,

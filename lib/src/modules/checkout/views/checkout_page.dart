@@ -7,6 +7,7 @@ import 'package:flutter_ecommerce_app/src/widgets/title_text.dart';
 import 'package:get/get.dart';
 import '../../../config/route.dart';
 import '../../../widgets/bottom_navigation_bar.dart';
+import '../../../widgets/topbar.dart';
 import '../../cart/controller/cart_controller.dart';
 import '../controller/checkout_controller.dart';
 
@@ -205,42 +206,6 @@ class CheckoutPage extends StatelessWidget {
     }, borderRadius: BorderRadius.all(Radius.circular(13)));
   }
 
-  Widget _appBar(BuildContext context) {
-    return Container(
-      padding: AppTheme.padding,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          InkWell(
-            child: RotatedBox(
-              quarterTurns: 4,
-              child: _icon(context, Icons.arrow_back_sharp, color: Colors.black54),
-            ),
-          ),
-          TitleText(
-            text: 'Checkout',
-            fontSize: 27,
-            fontWeight: FontWeight.w400,
-          ),
-          ClipRRect(
-            borderRadius: BorderRadius.all(Radius.circular(13)),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Theme
-                    .of(context)
-                    .backgroundColor,
-                boxShadow: <BoxShadow>[
-                  BoxShadow(color: Color(0xfff8f8f8), blurRadius: 10, spreadRadius: 10),
-                ],
-              ),
-              child: Image.asset("assets/user.png"),
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -268,7 +233,7 @@ class CheckoutPage extends StatelessWidget {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            _appBar(context),
+                            TopBar('Checkout',Icons.arrow_back_sharp,() => Get.back()),
                             Expanded(
                               child: Container(
                                 padding: AppTheme.padding,

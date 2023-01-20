@@ -1,8 +1,10 @@
 import 'package:get/get.dart';
 import '../../../model/data.dart';
+import 'package:flutter/material.dart';
 
 class HomeController extends GetxController {
   bool flag = false;
+
 
   // Category bar
   List categoryList = AppData.categoryList;

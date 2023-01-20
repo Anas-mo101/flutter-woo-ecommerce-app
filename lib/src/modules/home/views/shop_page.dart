@@ -7,10 +7,14 @@ import 'package:flutter_ecommerce_app/src/widgets/product_card.dart';
 import 'package:flutter_ecommerce_app/src/widgets/extentions.dart';
 import 'package:get/get.dart';
 import '../../../config/route.dart';
+import '../../../widgets/bottom_navigation_bar.dart';
+import '../controller/home_controller.dart';
 import '../widget/category-widget.dart';
 
 
 class ShopPage extends StatelessWidget {
+
+  final shopPageController = Get.put(HomeController());
 
   @override
   Widget build(BuildContext context) {
@@ -83,6 +87,10 @@ class ShopPage extends StatelessWidget {
                   borderRadius: BorderRadius.all(Radius.circular(10))
               ),
               child: TextField(
+                onSubmitted: (String value) {
+                  final navController = Get.put(NavController());
+                  navController.toggleNavBar(1, argument: value);
+                },
                 decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: "Search Products",
@@ -93,8 +101,6 @@ class ShopPage extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(width: 20),
-          _icon(context,Icons.filter_list, color: Colors.black54)
         ],
       ),
     );

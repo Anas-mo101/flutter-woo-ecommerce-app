@@ -7,6 +7,7 @@ import 'package:flutter_ecommerce_app/src/widgets/title_text.dart';
 import 'package:get/get.dart';
 import '../../../config/route.dart';
 import '../../../widgets/bottom_navigation_bar.dart';
+import '../../../widgets/topbar.dart';
 import '../../home/widget/category-widget.dart';
 import '../controller/search_controller.dart';
 
@@ -15,7 +16,7 @@ class SearchPage extends StatelessWidget {
 
   final searchController = Get.put(SearchController());
 
-  Widget _search(BuildContext context) {
+  Widget _search(BuildContext context,{String keyword = ''}) {
     return Container(
       margin: AppTheme.padding,
       child: Row(
@@ -26,6 +27,7 @@ class SearchPage extends StatelessWidget {
               alignment: Alignment.center,
               decoration: BoxDecoration(color: LightColor.lightGrey.withAlpha(100), borderRadius: BorderRadius.all(Radius.circular(10))),
               child: TextField(
+                controller: TextEditingController()..text = keyword,
                 decoration: InputDecoration(
                   border: InputBorder.none,
                   hintText: "Search Products",
@@ -136,38 +138,6 @@ class SearchPage extends StatelessWidget {
     }, borderRadius: BorderRadius.all(Radius.circular(13)));
   }
 
-  Widget _appBar(BuildContext context) {
-    return Container(
-      padding: AppTheme.padding,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          RotatedBox(
-            quarterTurns: 4,
-            child: _icon(context, Icons.sort, color: Colors.black54),
-          ),
-          TitleText(
-            text: 'Search',
-            fontSize: 27,
-            fontWeight: FontWeight.w400,
-          ),
-          ClipRRect(
-            borderRadius: BorderRadius.all(Radius.circular(13)),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Theme.of(context).backgroundColor,
-                boxShadow: <BoxShadow>[
-                  BoxShadow(color: Color(0xfff8f8f8), blurRadius: 10, spreadRadius: 10),
-                ],
-              ),
-              child: Image.asset("assets/user.png"),
-            ),
-          ).ripple(() {}, borderRadius: BorderRadius.all(Radius.circular(13)))
-        ],
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -180,14 +150,16 @@ class SearchPage extends StatelessWidget {
                 height: AppTheme.fullHeight(context) - 50,
                 child: Column(
                   children: <Widget>[
-                    _appBar(context),
+                    TopBar('Search', Icons.sort,() => Get.toNamed(Routes.settings)),
                     GetBuilder<SearchController>(
                         init: SearchController(),
                         builder: (controller) {
+                          String args = Get.arguments != null ? '${Get.arguments}' : '';
+
                           return Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              _search(context),
+                              _search(context, keyword: args),
                               SizedBox(height: 10),
                               Container(
                                 padding: EdgeInsets.symmetric(horizontal: 20.0),
