@@ -10,9 +10,11 @@ import '../modules/profile/views/register.dart';
 import '../modules/search/views/filter.dart';
 import '../modules/search/views/search_page.dart';
 import '../modules/settings/views/settings_page.dart';
+import '../widgets/splash_screen.dart';
 
 class Routes {
-  static const home = '/';
+  static const splash = '/';
+  static const home = '/home';
   static const cart = '/cart';
   static const search = '/search';
   static const filter = '/filter';
@@ -28,6 +30,7 @@ class Routes {
   static getRoute() {
     return [
       GetPage(name: home, page: () => MainPage()),
+      GetPage(name: splash, page: () => SplashScreen()),
       GetPage(name: cart, page: () => ShoppingCartPage()),
       GetPage( name: product,  page: () => ProductDetailPage()),
       GetPage( name: search,  page: () => SearchPage()),

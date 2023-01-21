@@ -10,49 +10,7 @@ import '../../../widgets/bottom_navigation_bar.dart';
 import '../../../widgets/topbar.dart';
 import '../../cart/controller/cart_controller.dart';
 import '../controller/checkout_controller.dart';
-
-class TogglePaymentOptions extends StatelessWidget{
-    TogglePaymentOptions({Key key}) : super(key: key);
-
-    final checkoutController = Get.put(CheckoutController());
-
-    Widget paymentOptions(String option){
-      bool selected = checkoutController.paymentOptions.indexOf(option) == checkoutController.selectedPaymentOptions;
-
-      return InkWell(
-        onTap: () => checkoutController.togglePaymentOption(option),
-        child: Column(
-          children: [
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.symmetric(vertical: 12),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15.0),
-                  border: Border.all(
-                    color: selected ? LightColor.orange : Colors.grey,
-                    width: 2.0,
-                  )
-              ),
-              child: Center(child: Text(option)),
-            ),
-            SizedBox(height: 10),
-          ],
-        ),
-      );
-    }
-
-    @override
-    Widget build(BuildContext context) {
-      return Container(
-        child: Column(
-          children: [
-            ...checkoutController.paymentOptions.map((e) => paymentOptions(e))
-          ],
-        ),
-      );
-    }
-}
-
+import '../widgets/toggle_payment_options.dart';
 
 class BillingPage extends StatelessWidget {
   BillingPage({Key key}) : super(key: key);
