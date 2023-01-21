@@ -60,42 +60,42 @@ class BillingController extends GetxController {
   bool validateCustomerInfo(){
 
     /// Validate Name
-    if(cusName.value.text.isEmpty){
-      print(1);
-      resetError();
-      cusNameErr = true;
-      update();
-      return false;
-    }
-
-    /// Validate Email
-    if(cusEmail.value.text.isEmpty || !isEmail(cusEmail.value.text)){
-      print(2);
-
-      resetError();
-      cusEmailErr = true;
-      update();
-      return false;
-    }
-
-    /// Validate Phone
-    if(cusPhone.value.text.isEmpty || !isPhoneNumber(cusPhone.value.text)){
-      print(3);
-
-      resetError();
-      cusPhoneErr = true;
-      update();
-      return false;
-    }
-
-    if(cusBilling.value.text.isEmpty){
-      print(5);
-
-      resetError();
-      cusBillingErr = true;
-      update();
-      return false;
-    }
+    // if(cusName.value.text.isEmpty){
+    //   print(1);
+    //   resetError();
+    //   cusNameErr = true;
+    //   update();
+    //   return false;
+    // }
+    //
+    // /// Validate Email
+    // if(cusEmail.value.text.isEmpty || !isEmail(cusEmail.value.text)){
+    //   print(2);
+    //
+    //   resetError();
+    //   cusEmailErr = true;
+    //   update();
+    //   return false;
+    // }
+    //
+    // /// Validate Phone
+    // // if(cusPhone.value.text.isEmpty || !isPhoneNumber(cusPhone.value.text)){
+    // //   print(3);
+    // //
+    // //   resetError();
+    // //   cusPhoneErr = true;
+    // //   update();
+    // //   return false;
+    // // }
+    //
+    // if(cusBilling.value.text.isEmpty){
+    //   print(5);
+    //
+    //   resetError();
+    //   cusBillingErr = true;
+    //   update();
+    //   return false;
+    // }
 
     // if(selectedShippingOptions){
     //   resetError();
@@ -104,24 +104,24 @@ class BillingController extends GetxController {
     //   return false;
     // }
 
-    /// Validate Billing
-    if(cusShipping.value.text.isEmpty){
-      print(4);
-
-      resetError();
-      cusShippingErr = true;
-      update();
-      return false;
-    }
-
-
-    if(cusZip.value.text.isEmpty || !isZipCode(cusZip.value.text)){
-      print(6);
-
-      cusZipErr = true;
-      update();
-      return false;
-    }
+    // /// Validate Billing
+    // if(cusShipping.value.text.isEmpty){
+    //   print(4);
+    //
+    //   resetError();
+    //   cusShippingErr = true;
+    //   update();
+    //   return false;
+    // }
+    //
+    //
+    // if(cusZip.value.text.isEmpty || !isZipCode(cusZip.value.text)){
+    //   print(6);
+    //
+    //   cusZipErr = true;
+    //   update();
+    //   return false;
+    // }
 
     resetError();
     update();

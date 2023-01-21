@@ -24,10 +24,12 @@ class Order{
       this.uniqueList,
       this.paymentOption,
       this.customerName,
+
       this.customerEmail,
       this.customerPhone,
       this.customerBillingAddress,
       this.customerShippingAddress,
+
       this.customerZipAddress,
       this.customerCountry,
   );

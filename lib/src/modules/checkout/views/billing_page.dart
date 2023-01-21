@@ -27,7 +27,7 @@ class BillingPage extends StatelessWidget {
         ),
         onPressed: () {
           if(billingController.uniqueList.isNotEmpty && billingController.validateCustomerInfo()){
-            Get.toNamed(Routes.checkout, arguments: Order(
+            Order order = Order(
               billingController.itemsQty,
               billingController.uniqueList,
               billingController.paymentOptions[billingController.selectedPaymentOptions],
@@ -38,7 +38,34 @@ class BillingPage extends StatelessWidget {
               billingController.cusShipping.value.text,
               billingController.cusZip.value.text,
               billingController.shippingOptions[billingController.selectedShippingOptions],
-            ));
+            );
+
+            print([
+              billingController.itemsQty,
+              billingController.uniqueList,
+              billingController.paymentOptions[billingController.selectedPaymentOptions],
+              billingController.cusName.value.text,
+              billingController.cusPhone.value.text,
+              billingController.cusEmail.value.text,
+              billingController.cusBilling.value.text,
+              billingController.cusShipping.value.text,
+              billingController.cusZip.value.text,
+              billingController.shippingOptions[billingController.selectedShippingOptions],
+            ]);
+
+            Get.toNamed(Routes.checkout, arguments: [
+              billingController.itemsQty,
+              billingController.uniqueList,
+              billingController.paymentOptions[billingController.selectedPaymentOptions],
+              billingController.cusName.value.text,
+              billingController.cusPhone.value.text,
+              billingController.cusEmail.value.text,
+              billingController.cusBilling.value.text,
+              billingController.cusShipping.value.text,
+              billingController.cusZip.value.text,
+              billingController.shippingOptions[billingController.selectedShippingOptions],
+            ]);
+            // Get.toNamed(Routes.checkout);
           }
         },
         child: Container(

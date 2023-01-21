@@ -239,8 +239,9 @@ class CheckoutPage extends StatelessWidget {
             init: CheckoutController(),
             builder: (controller) {
                 var order = Get.arguments;
-                if(!(order is Order)) Get.back();
-                controller.calcCartItems(order);
+                if(order is List) {
+                  controller.calcCartItems(order);
+                }
 
                 return Stack(
                   fit: StackFit.expand,
