@@ -14,7 +14,6 @@ class ProductDetailPage extends StatelessWidget {
 
   final int productId = Get.arguments;
   final productController = Get.put(ProductController());
-  final cartController = Get.put(CartController());
 
 
   @override
@@ -370,7 +369,7 @@ class ProductDetailPage extends StatelessWidget {
   FloatingActionButton _floatingButton(BuildContext context) {
     return FloatingActionButton(
       onPressed: () {
-        cartController.addToCart(productController.product);
+        CartController.addToCart(productController.product);
       },
       backgroundColor: LightColor.orange,
       child: Icon(Icons.shopping_basket, color: Theme.of(context).floatingActionButtonTheme.backgroundColor),

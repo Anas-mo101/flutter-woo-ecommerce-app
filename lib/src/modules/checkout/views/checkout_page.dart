@@ -6,9 +6,8 @@ import 'package:flutter_ecommerce_app/src/widgets/extentions.dart';
 import 'package:flutter_ecommerce_app/src/widgets/title_text.dart';
 import 'package:get/get.dart';
 import '../../../config/route.dart';
-import '../../../widgets/bottom_navigation_bar.dart';
 import '../../../widgets/topbar.dart';
-import '../../cart/controller/cart_controller.dart';
+import '../models/order.dart';
 import '../controller/checkout_controller.dart';
 
 class CheckoutPage extends StatelessWidget {
@@ -17,7 +16,7 @@ class CheckoutPage extends StatelessWidget {
   final checkoutController = Get.put(CheckoutController());
 
   List<Widget> _cartItems(BuildContext context, CheckoutController controller) {
-    List<Product> items = controller.getCart();
+    List<Product> items = controller.ongoingOrder.uniqueList;
     if (items.isEmpty) return [];
     List<Widget> itemsWidget = items.map((e) => _item(e)).toList();
     return itemsWidget;
@@ -101,25 +100,25 @@ class CheckoutPage extends StatelessWidget {
     );
   }
 
-  Widget _price() {
+  Widget _price(int itemsCount, double subtotal) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         TitleText(
-          text: '${checkoutController.getTotalQty()} Items',
+          text: '$itemsCount Items',
           color: LightColor.grey,
           fontSize: 14,
           fontWeight: FontWeight.w500,
         ),
         TitleText(
-          text: '\$${checkoutController.subtotal}',
+          text: '\$$subtotal',
           fontSize: 18,
         ),
       ],
     );
   }
 
-  Widget tax() {
+  Widget tax(double tax) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
@@ -130,14 +129,14 @@ class CheckoutPage extends StatelessWidget {
           fontWeight: FontWeight.w500,
         ),
         TitleText(
-          text: '\$${checkoutController.getTax()}',
+          text: '\$$tax',
           fontSize: 18,
         ),
       ],
     );
   }
 
-  Widget del() {
+  Widget del(double delv) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
@@ -148,14 +147,14 @@ class CheckoutPage extends StatelessWidget {
           fontWeight: FontWeight.w500,
         ),
         TitleText(
-          text: '\$${checkoutController.getDelv()}',
+          text: '\$$delv',
           fontSize: 18,
         ),
       ],
     );
   }
 
-  Widget total() {
+  Widget total(double total) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
@@ -166,8 +165,46 @@ class CheckoutPage extends StatelessWidget {
           fontWeight: FontWeight.w500,
         ),
         TitleText(
-          text: '\$${checkoutController.getGrandTotal()}',
+          text: '\$$total',
           fontSize: 18,
+        ),
+      ],
+    );
+  }
+
+  Widget paymentMethod(String mth) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        TitleText(
+          text: 'payment',
+          color: LightColor.grey,
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
+        ),
+        TitleText(
+          text: '$mth',
+          fontSize: 15,
+        ),
+      ],
+    );
+  }
+
+  Widget shippingTo(String to) {
+    String displayName = to.length <= 20 ? to : '${to.substring(0,20)}...' ;
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        TitleText(
+          text: 'Shipping to',
+          color: LightColor.grey,
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
+        ),
+        TitleText(
+          text: displayName,
+          fontSize: 15,
         ),
       ],
     );
@@ -194,19 +231,6 @@ class CheckoutPage extends StatelessWidget {
     );
   }
 
-  Widget _icon(BuildContext context, IconData icon, {Color color = LightColor.iconColor}) {
-    return Container(
-      padding: EdgeInsets.all(10),
-      decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(13)), color: Theme
-          .of(context)
-          .backgroundColor, boxShadow: AppTheme.shadow),
-      child: Icon(icon, color: color),
-    ).ripple(() {
-      Get.offAndToNamed(Routes.cart);
-    }, borderRadius: BorderRadius.all(Radius.circular(13)));
-  }
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -214,11 +238,9 @@ class CheckoutPage extends StatelessWidget {
         child: GetBuilder<CheckoutController>(
             init: CheckoutController(),
             builder: (controller) {
-                List args = Get.arguments ?? [];
-                if(args.isEmpty){
-                  Get.back();
-                }
-                controller.setCartItems(args[0], args[1]);
+                var order = Get.arguments;
+                if(!(order is Order)) Get.back();
+                controller.calcCartItems(order);
 
                 return Stack(
                   fit: StackFit.expand,
@@ -261,13 +283,17 @@ class CheckoutPage extends StatelessWidget {
                                     thickness: 1,
                                     height: 70,
                                   ),
-                                  _price(),
+                                  _price(controller.getOrderTotalQty(),controller.ongoingOrder.subtotal),
                                   SizedBox(height: 30),
-                                  tax(),
+                                  tax(controller.getTax()),
                                   SizedBox(height: 30),
-                                  del(),
+                                  del(controller.getDelv()),
                                   SizedBox(height: 30),
-                                  total(),
+                                  total(controller.getGrandTotal()),
+                                  SizedBox(height: 30),
+                                  shippingTo(controller.ongoingOrder.customerShippingAddress),
+                                  SizedBox(height: 30),
+                                  paymentMethod(controller.ongoingOrder.paymentOption),
                                   SizedBox(height: 30),
                                   _submitButton(context),
                                 ],

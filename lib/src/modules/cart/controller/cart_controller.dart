@@ -15,50 +15,17 @@ class CartController extends GetxController {
     super.onInit();
   }
 
-  // save each item in cart separatly like a real cart
-  List<Product> _items = [];
+  // tracks quantity of products in cart
   Map<int, int> itemsQty = {};
-  List<Product> uniquelist = [];
+  // unique list on products in cart
+  List<Product> uniqueList = [];
 
   int getQty(int id){
     return itemsQty[id];
   }
 
-  void setUniqueList(Product product){
-    uniquelist.removeWhere((element) => product.id == element.id);
-    uniquelist.add(product);
-    _saveCartItems();
-  }
-
-  void loadItemsQty(int id){
-    if(itemsQty.containsKey(id)){
-      itemsQty[id]++;
-    }else{
-      itemsQty = {...itemsQty,...{id: 1}};
-    }
-  }
-
-  void setItemsQty(int id, int qty){
-    itemsQty[id] = qty;
-  }
-
-  void delUniqueList(Product product){
-    uniquelist.removeWhere((element) => product.id == element.id);
-  }
-
-  bool delItemsQty(Product product){
-    if(itemsQty.containsKey(product.id)){
-      itemsQty[product.id]--;
-      if(itemsQty[product.id] <= 0){
-        itemsQty.remove(product.id);
-        return true;
-      }
-    }
-    return false;
-  }
-
   List<Product> getCart() {
-    return uniquelist.toList();
+    return uniqueList.toList();
   }
 
   int getCartTotal() {
@@ -71,7 +38,7 @@ class CartController extends GetxController {
 
   double getPrice() {
     double price = 0.0;
-    uniquelist.forEach((element) {
+    uniqueList.forEach((element) {
       if(itemsQty.containsKey(element.id)){
         price += (element.price * itemsQty[element.id]);
       }
@@ -79,16 +46,44 @@ class CartController extends GetxController {
     return price;
   }
 
-  void addToCart(Product item) {
-    _items.add(item);
-    setUniqueList(item);
-    loadItemsQty(item.id);
+  static Future<void> addToCart(Product item) async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> cart = prefs.getStringList("cart") ?? [];
+    List<String> cartQty = prefs.getStringList("cartQty") ?? [];
+
+    var uniqueList = cart.map((item) => Product.fromJson(jsonDecode(item))).toList();
+    Map<int, int> mappedArray = {};
+    cartQty.asMap().forEach((index, element) {
+      List<int> id = element.split(':').map((e) => int.parse(e)).toList();
+      mappedArray[id[0]] = id[1];
+    });
+
+    uniqueList.removeWhere((element) => item.id == element.id);
+    uniqueList.add(item);
+
+    if(mappedArray.containsKey(item.id)){
+      mappedArray[item.id]++;
+    }else{
+      mappedArray = {...mappedArray,...{item.id: 1}};
+    }
+
+    List<String> saveItemCount = [];
+    mappedArray.forEach((key, value) {
+      saveItemCount.add('$key:$value');
+    });
+    prefs.setStringList("cartQty", saveItemCount);
+    prefs.setStringList("cart", uniqueList.map((item) => jsonEncode(item?.toJson())).toList());
   }
 
+
   void removeFromCart(Product item) {
-    if(delItemsQty(item)){
-      delUniqueList(item);
-      _items.remove(item);
+    if(itemsQty.containsKey(item.id)){
+      if(itemsQty[item.id] <= 1){
+        itemsQty.remove(item.id);
+        uniqueList.removeWhere((element) => item.id == element.id);
+      }else{
+        itemsQty[item.id]--;
+      }
     }
 
     _saveCartItems();
@@ -98,22 +93,20 @@ class CartController extends GetxController {
   void _saveCartItems() async {
     final prefs = await SharedPreferences.getInstance();
     List<String> saveItemCount = [];
-    itemsQty.forEach((key, value) {
-      saveItemCount.add('$key:$value');
-    });
+    itemsQty.forEach((key, value) => saveItemCount.add('$key:$value'));
+
     prefs.setStringList("cartQty", saveItemCount);
-    prefs.setStringList("cart", uniquelist.map((item) => jsonEncode(item?.toJson())).toList());
+    prefs.setStringList("cart", uniqueList.map((item) => jsonEncode(item?.toJson())).toList());
   }
 
   void loadCartItems() async {
     final prefs = await SharedPreferences.getInstance();
-    List<String> cart = prefs.getStringList("cart");
+    List<String> cart = prefs.getStringList("cart") ?? [];
     List<String> cartQty = prefs.getStringList("cartQty") ?? [];
-    uniquelist = cart.map((item) => Product.fromJson(jsonDecode(item))).toList();
-    _items = uniquelist;
+    uniqueList = cart.map((item) => Product.fromJson(jsonDecode(item))).toList();
     cartQty.forEach((element) {
       List<int> id = element.split(':').map((e) => int.parse(e)).toList();
-      setItemsQty(id[0], id[1]);
+      itemsQty[id[0]] = id[1];
     });
     update();
   }

@@ -11,6 +11,7 @@ class NavController extends GetxController {
   int _selectedIndex = 0;
 
   void toggleNavBar(int index, {String argument}){
+    print(index);
     if(_selectedIndex == index){
       return;
     }
@@ -41,7 +42,10 @@ class NavController extends GetxController {
 
 
 class CustomBottomNavigationBar extends StatelessWidget {
-  CustomBottomNavigationBar({Key key}) : super(key: key);
+  CustomBottomNavigationBar({Key key, this.initPanel}) : super(key: key);
+
+  int initPanel = 0;
+
   final navController = Get.put(NavController());
 
 
@@ -92,6 +96,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final appSize = MediaQuery.of(context).size;
     final height = 60.0;
+    navController._selectedIndex = initPanel;
     return Container(
       width: appSize.width,
       height: 60,

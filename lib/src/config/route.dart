@@ -36,11 +36,11 @@ class Routes {
       GetPage( name: search,  page: () => SearchPage()),
       GetPage( name: orders,  page: () => OrderPage()),
       GetPage( name: filter,  page: () => SearchFilter()),
+      GetPage( name: billing,  page: () => BillingPage()),
       GetPage( name: checkout,  page: () => CheckoutPage()),
       GetPage( name: settings,  page: () => SettingsPage()),
       GetPage( name: profile,  page: () => LoginPage()),
       GetPage( name: register,  page: () => RegisterPage()),
-      GetPage( name: billing,  page: () => BillingPage()),
     ];
   }
 }

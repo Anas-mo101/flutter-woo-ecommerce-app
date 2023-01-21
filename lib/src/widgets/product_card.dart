@@ -74,7 +74,6 @@ class ProductCard extends StatelessWidget {
           ],
         ),
       ).ripple(() {
-        Navigator.of(context).pushNamed('/detail');
         onSelected(product);
       }, borderRadius: BorderRadius.all(Radius.circular(20))),
     );

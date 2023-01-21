@@ -3,19 +3,20 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
 import '../../../themes/light_color.dart';
+import '../controller/billing_controller.dart';
 import '../controller/checkout_controller.dart';
 
 
 class TogglePaymentOptions extends StatelessWidget{
   TogglePaymentOptions({Key key}) : super(key: key);
 
-  final checkoutController = Get.put(CheckoutController());
+  final billingController = Get.put(BillingController());
 
   Widget paymentOptions(String option){
-    bool selected = checkoutController.paymentOptions.indexOf(option) == checkoutController.selectedPaymentOptions;
+    bool selected = billingController.paymentOptions.indexOf(option) == billingController.selectedPaymentOptions;
 
     return InkWell(
-      onTap: () => checkoutController.togglePaymentOption(option),
+      onTap: () => billingController.togglePaymentOption(option),
       child: Column(
         children: [
           Container(
@@ -41,7 +42,7 @@ class TogglePaymentOptions extends StatelessWidget{
     return Container(
       child: Column(
         children: [
-          ...checkoutController.paymentOptions.map((e) => paymentOptions(e))
+          ...billingController.paymentOptions.map((e) => paymentOptions(e))
         ],
       ),
     );

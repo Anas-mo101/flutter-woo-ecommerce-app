@@ -18,11 +18,11 @@ class ShoppingCartPage extends StatelessWidget {
   List<Widget> _cartItems(BuildContext context, CartController controller) {
     List<Product> items = controller.getCart();
     if (items.isEmpty) return [];
-    List<Widget> itemsWidget = items.map((e) => _item(e, controller.removeFromCart)).toList();
+    List<Widget> itemsWidget = items.map((e) => _item(e)).toList();
     return itemsWidget;
   }
 
-  Widget _item(Product model, Function remove) {
+  Widget _item(Product model) {
     return Container(
       height: 80,
       child: Row(
@@ -83,9 +83,7 @@ class ShoppingCartPage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         InkWell(
-                          onTap: () {
-                            cartController.removeFromCart(model);
-                          },
+                          onTap: () => cartController.removeFromCart(model),
                           child: Container(
                             width: 35,
                             height: 35,
@@ -134,9 +132,9 @@ class ShoppingCartPage extends StatelessWidget {
   Widget _submitButton(BuildContext context) {
     return TextButton(
       onPressed: () {
-        if(cartController.uniquelist.isNotEmpty){
+        if(cartController.uniqueList.isNotEmpty && cartController.itemsQty.isNotEmpty){
           Get.toNamed(Routes.billing, arguments: [
-            cartController.uniquelist,
+            cartController.uniqueList,
             cartController.itemsQty
           ]);
         }
@@ -234,7 +232,7 @@ class ShoppingCartPage extends StatelessWidget {
                     Positioned(
                       bottom: 0,
                       right: 0,
-                      child: CustomBottomNavigationBar(),
+                      child: CustomBottomNavigationBar(initPanel: 2),
                     )
                   ],
                 );

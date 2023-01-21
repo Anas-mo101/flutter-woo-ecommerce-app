@@ -19,7 +19,8 @@ class MyApp extends StatelessWidget {
           Theme.of(context).textTheme,
         ),
       ),
-      home: SplashScreen(),
+      // home: SplashScreen(),
+      initialRoute: Routes.splash,
       getPages: Routes.getRoute(),
     );
   }

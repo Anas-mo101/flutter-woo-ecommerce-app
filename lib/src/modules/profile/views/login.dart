@@ -67,7 +67,7 @@ class LoginPage extends StatelessWidget {
         SizedBox(height: 20),
         TextButton(
           onPressed: () {
-            Get.offAndToNamed(Routes.register);
+            Get.toNamed(Routes.register);
           },
           style: ButtonStyle(
             shape: MaterialStateProperty.all(

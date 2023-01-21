@@ -3,16 +3,13 @@ import 'package:flutter_ecommerce_app/src/modules/home/views/shop_page.dart';
 import 'package:flutter_ecommerce_app/src/themes/light_color.dart';
 import 'package:flutter_ecommerce_app/src/themes/theme.dart';
 import 'package:flutter_ecommerce_app/src/widgets/bottom_navigation_bar.dart';
-import 'package:flutter_ecommerce_app/src/widgets/title_text.dart';
 import 'package:flutter_ecommerce_app/src/widgets/extentions.dart';
 import 'package:get/get.dart';
 import '../../../config/route.dart';
 import '../../../widgets/topbar.dart';
-import '../controller/home_controller.dart';
 
 class MainPage extends StatelessWidget {
 
-  // final navController = Get.put(NavigationController());
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +45,7 @@ class MainPage extends StatelessWidget {
             Positioned(
               bottom: 0,
               right: 0,
-              child: CustomBottomNavigationBar(),
+              child: CustomBottomNavigationBar(initPanel: 0),
             )
           ],
         ),

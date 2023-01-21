@@ -197,7 +197,7 @@ class SearchPage extends StatelessWidget {
             Positioned(
               bottom: 0,
               right: 0,
-              child: CustomBottomNavigationBar(),
+              child: CustomBottomNavigationBar(initPanel: 1),
             )
           ],
         ),
