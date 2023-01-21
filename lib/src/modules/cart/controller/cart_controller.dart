@@ -75,6 +75,12 @@ class CartController extends GetxController {
     prefs.setStringList("cart", uniqueList.map((item) => jsonEncode(item?.toJson())).toList());
   }
 
+  static Future<void> emptyCart() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setStringList("cartQty", []);
+    prefs.setStringList("cart", []);
+  }
+
 
   void removeFromCart(Product item) {
     if(itemsQty.containsKey(item.id)){

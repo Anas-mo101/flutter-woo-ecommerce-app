@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_ecommerce_app/src/modules/product/model/product.dart';
 import 'package:flutter_ecommerce_app/src/themes/light_color.dart';
 import 'package:flutter_ecommerce_app/src/themes/theme.dart';
-import 'package:flutter_ecommerce_app/src/widgets/extentions.dart';
 import 'package:flutter_ecommerce_app/src/widgets/title_text.dart';
 import 'package:get/get.dart';
 import '../../../config/route.dart';
 import '../../../widgets/topbar.dart';
-import '../models/order.dart';
+import '../../cart/controller/cart_controller.dart';
 import '../controller/checkout_controller.dart';
 
 class CheckoutPage extends StatelessWidget {
@@ -211,21 +210,27 @@ class CheckoutPage extends StatelessWidget {
   }
 
   Widget _submitButton(BuildContext context) {
-    return TextButton(
-      style: ButtonStyle(
-        shape: MaterialStateProperty.all(
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+    return InkWell(
+      onTap: (){
+        CartController.emptyCart();
+        Get.offAndToNamed(Routes.confirmation);
+      },
+      child: TextButton(
+        style: ButtonStyle(
+          shape: MaterialStateProperty.all(
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          ),
+          backgroundColor: MaterialStateProperty.all<Color>(LightColor.orange),
         ),
-        backgroundColor: MaterialStateProperty.all<Color>(LightColor.orange),
-      ),
-      child: Container(
-        alignment: Alignment.center,
-        padding: EdgeInsets.symmetric(vertical: 4),
-        width: AppTheme.fullWidth(context) * .75,
-        child: TitleText(
-          text: 'Pay',
-          color: LightColor.background,
-          fontWeight: FontWeight.w500,
+        child: Container(
+          alignment: Alignment.center,
+          padding: EdgeInsets.symmetric(vertical: 4),
+          width: AppTheme.fullWidth(context) * .75,
+          child: TitleText(
+            text: 'Pay',
+            color: LightColor.background,
+            fontWeight: FontWeight.w500,
+          ),
         ),
       ),
     );

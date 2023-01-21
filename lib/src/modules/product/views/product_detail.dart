@@ -150,7 +150,7 @@ class ProductDetailPage extends StatelessWidget {
     );
   }
 
-  Widget _detailWidget(Product product) {
+    Widget _detailWidget(Product product) {
     List<Widget> ratings = [];
     for (var i = 0; i < product.rating; i++) {
       ratings.add(Icon(Icons.star, color: LightColor.yellowColor, size: 17));

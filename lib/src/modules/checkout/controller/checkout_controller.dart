@@ -7,7 +7,6 @@ import 'package:flutter_ecommerce_app/src/modules/product/model/product.dart';
 
 import '../models/order.dart';
 
-
 // store cart item in set() -> uniquely
 // keep track of each cart item's qty in may and id as key
 
