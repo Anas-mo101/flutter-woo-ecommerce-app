@@ -135,7 +135,10 @@ class ShoppingCartPage extends StatelessWidget {
     return TextButton(
       onPressed: () {
         if(cartController.uniquelist.isNotEmpty){
-          Get.toNamed(Routes.checkout);
+          Get.toNamed(Routes.billing, arguments: [
+            cartController.uniquelist,
+            cartController.itemsQty
+          ]);
         }
       },
       style: ButtonStyle(

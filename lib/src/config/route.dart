@@ -1,5 +1,6 @@
 import 'package:flutter_ecommerce_app/src/modules/home/views/main_page.dart';
 import 'package:get/get.dart';
+import '../modules/checkout/views/billing_page.dart';
 import '../modules/checkout/views/checkout_page.dart';
 import '../modules/orders/views/orders_page.dart';
 import '../modules/product/views/product_detail.dart';
@@ -17,6 +18,7 @@ class Routes {
   static const filter = '/filter';
   static const checkout = '/checkout';
   static const orders = '/orders';
+  static const billing = '/billing';
   static const profile = '/profile';
   static const settings = '/settings';
   static const register = '/register';
@@ -35,6 +37,7 @@ class Routes {
       GetPage( name: settings,  page: () => SettingsPage()),
       GetPage( name: profile,  page: () => LoginPage()),
       GetPage( name: register,  page: () => RegisterPage()),
+      GetPage( name: billing,  page: () => BillingPage()),
     ];
   }
 }

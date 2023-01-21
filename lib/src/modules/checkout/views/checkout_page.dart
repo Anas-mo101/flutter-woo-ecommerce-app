@@ -16,14 +16,14 @@ class CheckoutPage extends StatelessWidget {
 
   final checkoutController = Get.put(CheckoutController());
 
-  List<Widget> _cartItems(BuildContext context, CartController controller) {
+  List<Widget> _cartItems(BuildContext context, CheckoutController controller) {
     List<Product> items = controller.getCart();
     if (items.isEmpty) return [];
-    List<Widget> itemsWidget = items.map((e) => _item(e, controller.removeFromCart)).toList();
+    List<Widget> itemsWidget = items.map((e) => _item(e)).toList();
     return itemsWidget;
   }
 
-  Widget _item(Product model, Function remove) {
+  Widget _item(Product model) {
     return Container(
       height: 80,
       child: Row(
@@ -106,13 +106,13 @@ class CheckoutPage extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         TitleText(
-          text: '${checkoutController.getCartTotal()} Items',
+          text: '${checkoutController.getTotalQty()} Items',
           color: LightColor.grey,
           fontSize: 14,
           fontWeight: FontWeight.w500,
         ),
         TitleText(
-          text: '\$${checkoutController.getPrice()}',
+          text: '\$${checkoutController.subtotal}',
           fontSize: 18,
         ),
       ],
@@ -130,7 +130,7 @@ class CheckoutPage extends StatelessWidget {
           fontWeight: FontWeight.w500,
         ),
         TitleText(
-          text: '\$${checkoutController.getPrice() * 0.04}',
+          text: '\$${checkoutController.getTax()}',
           fontSize: 18,
         ),
       ],
@@ -148,7 +148,7 @@ class CheckoutPage extends StatelessWidget {
           fontWeight: FontWeight.w500,
         ),
         TitleText(
-          text: '\$10',
+          text: '\$${checkoutController.getDelv()}',
           fontSize: 18,
         ),
       ],
@@ -166,7 +166,7 @@ class CheckoutPage extends StatelessWidget {
           fontWeight: FontWeight.w500,
         ),
         TitleText(
-          text: '\$${checkoutController.getPrice() + (checkoutController.getPrice() * 0.04) + 10}',
+          text: '\$${checkoutController.getGrandTotal()}',
           fontSize: 18,
         ),
       ],
@@ -211,9 +211,15 @@ class CheckoutPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: GetBuilder<CartController>(
-            init: CartController(),
+        child: GetBuilder<CheckoutController>(
+            init: CheckoutController(),
             builder: (controller) {
+                List args = Get.arguments ?? [];
+                if(args.isEmpty){
+                  Get.back();
+                }
+                controller.setCartItems(args[0], args[1]);
+
                 return Stack(
                   fit: StackFit.expand,
                   children: <Widget>[
