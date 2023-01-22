@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_ecommerce_app/src/themes/light_color.dart';
 import 'package:flutter_ecommerce_app/src/themes/theme.dart';
-import 'package:flutter_ecommerce_app/src/widgets/extentions.dart';
-import 'package:flutter_ecommerce_app/src/widgets/title_text.dart';
 import 'package:flutter_ecommerce_app/src/widgets/topbar.dart';
 import 'package:get/get.dart';
-import '../../../config/route.dart';
-import '../../cart/controller/cart_controller.dart';
 import '../controllers/settings_controller.dart';
 
 class SettingsPage extends StatelessWidget {
