@@ -35,7 +35,7 @@ class ProfilePage extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             TopBar(
-                                'Profile',
+                                'profile'.tr,
                                 Icons.close,
                                 () => Get.offAllNamed(Routes.home),
                                 rightIcon: Icons.settings,

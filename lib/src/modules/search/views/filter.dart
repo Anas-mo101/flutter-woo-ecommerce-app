@@ -75,7 +75,7 @@ class SearchFilter extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      TitleText(text: 'Filter', fontSize: 25),
+                      TitleText(text: 'filter'.tr, fontSize: 25),
                     ],
                   ),
                 ),

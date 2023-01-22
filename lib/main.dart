@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ecommerce_app/src/config/internationalization.dart';
 import 'package:flutter_ecommerce_app/src/config/route.dart';
-import 'package:flutter_ecommerce_app/src/widgets/splash_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'src/themes/theme.dart';
 import 'package:get/get.dart';
@@ -19,9 +19,11 @@ class MyApp extends StatelessWidget {
           Theme.of(context).textTheme,
         ),
       ),
-      // home: SplashScreen(),
       initialRoute: Routes.splash,
       getPages: Routes.getRoute(),
+      translations: Internationalization(),
+      locale: Locale('en', 'US'),
+      fallbackLocale: Locale('en', 'US')
     );
   }
 }

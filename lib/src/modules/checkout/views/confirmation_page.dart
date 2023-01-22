@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/scheduler/ticker.dart';
 import 'package:flutter_ecommerce_app/src/themes/light_color.dart';
-import 'package:flutter_ecommerce_app/src/widgets/extentions.dart';
 import 'package:get/get.dart';
 import '../../../config/route.dart';
-import '../../../themes/theme.dart';
 import '../../../widgets/title_text.dart';
 
 
@@ -57,7 +54,7 @@ class ConfirmationPage extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Center(child: Text("Order Confirmed"))
+                    Center(child: Text("order_confirmed".tr))
                   ],
                 ),
               )

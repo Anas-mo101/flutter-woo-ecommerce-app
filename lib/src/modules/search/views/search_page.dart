@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_ecommerce_app/src/modules/product/model/product.dart';
 import 'package:flutter_ecommerce_app/src/themes/light_color.dart';
 import 'package:flutter_ecommerce_app/src/themes/theme.dart';
-import 'package:flutter_ecommerce_app/src/widgets/extentions.dart';
 import 'package:flutter_ecommerce_app/src/widgets/title_text.dart';
 import 'package:get/get.dart';
 import '../../../config/route.dart';
@@ -30,7 +29,7 @@ class SearchPage extends StatelessWidget {
                 controller: TextEditingController()..text = keyword,
                 decoration: InputDecoration(
                   border: InputBorder.none,
-                  hintText: "Search Products",
+                  hintText: "search_products".tr,
                   hintStyle: TextStyle(fontSize: 12),
                   contentPadding: EdgeInsets.only(left: 10, right: 10, bottom: 0, top: 5),
                   prefixIcon: Icon(Icons.search, color: Colors.black54)
@@ -110,10 +109,7 @@ class SearchPage extends StatelessWidget {
                             height: 35,
                             alignment: Alignment.center,
                             decoration: BoxDecoration(color: LightColor.lightGrey.withAlpha(150), borderRadius: BorderRadius.circular(10)),
-                            child: TitleText(
-                              text: 'add',
-                              fontSize: 12,
-                            ),
+                            child: Icon(Icons.add),
                           ),
                         ),
                       ],
@@ -124,18 +120,6 @@ class SearchPage extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  Widget _icon(BuildContext context, IconData icon, {Color color = LightColor.iconColor}) {
-    return Container(
-      padding: EdgeInsets.all(10),
-      decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(13)), color: Theme
-          .of(context)
-          .backgroundColor, boxShadow: AppTheme.shadow),
-      child: Icon(icon, color: color),
-    ).ripple(() {
-      Get.toNamed(Routes.settings);
-    }, borderRadius: BorderRadius.all(Radius.circular(13)));
   }
 
   @override
@@ -150,7 +134,7 @@ class SearchPage extends StatelessWidget {
                 height: AppTheme.fullHeight(context) - 50,
                 child: Column(
                   children: <Widget>[
-                    TopBar('Search', Icons.sort,() => Get.toNamed(Routes.settings)),
+                    TopBar('search'.tr, Icons.sort,() => Get.toNamed(Routes.settings)),
                     GetBuilder<SearchController>(
                         init: SearchController(),
                         builder: (controller) {
@@ -166,7 +150,7 @@ class SearchPage extends StatelessWidget {
                                 child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text('Filter by Category'),
+                                      Text('filter_category'.tr),
                                       InkWell(
                                         onTap: () => Get.toNamed(Routes.filter),
                                         child: Container(

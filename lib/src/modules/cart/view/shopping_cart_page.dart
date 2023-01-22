@@ -116,7 +116,7 @@ class ShoppingCartPage extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         TitleText(
-          text: '${cartController.getCartTotal()} Items',
+          text: '${cartController.getCartTotal()} ${'items'.tr}',
           color: LightColor.grey,
           fontSize: 14,
           fontWeight: FontWeight.w500,
@@ -150,7 +150,7 @@ class ShoppingCartPage extends StatelessWidget {
         padding: EdgeInsets.symmetric(vertical: 4),
         width: AppTheme.fullWidth(context) * .75,
         child: TitleText(
-          text: 'Checkout',
+          text: 'checkout'.tr,
           color: LightColor.background,
           fontWeight: FontWeight.w500,
         ),
@@ -197,7 +197,7 @@ class ShoppingCartPage extends StatelessWidget {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            TopBar('Cart',Icons.sort,() => Get.toNamed(Routes.settings)),
+                            TopBar('cart'.tr,Icons.sort,() => Get.toNamed(Routes.settings)),
                             Expanded(
                               child: Container(
                                 padding: AppTheme.padding,

@@ -27,40 +27,6 @@ class OrderPage extends StatelessWidget {
     }, borderRadius: BorderRadius.all(Radius.circular(13)));
   }
 
-  Widget _appBar(BuildContext context) {
-    return Container(
-      padding: AppTheme.padding,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          RotatedBox(
-            quarterTurns: 4,
-            child: _icon(context, Icons.sort, color: Colors.black54),
-          ),
-          TitleText(
-            text: 'Orders',
-            fontSize: 27,
-            fontWeight: FontWeight.w400,
-          ),
-          ClipRRect(
-            borderRadius: BorderRadius.all(Radius.circular(13)),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Theme
-                    .of(context)
-                    .backgroundColor,
-                boxShadow: <BoxShadow>[
-                  BoxShadow(color: Color(0xfff8f8f8), blurRadius: 10, spreadRadius: 10),
-                ],
-              ),
-                child: Icon(Icons.person, color: Colors.black54),
-            ),
-          ).ripple(() {}, borderRadius: BorderRadius.all(Radius.circular(13)))
-        ],
-      ),
-    );
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -85,12 +51,9 @@ class OrderPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    TopBar('Orders',Icons.sort,() => Get.toNamed(Routes.settings)),
+                    TopBar('orders'.tr,Icons.sort,() => Get.toNamed(Routes.settings)),
                     Expanded(
-                      child: Container(
-                        padding: AppTheme.padding,
-
-                      ),
+                      child: Container(),
                     )
                   ],
                 ),

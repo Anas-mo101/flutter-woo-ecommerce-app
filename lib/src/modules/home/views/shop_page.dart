@@ -38,18 +38,6 @@ class ShopPage extends StatelessWidget {
     );
   }
 
-  Widget _icon(BuildContext context, IconData icon, {Color color = LightColor.iconColor}) {
-    return Container(
-      padding: EdgeInsets.all(10),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(13)),
-          color: Theme.of(context).backgroundColor,
-          boxShadow: AppTheme.shadow
-      ),
-      child: Icon(icon, color: color),
-    ).ripple(() {}, borderRadius: BorderRadius.all(Radius.circular(13)));
-  }
-
   Widget _productWidget(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
@@ -93,7 +81,7 @@ class ShopPage extends StatelessWidget {
                 },
                 decoration: InputDecoration(
                     border: InputBorder.none,
-                    hintText: "Search Products",
+                    hintText: "search_products".tr,
                     hintStyle: TextStyle(fontSize: 12),
                     contentPadding: EdgeInsets.only(left: 10, right: 10, bottom: 0, top: 5),
                     prefixIcon: Icon(Icons.search, color: Colors.black54)

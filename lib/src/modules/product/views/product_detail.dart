@@ -80,14 +80,10 @@ class ProductDetailPage extends StatelessWidget {
             size: 15,
             padding: 12,
             isOutLine: true,
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
+            onPressed: () => Get.back(),
           ),
           _icon(isLiked ? Icons.favorite : Icons.favorite_border, color: isLiked ? LightColor.red : LightColor.lightGrey, size: 15, padding: 12, isOutLine: false, onPressed: () {
-            // setState(() {
-            //   isLiked = !isLiked;
-            // });
+
           }),
         ],
       ),
@@ -264,7 +260,7 @@ class ProductDetailPage extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         TitleText(
-          text: "Available Size",
+          text: "available_sizes".tr,
           fontSize: 14,
         ),
         SizedBox(height: 20),
@@ -307,7 +303,7 @@ class ProductDetailPage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        TitleText(text: "Available Colors", fontSize: 14),
+        TitleText(text: "available_colors".tr, fontSize: 14),
         SizedBox(height: 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -363,7 +359,7 @@ class ProductDetailPage extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         TitleText(
-          text: "Description",
+          text: "description".tr,
           fontSize: 14,
         ),
         SizedBox(height: 20),
@@ -372,28 +368,4 @@ class ProductDetailPage extends StatelessWidget {
     );
   }
 
-  FloatingActionButton _floatingButton(BuildContext context) {
-    return FloatingActionButton(
-      onPressed: () {
-        CartController.addToCart(productController.product).then((value) => productController.setProductQtyInCart());
-      },
-      backgroundColor: LightColor.orange,
-      child: Stack(
-        children: [
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: Icon(Icons.shopping_cart, color: Theme.of(context).floatingActionButtonTheme.backgroundColor),
-          ),
-          // if(productController.productQtyInCart > 0)
-          Positioned(
-              top: 25,
-              left: 0,
-              child: Container(width: 20, height: 20, decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.black), child: Center(child: Text('${productController.productQtyInCart}'))))
-        ],
-      ),
-    );
-  }
 }

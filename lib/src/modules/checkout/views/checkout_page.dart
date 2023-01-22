@@ -104,7 +104,7 @@ class CheckoutPage extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         TitleText(
-          text: '$itemsCount Items',
+          text: '$itemsCount ${'items'.tr}',
           color: LightColor.grey,
           fontSize: 14,
           fontWeight: FontWeight.w500,
@@ -122,7 +122,7 @@ class CheckoutPage extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         TitleText(
-          text: 'tax 4%',
+          text: '${'tax'.tr} 4%',
           color: LightColor.grey,
           fontSize: 14,
           fontWeight: FontWeight.w500,
@@ -140,7 +140,7 @@ class CheckoutPage extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         TitleText(
-          text: 'delivery',
+          text: 'delivery'.tr,
           color: LightColor.grey,
           fontSize: 14,
           fontWeight: FontWeight.w500,
@@ -158,7 +158,7 @@ class CheckoutPage extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         TitleText(
-          text: 'total',
+          text: 'total'.tr,
           color: LightColor.grey,
           fontSize: 14,
           fontWeight: FontWeight.w500,
@@ -176,7 +176,7 @@ class CheckoutPage extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         TitleText(
-          text: 'payment',
+          text: 'payment'.tr,
           color: LightColor.grey,
           fontSize: 14,
           fontWeight: FontWeight.w500,
@@ -196,7 +196,7 @@ class CheckoutPage extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         TitleText(
-          text: 'Shipping to',
+          text: 'shipping_to'.tr,
           color: LightColor.grey,
           fontSize: 14,
           fontWeight: FontWeight.w500,
@@ -227,7 +227,7 @@ class CheckoutPage extends StatelessWidget {
           padding: EdgeInsets.symmetric(vertical: 4),
           width: AppTheme.fullWidth(context) * .75,
           child: TitleText(
-            text: 'Pay',
+            text: 'pay'.tr,
             color: LightColor.background,
             fontWeight: FontWeight.w500,
           ),
@@ -267,7 +267,7 @@ class CheckoutPage extends StatelessWidget {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            TopBar('Checkout',Icons.arrow_back_sharp,() => Get.back(), rightIcon: null),
+                            TopBar('checkout'.tr,Icons.arrow_back_sharp,() => Get.back(), rightIcon: null),
                             Expanded(
                               child: Container(
                                 padding: AppTheme.padding,

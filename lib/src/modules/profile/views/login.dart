@@ -29,7 +29,7 @@ class LoginPage extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: 4),
             width: AppTheme.fullWidth(context) * .75,
             child: TitleText(
-              text: 'Login',
+              text: 'login'.tr,
               color: LightColor.background,
               fontWeight: FontWeight.w500,
             ),
@@ -49,14 +49,14 @@ class LoginPage extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: 4),
             width: AppTheme.fullWidth(context) * .75,
             child: TitleText(
-              text: 'Google',
+              text: 'google'.tr,
               color: LightColor.background,
               fontWeight: FontWeight.w500,
             ),
           ),
         ),
         SizedBox(height: 20),
-        Text('or'),
+        Text('or'.tr),
         SizedBox(height: 20),
         TextButton(
           onPressed: () {
@@ -73,7 +73,7 @@ class LoginPage extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: 4),
             width: AppTheme.fullWidth(context) * .75,
             child: TitleText(
-              text: 'Register',
+              text: 'register'.tr,
               color: LightColor.background,
               fontWeight: FontWeight.w500,
             ),
@@ -97,7 +97,7 @@ class LoginPage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         TopBar(
-                          'Login',
+                          'login'.tr,
                           Icons.arrow_back_rounded,
                           () => Get.back(),
                           rightIcon: null,
@@ -111,12 +111,12 @@ class LoginPage extends StatelessWidget {
                               TextField(
                                 controller: controller.loginEmail,
                                 decoration: InputDecoration(
-                                  errorText: controller.loginEmailErr ? 'Invalid input' : null,
+                                  errorText: controller.loginEmailErr ? 'invalid_input'.tr : null,
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(15.0),
                                     borderSide: BorderSide(color: Colors.blue, width: 2.0),
                                   ),
-                                  hintText: "Email",
+                                  hintText: "email".tr,
                                   hintStyle: TextStyle(fontSize: 12),
                                   contentPadding: EdgeInsets.only(left: 10, right: 10, bottom: 0, top: 5),
                                 ),
@@ -125,12 +125,12 @@ class LoginPage extends StatelessWidget {
                               TextField(
                                 controller: controller.loginPassword,
                                 decoration: InputDecoration(
-                                  errorText: controller.loginPassErr ? 'Invalid input' : null,
+                                  errorText: controller.loginPassErr ? 'invalid_input'.tr : null,
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(15.0),
                                     borderSide: BorderSide(color: Colors.blue, width: 2.0),
                                   ),
-                                  hintText: "Password",
+                                  hintText: "password".tr,
                                   hintStyle: TextStyle(fontSize: 12),
                                   contentPadding: EdgeInsets.only(left: 10, right: 10, bottom: 0, top: 5),
                                 ),

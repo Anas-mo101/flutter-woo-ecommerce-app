@@ -44,7 +44,7 @@ class BillingPage extends StatelessWidget {
           padding: EdgeInsets.symmetric(vertical: 4),
           width: AppTheme.fullWidth(context) * .75,
           child: TitleText(
-            text: 'Next',
+            text: 'next'.tr,
             color: LightColor.background,
             fontWeight: FontWeight.w500,
           ),
@@ -86,23 +86,23 @@ class BillingPage extends StatelessWidget {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            TopBar('Billing',Icons.arrow_back_sharp,() => Get.toNamed(Routes.cart), rightIcon: null),
+                            TopBar('billing'.tr,Icons.arrow_back_sharp,() => Get.toNamed(Routes.cart), rightIcon: null),
                             Container(
                               padding: EdgeInsets.symmetric(horizontal: 20),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text('Customer Information'),
+                                  Text('customer_info'.tr),
                                   SizedBox(height: 20),
                                   TextField(
                                     controller: controller.cusName,
                                     decoration: InputDecoration(
-                                      errorText: controller.cusNameErr ? 'Invalid input' : null,
+                                      errorText: controller.cusNameErr ? 'invalid_input'.tr : null,
                                       border:  OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(15.0),
                                         borderSide: BorderSide(color: Colors.blue, width: 2.0),
                                       ),
-                                      hintText: "Customer Name",
+                                      hintText: "name".tr,
                                       hintStyle: TextStyle(fontSize: 12),
                                       contentPadding: EdgeInsets.only(left: 10, right: 10, bottom: 0, top: 5),
                                     ),
@@ -111,11 +111,11 @@ class BillingPage extends StatelessWidget {
                                   TextField(
                                     controller: controller.cusEmail,
                                     decoration: InputDecoration(
-                                      errorText: controller.cusEmailErr ? 'Invalid input' : null,
+                                      errorText: controller.cusEmailErr ? 'invalid_input'.tr : null,
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(15.0),
                                       ),
-                                      hintText: "Email",
+                                      hintText: "email".tr,
                                       hintStyle: TextStyle(fontSize: 12),
                                       contentPadding: EdgeInsets.only(left: 10, right: 10, bottom: 0, top: 5),
                                     ),
@@ -124,11 +124,11 @@ class BillingPage extends StatelessWidget {
                                   TextField(
                                     controller: controller.cusPhone,
                                     decoration: InputDecoration(
-                                      errorText: controller.cusPhoneErr ? 'Invalid input' : null,
+                                      errorText: controller.cusPhoneErr ? 'invalid_input'.tr : null,
                                       border:  OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(15.0),
                                       ),
-                                      hintText: "Phone number",
+                                      hintText: "phone_number".tr,
                                       hintStyle: TextStyle(fontSize: 12),
                                       contentPadding: EdgeInsets.only(left: 10, right: 10, bottom: 0, top: 5),
                                     ),
@@ -137,17 +137,17 @@ class BillingPage extends StatelessWidget {
                                   TextField(
                                     controller: controller.cusBilling,
                                     decoration: InputDecoration(
-                                      errorText: controller.cusBillingErr ? 'Invalid input' : null,
+                                      errorText: controller.cusBillingErr ? 'invalid_input'.tr : null,
                                       border:  OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(15.0),
                                       ),
-                                      hintText: "Billing address",
+                                      hintText: "billing_address".tr,
                                       hintStyle: TextStyle(fontSize: 12),
                                       contentPadding: EdgeInsets.only(left: 10, right: 10, bottom: 0, top: 5),
                                     ),
                                   ),
                                   SizedBox(height: 20),
-                                  Text('Shipping Information'),
+                                  Text('shipping_info'.tr),
                                   SizedBox(height: 20),
                                   Container(
                                     width: double.infinity,
@@ -160,7 +160,7 @@ class BillingPage extends StatelessWidget {
                                         )
                                     ),
                                     child: DropdownButton<String>(
-                                      hint: Text('Country', style: TextStyle(fontSize: 14)),
+                                      hint: Text('country'.tr, style: TextStyle(fontSize: 14)),
                                       value: controller.shippingOptions[controller.selectedShippingOptions],
                                       isExpanded: true,
                                       underline: Container(),
@@ -180,12 +180,12 @@ class BillingPage extends StatelessWidget {
                                   TextField(
                                     controller: controller.cusShipping,
                                     decoration: InputDecoration(
-                                      errorText: controller.cusShippingErr ? 'Invalid input' : null,
+                                      errorText: controller.cusShippingErr ? 'invalid_input'.tr : null,
                                       border:  OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(15.0),
                                         borderSide: BorderSide(color: Colors.blue, width: 2.0),
                                       ),
-                                      hintText: "Shipping address",
+                                      hintText: "shipping_address".tr,
                                       hintStyle: TextStyle(fontSize: 12),
                                       contentPadding: EdgeInsets.only(left: 10, right: 10, bottom: 0, top: 5),
                                     ),
@@ -194,18 +194,18 @@ class BillingPage extends StatelessWidget {
                                   TextField(
                                     controller: controller.cusZip,
                                     decoration: InputDecoration(
-                                      errorText: controller.cusZipErr ? 'Invalid input' : null,
+                                      errorText: controller.cusZipErr ? 'invalid_input'.tr : null,
                                       border:  OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(15.0),
                                         borderSide: BorderSide(color: Colors.blue, width: 2.0),
                                       ),
-                                      hintText: "Zip Code",
+                                      hintText: "zip_code".tr,
                                       hintStyle: TextStyle(fontSize: 12),
                                       contentPadding: EdgeInsets.only(left: 10, right: 10, bottom: 0, top: 5),
                                     ),
                                   ),
                                   SizedBox(height: 20),
-                                  Text('Payment Method'),
+                                  Text('payment_method'.tr),
                                   SizedBox(height: 20),
                                   TogglePaymentOptions()
                                 ],

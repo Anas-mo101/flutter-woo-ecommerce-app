@@ -15,61 +15,12 @@ class SettingsPage extends StatelessWidget {
   final settingsController = Get.put(SettingsController());
 
 
-  Widget _icon(BuildContext context, IconData icon, {Color color = LightColor.iconColor}) {
-    return Container(
-      padding: EdgeInsets.all(10),
-      decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(13)), color: Theme
-          .of(context)
-          .backgroundColor, boxShadow: AppTheme.shadow),
-      child: Icon(icon, color: color),
-    ).ripple(() {
-      Get.back();
-    }, borderRadius: BorderRadius.all(Radius.circular(13)));
-  }
-
-  Widget _appBar(BuildContext context) {
-    return Container(
-      padding: AppTheme.padding,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          InkWell(
-            child: RotatedBox(
-              quarterTurns: 4,
-              child: _icon(context, Icons.arrow_back_sharp, color: Colors.black54),
-            ),
-          ),
-          TitleText(
-            text: 'Settings',
-            fontSize: 27,
-            fontWeight: FontWeight.w400,
-          ),
-          ClipRRect(
-            borderRadius: BorderRadius.all(Radius.circular(13)),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Theme
-                    .of(context)
-                    .backgroundColor,
-                boxShadow: <BoxShadow>[
-                  BoxShadow(color: Color(0xfff8f8f8), blurRadius: 10, spreadRadius: 10),
-                ],
-              ),
-                child: Icon(Icons.person, color: Colors.black54),
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: GetBuilder<CartController>(
-            init: CartController(),
+        child: GetBuilder<SettingsController>(
+            init: SettingsController(),
             builder: (controller) {
                 return Stack(
                   fit: StackFit.expand,
@@ -90,27 +41,70 @@ class SettingsPage extends StatelessWidget {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            TopBar('Settings',Icons.arrow_back_sharp,() => Get.back() ),
+                            TopBar('settings'.tr,Icons.arrow_back_sharp,() => Get.back() ),
                             Expanded(
                               child: Container(
                                 padding: AppTheme.padding,
                                 child: SingleChildScrollView(
                                   child: Column(
                                     children: [
+                                      SizedBox(height: 50),
+                                      Text('general_settings'.tr),
+                                      SizedBox(height: 20),
+                                      Container(
+                                        width: double.infinity,
+                                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(15.0),
+                                            border: Border.all(
+                                              color: Colors.grey,
+                                              width: 1.0,
+                                            )
+                                        ),
+                                        child: DropdownButton<String>(
+                                          hint: Text(
+                                              '${'language'.tr} - ${controller.language[controller.selectedLanguage]}',
+                                              style: TextStyle(fontSize: 14)
+                                          ),
+                                          isExpanded: true,
+                                          underline: Container(),
+                                          borderRadius: BorderRadius.circular(15.0),
+                                          items: [
+                                            ...controller.language.map((e) => DropdownMenuItem(
+                                              child: Text(e),
+                                              value: e,
+                                            )),
+                                          ],
+                                          onChanged: (String newValue) => controller.toggleLanguage(newValue)
+                                        ),
+                                      ),
+                                      Divider(
+                                        thickness: 1,
+                                        height: 70,
+                                      ),
+                                      Container(
+                                        alignment: Alignment.center,
+                                        width: AppTheme.fullWidth(context),
+                                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(15.0),
+                                            border: Border.all(
+                                              color: Colors.grey,
+                                              width: 1.0,
+                                            )
+                                        ),
+                                        child: ListTile(
+                                          title: Text('More Settings'),
+                                          leading: Icon(Icons.settings),
+                                          trailing: Icon(Icons.arrow_forward_ios),
+                                          onTap: (){
 
+                                          },
+                                        ),
+                                      )
                                     ],
                                   ),
                                 ),
-                              ),
-                            ),
-                            Container(
-                              padding: EdgeInsets.symmetric(vertical: 30,horizontal: 20),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: <Widget>[
-
-
-                                ],
                               ),
                             ),
                           ],
@@ -121,7 +115,6 @@ class SettingsPage extends StatelessWidget {
                 );
             }
         )
-
       ),
     );
   }
