@@ -7,6 +7,7 @@ import '../modules/orders/views/orders_page.dart';
 import '../modules/product/views/product_detail.dart';
 import '../modules/cart/view/shopping_cart_page.dart';
 import '../modules/profile/views/login.dart';
+import '../modules/profile/views/profile.dart';
 import '../modules/profile/views/register.dart';
 import '../modules/search/views/filter.dart';
 import '../modules/search/views/search_page.dart';
@@ -22,6 +23,7 @@ class Routes {
   static const checkout = '/checkout';
   static const orders = '/orders';
   static const billing = '/billing';
+  static const login = '/login';
   static const profile = '/profile';
   static const settings = '/settings';
   static const register = '/register';
@@ -42,7 +44,8 @@ class Routes {
       GetPage( name: billing,  page: () => BillingPage()),
       GetPage( name: checkout,  page: () => CheckoutPage()),
       GetPage( name: settings,  page: () => SettingsPage()),
-      GetPage( name: profile,  page: () => LoginPage()),
+      GetPage( name: profile,  page: () => ProfilePage()),
+      GetPage( name: login,  page: () => LoginPage()),
       GetPage( name: register,  page: () => RegisterPage()),
     ];
   }

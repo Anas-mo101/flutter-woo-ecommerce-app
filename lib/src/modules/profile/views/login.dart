@@ -5,26 +5,19 @@ import '../../../themes/light_color.dart';
 import '../../../themes/theme.dart';
 import '../../../widgets/title_text.dart';
 import '../../../widgets/topbar.dart';
+import '../contollers/login_controller.dart';
 
-class LoginController extends GetxController {
-  final email = ''.obs;
-  final password = ''.obs;
-
-  void login() {
-    // Handle login logic here
-    if (email.value == 'test@example.com' && password.value == 'password') {
-      // Navigate to the next page
-      Get.offNamed('/profile');
-    } else {}
-  }
-}
 
 class LoginPage extends StatelessWidget {
-  Widget _submitButton(BuildContext context) {
+
+
+  Widget _submitButton(BuildContext context, LoginController controller) {
     return Column(
       children: [
         TextButton(
-          onPressed: () {},
+          onPressed: () {
+            controller.login();
+          },
           style: ButtonStyle(
             shape: MaterialStateProperty.all(
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
@@ -97,46 +90,63 @@ class LoginPage extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.all(16.0),
           child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                TopBar('Login', Icons.arrow_back_rounded,() => Get.back()),
-                SizedBox(height: 150),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      TextField(
-                        decoration: InputDecoration(
-                            border:  OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15.0),
-                              borderSide: BorderSide(color: Colors.blue, width: 2.0),
-                            ),
-                            hintText: "Email",
-                            hintStyle: TextStyle(fontSize: 12),
-                            contentPadding: EdgeInsets.only(left: 10, right: 10, bottom: 0, top: 5),
-                         ),
-                      ),
-                      SizedBox(height: 20),
-                      TextField(
-                        decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15.0),
-                              borderSide: BorderSide(color: Colors.blue, width: 2.0),
-                            ),
-                            hintText: "Password",
-                            hintStyle: TextStyle(fontSize: 12),
-                            contentPadding: EdgeInsets.only(left: 10, right: 10, bottom: 0, top: 5),
-                       ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 150),
-                _submitButton(context),
-              ],
-            ),
+              child: GetBuilder<LoginController>(
+                  init: LoginController(),
+                  builder: (controller) {
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TopBar(
+                          'Login',
+                          Icons.arrow_back_rounded,
+                          () => Get.back(),
+                          rightIcon: null,
+                        ),
+                        SizedBox(height: 150),
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 20),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              TextField(
+                                controller: controller.loginEmail,
+                                decoration: InputDecoration(
+                                  errorText: controller.loginEmailErr ? 'Invalid input' : null,
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(15.0),
+                                    borderSide: BorderSide(color: Colors.blue, width: 2.0),
+                                  ),
+                                  hintText: "Email",
+                                  hintStyle: TextStyle(fontSize: 12),
+                                  contentPadding: EdgeInsets.only(left: 10, right: 10, bottom: 0, top: 5),
+                                ),
+                              ),
+                              SizedBox(height: 20),
+                              TextField(
+                                controller: controller.loginPassword,
+                                decoration: InputDecoration(
+                                  errorText: controller.loginPassErr ? 'Invalid input' : null,
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(15.0),
+                                    borderSide: BorderSide(color: Colors.blue, width: 2.0),
+                                  ),
+                                  hintText: "Password",
+                                  hintStyle: TextStyle(fontSize: 12),
+                                  contentPadding: EdgeInsets.only(left: 10, right: 10, bottom: 0, top: 5),
+                                ),
+                              ),
+                              SizedBox(height: 30),
+                              if(controller.loginStatus.isNotEmpty)
+                                Text(controller.loginStatus, style: TextStyle(color: Colors.red))
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 120),
+                        _submitButton(context,controller),
+                      ],
+                    );
+                  }
+              )
           ),
         ),
       ),

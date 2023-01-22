@@ -1,7 +1,15 @@
 import 'package:flutter_ecommerce_app/src/model/category.dart';
 import 'package:flutter_ecommerce_app/src/modules/product/model/product.dart';
 
+import '../modules/profile/models/user.dart';
+
 class AppData {
+  static User user = User(
+      'Anas Mohamed',
+      '12345',
+      'anas@gmail.com'
+  );
+
   static List<Product> productList = [
     Product(
         id: 1,
@@ -21,26 +29,6 @@ class AppData {
           'S',
           'L',
           'XL'
-        ]
-    ),
-    Product(
-        id: 3,
-        name: 'Nike Water Min 45700',
-        price: 240.00,
-        isSelected: true,
-        isliked: false,
-        image: 'assets/shooe_tilt_1.png',
-        category: "Trending Now",
-        desc: "Product Desc",
-        rating: 4,
-        availableSColor: [
-          'black',
-          'white'
-        ],
-        availableSizes: [
-          'XS',
-          'L',
-          '4XL'
         ]
     ),
   ];

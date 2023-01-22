@@ -267,7 +267,7 @@ class CheckoutPage extends StatelessWidget {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            TopBar('Checkout',Icons.arrow_back_sharp,() => Get.back()),
+                            TopBar('Checkout',Icons.arrow_back_sharp,() => Get.back(), rightIcon: null),
                             Expanded(
                               child: Container(
                                 padding: AppTheme.padding,

@@ -3,17 +3,26 @@ import 'package:flutter_ecommerce_app/src/widgets/extentions.dart';
 import 'package:flutter_ecommerce_app/src/widgets/title_text.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-
 import '../config/route.dart';
 import '../themes/theme.dart';
 
 
 class TopBar extends StatelessWidget {
-  const TopBar(this.pageName, this.icon, this.goTo) : super();
+  const TopBar(
+      this.pageName,
+      this.icon,
+      this.goTo,
+      {
+        this.rightIcon = Icons.person,
+        this.rightGoTo = Routes.login,
+      }
+  ) : super();
 
   final String pageName;
   final IconData icon;
   final Function goTo;
+  final String rightGoTo;
+  final IconData rightIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -39,8 +48,9 @@ class TopBar extends StatelessWidget {
             fontSize: 27,
             fontWeight: FontWeight.w400,
           ),
+          rightIcon == null ? SizedBox(width: 25):
           InkWell(
-            onTap: () => Get.toNamed(Routes.profile),
+            onTap: () => Get.toNamed(rightGoTo),
             child: ClipRRect(
               borderRadius: BorderRadius.all(Radius.circular(13)),
               child: Container(
@@ -52,7 +62,7 @@ class TopBar extends StatelessWidget {
                     BoxShadow(color: Color(0xfff8f8f8), blurRadius: 10, spreadRadius: 10),
                   ],
                 ),
-                child: Icon(Icons.person, color: Colors.black54),
+                child: Icon(rightIcon, color: Colors.black54),
               ),
             ),
           )

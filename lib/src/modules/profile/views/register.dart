@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_ecommerce_app/src/widgets/extentions.dart';
 import 'package:get/get.dart';
-
-import '../../../config/route.dart';
 import '../../../themes/light_color.dart';
 import '../../../themes/theme.dart';
 import '../../../widgets/title_text.dart';
@@ -68,7 +65,12 @@ class RegisterPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                TopBar('Register', Icons.arrow_back_rounded,() => Get.back()),
+                TopBar(
+                  'Register',
+                  Icons.arrow_back_rounded,
+                      () => Get.back(),
+                  rightIcon: null,
+                ),
                 SizedBox(height: 100),
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 20),

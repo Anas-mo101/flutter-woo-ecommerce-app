@@ -6,8 +6,6 @@ import 'package:get/get.dart';
 import '../../../config/route.dart';
 import '../../../widgets/topbar.dart';
 import '../controller/billing_controller.dart';
-import '../controller/checkout_controller.dart';
-import '../models/order.dart';
 import '../widgets/toggle_payment_options.dart';
 
 class BillingPage extends StatelessWidget {
@@ -27,32 +25,6 @@ class BillingPage extends StatelessWidget {
         ),
         onPressed: () {
           if(billingController.uniqueList.isNotEmpty && billingController.validateCustomerInfo()){
-            Order order = Order(
-              billingController.itemsQty,
-              billingController.uniqueList,
-              billingController.paymentOptions[billingController.selectedPaymentOptions],
-              billingController.cusName.value.text,
-              billingController.cusPhone.value.text,
-              billingController.cusEmail.value.text,
-              billingController.cusBilling.value.text,
-              billingController.cusShipping.value.text,
-              billingController.cusZip.value.text,
-              billingController.shippingOptions[billingController.selectedShippingOptions],
-            );
-
-            print([
-              billingController.itemsQty,
-              billingController.uniqueList,
-              billingController.paymentOptions[billingController.selectedPaymentOptions],
-              billingController.cusName.value.text,
-              billingController.cusPhone.value.text,
-              billingController.cusEmail.value.text,
-              billingController.cusBilling.value.text,
-              billingController.cusShipping.value.text,
-              billingController.cusZip.value.text,
-              billingController.shippingOptions[billingController.selectedShippingOptions],
-            ]);
-
             Get.toNamed(Routes.checkout, arguments: [
               billingController.itemsQty,
               billingController.uniqueList,
@@ -65,7 +37,6 @@ class BillingPage extends StatelessWidget {
               billingController.cusZip.value.text,
               billingController.shippingOptions[billingController.selectedShippingOptions],
             ]);
-            // Get.toNamed(Routes.checkout);
           }
         },
         child: Container(
@@ -115,7 +86,7 @@ class BillingPage extends StatelessWidget {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            TopBar('Billing',Icons.arrow_back_sharp,() => Get.toNamed(Routes.cart)),
+                            TopBar('Billing',Icons.arrow_back_sharp,() => Get.toNamed(Routes.cart), rightIcon: null),
                             Container(
                               padding: EdgeInsets.symmetric(horizontal: 20),
                               child: Column(
