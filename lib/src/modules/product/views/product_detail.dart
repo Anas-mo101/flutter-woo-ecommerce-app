@@ -15,43 +15,57 @@ class ProductDetailPage extends StatelessWidget {
   final int productId = Get.arguments;
   final productController = Get.put(ProductController());
 
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: _floatingButton(context),
-      body: SafeArea(
-        child: Container(
-          decoration: BoxDecoration(
-              gradient: LinearGradient(
-            colors: [
-              Color(0xfffbfbfb),
-              Color(0xfff7f7f7),
-            ],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          )),
-          child: GetBuilder<ProductController>(
-            init: ProductController(),
-            builder: (controller) {
-              controller.setProduct(productId);
-              return Stack(
-                children: <Widget>[
-                  Column(
-                    children: <Widget>[
-                      _appBar(context, controller.isLiked),
-                      _productImage(context),
-                      _categoryWidget(context),
-                    ],
+    return GetBuilder<ProductController>(
+        init: ProductController(),
+        builder: (controller) {
+          controller.setProduct(productId);
+
+          return Scaffold(
+            floatingActionButton: FloatingActionButton(
+              onPressed: () {
+                CartController.addToCart(controller.product).then((value) => controller.setProductQtyInCart());
+              },
+              backgroundColor: LightColor.orange,
+              child: Stack(
+                children: [
+                  Positioned(
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    child: Icon(Icons.shopping_cart, color: Theme.of(context).floatingActionButtonTheme.backgroundColor),
                   ),
-                  _detailWidget(controller.product)
+                  if(controller.productQtyInCart > 0)
+                  Positioned(
+                      top: 25,
+                      left: 0,
+                      child: Container(width: 20, height: 20, decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.black), child: Center(child: Text('${controller.productQtyInCart}'))))
                 ],
-              );
-            },
-          ),
-        ),
-      ),
-    );
+              ),
+            ),
+            body: SafeArea(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Color(0xfff1f0f0),
+                ),
+                child: Stack(
+                  children: <Widget>[
+                    Column(
+                      children: <Widget>[
+                        _appBar(context, controller.isLiked),
+                        _productImage(context),
+                        _categoryWidget(context),
+                      ],
+                    ),
+                    _detailWidget(controller.product)
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
   }
 
   Widget _appBar(BuildContext context, bool isLiked) {
@@ -150,7 +164,7 @@ class ProductDetailPage extends StatelessWidget {
     );
   }
 
-    Widget _detailWidget(Product product) {
+  Widget _detailWidget(Product product) {
     List<Widget> ratings = [];
     for (var i = 0; i < product.rating; i++) {
       ratings.add(Icon(Icons.star, color: LightColor.yellowColor, size: 17));
@@ -219,13 +233,11 @@ class ProductDetailPage extends StatelessWidget {
                 SizedBox(
                   height: 20,
                 ),
-                if(product.availableSizes.isNotEmpty)
-                  _availableSize(product.availableSizes),
+                if (product.availableSizes.isNotEmpty) _availableSize(product.availableSizes),
                 SizedBox(
                   height: 20,
                 ),
-                if(product.availableSColor.isNotEmpty)
-                _availableColor(product.availableSColor),
+                if (product.availableSColor.isNotEmpty) _availableColor(product.availableSColor),
                 SizedBox(
                   height: 20,
                 ),
@@ -241,9 +253,9 @@ class ProductDetailPage extends StatelessWidget {
   Widget _availableSize(List availableSizes) {
     List<Widget> sizes = [];
     for (var element in availableSizes.asMap().entries) {
-      if(productController.selectedAvailableSizes == element.key){
-        sizes.add(_sizeWidget(element.value,isSelected: true));
-      }else{
+      if (productController.selectedAvailableSizes == element.key) {
+        sizes.add(_sizeWidget(element.value, isSelected: true));
+      } else {
         sizes.add(_sizeWidget(element.value));
       }
     }
@@ -258,9 +270,7 @@ class ProductDetailPage extends StatelessWidget {
         SizedBox(height: 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            ...sizes
-          ],
+          children: <Widget>[...sizes],
         )
       ],
     );
@@ -287,9 +297,9 @@ class ProductDetailPage extends StatelessWidget {
   Widget _availableColor(List availableColors) {
     List<Widget> colors = [];
     for (var element in availableColors.asMap().entries) {
-      if(productController.selectedAvailableSColor == element.key){
-        colors.add(_colorWidget(element.value,isSelected: true));
-      }else{
+      if (productController.selectedAvailableSColor == element.key) {
+        colors.add(_colorWidget(element.value, isSelected: true));
+      } else {
         colors.add(_colorWidget(element.value));
       }
     }
@@ -297,13 +307,11 @@ class ProductDetailPage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        TitleText( text: "Available Colors", fontSize: 14),
+        TitleText(text: "Available Colors", fontSize: 14),
         SizedBox(height: 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            ...colors
-          ],
+          children: <Widget>[...colors],
         )
       ],
     );
@@ -330,7 +338,7 @@ class ProductDetailPage extends StatelessWidget {
     }
 
     return InkWell(
-      onTap: (){
+      onTap: () {
         productController.toggleColorOptions(c);
       },
       child: Container(
@@ -339,9 +347,7 @@ class ProductDetailPage extends StatelessWidget {
             CircleAvatar(
               radius: 12,
               backgroundColor: color.withAlpha(150),
-              child: isSelected
-                  ? Icon( Icons.check_circle, color: color, size: 18)
-                  : CircleAvatar(radius: 7, backgroundColor: color),
+              child: isSelected ? Icon(Icons.check_circle, color: color, size: 18) : CircleAvatar(radius: 7, backgroundColor: color),
             ),
             SizedBox(
               width: 30,
@@ -369,10 +375,25 @@ class ProductDetailPage extends StatelessWidget {
   FloatingActionButton _floatingButton(BuildContext context) {
     return FloatingActionButton(
       onPressed: () {
-        CartController.addToCart(productController.product);
+        CartController.addToCart(productController.product).then((value) => productController.setProductQtyInCart());
       },
       backgroundColor: LightColor.orange,
-      child: Icon(Icons.shopping_basket, color: Theme.of(context).floatingActionButtonTheme.backgroundColor),
+      child: Stack(
+        children: [
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: Icon(Icons.shopping_cart, color: Theme.of(context).floatingActionButtonTheme.backgroundColor),
+          ),
+          // if(productController.productQtyInCart > 0)
+          Positioned(
+              top: 25,
+              left: 0,
+              child: Container(width: 20, height: 20, decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.black), child: Center(child: Text('${productController.productQtyInCart}'))))
+        ],
+      ),
     );
   }
 }

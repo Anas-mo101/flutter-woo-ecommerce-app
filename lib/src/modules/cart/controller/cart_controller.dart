@@ -46,6 +46,19 @@ class CartController extends GetxController {
     return price;
   }
 
+  static Future<int> getQtyFromCart(int id) async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> cartQty = prefs.getStringList("cartQty") ?? [];
+    int count = 0;
+    cartQty.forEach((element) {
+      List<int> itemId = element.split(':').map((e) => int.parse(e)).toList();
+      if(id == itemId[0]){
+        count = itemId[1];
+      }
+    });
+    return count;
+  }
+
   static Future<void> addToCart(Product item) async {
     final prefs = await SharedPreferences.getInstance();
     List<String> cart = prefs.getStringList("cart") ?? [];
@@ -80,7 +93,6 @@ class CartController extends GetxController {
     prefs.setStringList("cartQty", []);
     prefs.setStringList("cart", []);
   }
-
 
   void removeFromCart(Product item) {
     if(itemsQty.containsKey(item.id)){
