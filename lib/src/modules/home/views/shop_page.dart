@@ -1,10 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_ecommerce_app/src/model/data.dart';
 import 'package:flutter_ecommerce_app/src/themes/light_color.dart';
 import 'package:flutter_ecommerce_app/src/themes/theme.dart';
 import 'package:flutter_ecommerce_app/src/widgets/product_card.dart';
-import 'package:flutter_ecommerce_app/src/widgets/extentions.dart';
 import 'package:get/get.dart';
 import '../../../config/route.dart';
 import '../../../widgets/bottom_navigation_bar.dart';
@@ -14,8 +12,6 @@ import '../widget/category-widget.dart';
 
 class ShopPage extends StatelessWidget {
 
-  final shopPageController = Get.put(HomeController());
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -23,32 +19,66 @@ class ShopPage extends StatelessWidget {
         child: SingleChildScrollView(
           physics: BouncingScrollPhysics(),
           dragStartBehavior: DragStartBehavior.down,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              _search(context),
-              CategoryWidget(),
-              _productWidget(context),
-              _productWidget(context),
-              SizedBox(height: 40)
-            ],
-          ),
+          child: GetBuilder<HomeController>(
+            init: HomeController(),
+            builder: (controller) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  _search(context),
+                  CategoryWidget(),
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: 10),
+                    width: AppTheme.fullWidth(context),
+                    height: AppTheme.fullWidth(context) * .7,
+                    child: controller.isLoading ? Center(child: CircularProgressIndicator()) :
+                    GridView(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 1,
+                          childAspectRatio: 5 / 3,
+                          mainAxisSpacing: 30.0,
+                          crossAxisSpacing: 20.0
+                      ),
+                      padding: EdgeInsets.only(left: 20),
+                      scrollDirection: Axis.horizontal,
+                      children: controller.products.map(
+                            (product) => ProductCard(
+                          product: product,
+                          onSelected: (model) {
+                            Get.toNamed(Routes.product, arguments: model.id);
+                          },
+                        ),
+                      ).toList(),
+                    ),
+                  ),
+                  SizedBox(height: 40)
+                ],
+              );
+            }
+          )
         )
     );
   }
 
-  Widget _productWidget(BuildContext context) {
+
+
+  Widget _productWidget(BuildContext context, HomeController controller) {
+    print(controller.products.length);
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
       width: AppTheme.fullWidth(context),
       height: AppTheme.fullWidth(context) * .7,
-      child: GridView(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 1, childAspectRatio: 4 / 3, mainAxisSpacing: 30, crossAxisSpacing: 20),
+      child: controller.isLoading ? Center(child: CircularProgressIndicator()) :
+      GridView(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 1,
+            childAspectRatio: 4 / 3,
+            crossAxisSpacing: 20.0
+        ),
         padding: EdgeInsets.only(left: 20),
         scrollDirection: Axis.horizontal,
-        children: AppData.productList
-            .map(
+        children: controller.products.map(
               (product) => ProductCard(
                 product: product,
                 onSelected: (model) {

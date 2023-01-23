@@ -3,11 +3,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_ecommerce_app/src/model/data.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
+import '../api/product_api.dart';
 import '../../cart/controller/cart_controller.dart';
 import '../model/product.dart';
+import '../model/test_product_model.dart';
 
 
 class ProductController extends GetxController  {
+
+  bool isLoading = true;
 
   int product_id;
   int productQtyInCart = 0;
@@ -16,6 +20,16 @@ class ProductController extends GetxController  {
 
   int selectedAvailableSizes = 0;
   int selectedAvailableSColor = 0;
+
+
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    if(Get.arguments is int){
+      setProduct(Get.arguments);
+    }
+    super.onInit();
+  }
 
   @override
   void onReady() {
@@ -42,9 +56,26 @@ class ProductController extends GetxController  {
     update();
   }
 
-  void setProduct(int id)  {
-    product_id = id;
-    product = AppData.productList.firstWhere((element) =>  element.id == product_id);
+  void setProduct(int id) async {
+    try{
+      product_id = id;
+      /// Connect API Model to View Model
+      TestProduct test = await getProduct(id);
+      product = Product(
+          id: test.id,
+          name: test.title,
+          image: test.images ?? [],
+          price: test.price.toDouble(),
+          category: '...',
+          desc: test.description,
+          rating: 4,
+          availableSizes: [],
+          availableSColor: []
+      );
+      isLoading = false;
+    }catch(e){
+      isLoading = false;
+    }
     update();
   }
 
@@ -54,9 +85,18 @@ class ProductController extends GetxController  {
     update();
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
 
+  Future<TestProduct> getProduct(int id) async {
+    try{
+      return await ProductApi.getProduct(id);
+    }catch(e){
+      return TestProduct(
+          id: id,
+          title: 'Try Again Later',
+          price: 0,
+          description: "...",
+          images: [],
+      );
+    }
+  }
 }

@@ -13,7 +13,7 @@ class ProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: LightColor.background,
+        color: LightColor.lightGrey,
         borderRadius: BorderRadius.all(Radius.circular(20)),
         boxShadow: <BoxShadow>[
           BoxShadow(color: Color(0xfff8f8f8), blurRadius: 15, spreadRadius: 10),
@@ -21,41 +21,19 @@ class ProductCard extends StatelessWidget {
       ),
       margin: EdgeInsets.symmetric(vertical: !product.isSelected ? 20 : 0),
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        padding: EdgeInsets.fromLTRB(0,25,0,10),
         child: Stack(
           alignment: Alignment.center,
           children: <Widget>[
-            Positioned(
-              left: 0,
-              top: 0,
-              child: IconButton(
-                icon: Icon(
-                  product.isliked ? Icons.favorite : Icons.favorite_border,
-                  color: product.isliked ? LightColor.red : LightColor.iconColor,
-                ),
-                onPressed: () {
-                  product.isliked = true;
-                },
-              ),
-            ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 SizedBox(height: product.isSelected ? 15 : 0),
-                Expanded(
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: <Widget>[
-                      CircleAvatar(
-                        radius: 40,
-                        backgroundColor: LightColor.orange.withAlpha(40),
-                      ),
-                      Image.asset(product.image)
-                    ],
-                  ),
-                ),
-                // SizedBox(height: 5),
+                product.image[0] == null ?
+                Icon(Icons.image_not_supported) :
+                Center(child: Image.network(product.image[0])),
+                SizedBox(height: 5),
                 TitleText(
                   text: product.name,
                   fontSize: product.isSelected ? 16 : 14,
@@ -70,6 +48,18 @@ class ProductCard extends StatelessWidget {
                   fontSize: product.isSelected ? 18 : 16,
                 ),
               ],
+            ),
+            Align(
+              alignment: Alignment.topLeft,
+              child: IconButton(
+                icon: Icon(
+                  product.isliked ? Icons.favorite : Icons.favorite_border,
+                  color: product.isliked ? LightColor.red : LightColor.iconColor,
+                ),
+                onPressed: () {
+                  product.isliked = true;
+                },
+              ),
             ),
           ],
         ),

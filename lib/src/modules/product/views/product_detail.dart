@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_ecommerce_app/src/model/data.dart';
 import 'package:flutter_ecommerce_app/src/themes/light_color.dart';
 import 'package:flutter_ecommerce_app/src/themes/theme.dart';
 import 'package:flutter_ecommerce_app/src/widgets/title_text.dart';
@@ -12,7 +11,6 @@ import '../controller/product_controller.dart';
 class ProductDetailPage extends StatelessWidget {
   ProductDetailPage({Key key}) : super(key: key);
 
-  final int productId = Get.arguments;
   final productController = Get.put(ProductController());
 
   @override
@@ -20,7 +18,6 @@ class ProductDetailPage extends StatelessWidget {
     return GetBuilder<ProductController>(
         init: ProductController(),
         builder: (controller) {
-          controller.setProduct(productId);
 
           return Scaffold(
             floatingActionButton: FloatingActionButton(
@@ -55,11 +52,19 @@ class ProductDetailPage extends StatelessWidget {
                     Column(
                       children: <Widget>[
                         _appBar(context, controller.isLiked),
-                        _productImage(context),
-                        _categoryWidget(context),
+                        if(!controller.isLoading && (controller.product?.image != null && controller.product.image.isNotEmpty) )
+                          _productImage(context, controller.product.image[0]),
                       ],
                     ),
-                    _detailWidget(controller.product)
+                    if(!controller.isLoading && controller?.product?.image != null)
+                      Positioned(
+                        top: 300,
+                          child: _categoryWidget(context, controller.product.image)
+                      ),
+                    if(controller.isLoading)
+                      Center(child: CircularProgressIndicator()),
+                    if(!controller.isLoading)
+                      _detailWidget(controller.product)
                   ],
                 ),
               ),
@@ -70,6 +75,7 @@ class ProductDetailPage extends StatelessWidget {
 
   Widget _appBar(BuildContext context, bool isLiked) {
     return Container(
+
       padding: AppTheme.padding,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -82,9 +88,16 @@ class ProductDetailPage extends StatelessWidget {
             isOutLine: true,
             onPressed: () => Get.back(),
           ),
-          _icon(isLiked ? Icons.favorite : Icons.favorite_border, color: isLiked ? LightColor.red : LightColor.lightGrey, size: 15, padding: 12, isOutLine: false, onPressed: () {
+          _icon(
+              isLiked ? Icons.favorite : Icons.favorite_border,
+              color: isLiked ? LightColor.red : LightColor.lightGrey,
+              size: 15,
+              padding: 12,
+              isOutLine: true,
+              onPressed: () {
 
-          }),
+              }
+          ),
         ],
       ),
     );
@@ -111,7 +124,7 @@ class ProductDetailPage extends StatelessWidget {
           BoxShadow(color: Color(0xfff8f8f8), blurRadius: 5, spreadRadius: 10, offset: Offset(5, 5)),
         ],
       ),
-      child: Icon(icon, color: color, size: size),
+      child: Center(child: Icon(icon, color: color, size: size)),
     ).ripple(() {
       if (onPressed != null) {
         onPressed();
@@ -119,7 +132,7 @@ class ProductDetailPage extends StatelessWidget {
     }, borderRadius: BorderRadius.all(Radius.circular(13)));
   }
 
-  Widget _productImage(BuildContext context) {
+  Widget _productImage(BuildContext context, String imgLink) {
     return Stack(
       alignment: Alignment.bottomCenter,
       children: <Widget>[
@@ -128,17 +141,22 @@ class ProductDetailPage extends StatelessWidget {
           fontSize: 160,
           color: LightColor.lightGrey,
         ),
-        Image.asset('assets/show_1.png')
+        (imgLink == '' && imgLink == null) ?
+          Image.asset('assets/show_1.png') : Image.network(imgLink)
       ],
     );
   }
 
-  Widget _categoryWidget(BuildContext context) {
+  Widget _categoryWidget(BuildContext context, List<String> images) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 0),
       width: AppTheme.fullWidth(context),
       height: 80,
-      child: Row(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.center, children: AppData.showThumbnailList.map((x) => _thumbnail(x)).toList()),
+      child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: images.map((x) => _thumbnail(x)).toList()
+      ),
     );
   }
 
@@ -148,22 +166,17 @@ class ProductDetailPage extends StatelessWidget {
       child: Container(
         height: 40,
         width: 50,
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: LightColor.grey,
-          ),
-          borderRadius: BorderRadius.all(Radius.circular(13)),
-          // color: Theme.of(context).backgroundColor,
-        ),
-        child: Image.asset(image),
+        child: Image.network(image,scale: 0.5),
       ).ripple(() {}, borderRadius: BorderRadius.all(Radius.circular(13))),
     );
   }
 
   Widget _detailWidget(Product product) {
     List<Widget> ratings = [];
-    for (var i = 0; i < product.rating; i++) {
-      ratings.add(Icon(Icons.star, color: LightColor.yellowColor, size: 17));
+    if(product?.rating != null){
+      for (var i = 0; i < product.rating; i++) {
+        ratings.add(Icon(Icons.star, color: LightColor.yellowColor, size: 17));
+      }
     }
 
     return DraggableScrollableSheet(
@@ -200,7 +213,7 @@ class ProductDetailPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      TitleText(text: product.name, fontSize: 25),
+                      TitleText(text: product?.name ?? '...', fontSize: 25),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: <Widget>[
@@ -213,7 +226,7 @@ class ProductDetailPage extends StatelessWidget {
                                 color: LightColor.red,
                               ),
                               TitleText(
-                                text: product.price.toString(),
+                                text: '${product?.price ?? '0.0'}',
                                 fontSize: 25,
                               ),
                             ],
@@ -226,18 +239,22 @@ class ProductDetailPage extends StatelessWidget {
                     ],
                   ),
                 ),
+                if (product?.availableSizes?.length != null && product.availableSizes.length > 0)
                 SizedBox(
                   height: 20,
                 ),
-                if (product.availableSizes.isNotEmpty) _availableSize(product.availableSizes),
+                if (product?.availableSizes?.length != null && product.availableSizes.length > 0)
+                  _availableSize(product.availableSizes),
+                if (product?.availableSColor != null && product.availableSColor.length > 0)
                 SizedBox(
                   height: 20,
                 ),
-                if (product.availableSColor.isNotEmpty) _availableColor(product.availableSColor),
+                if (product?.availableSColor != null && product.availableSColor.length > 0)
+                  _availableColor(product.availableSColor),
                 SizedBox(
                   height: 20,
                 ),
-                _description(product.desc),
+                _description(product?.desc ?? '...'),
               ],
             ),
           ),

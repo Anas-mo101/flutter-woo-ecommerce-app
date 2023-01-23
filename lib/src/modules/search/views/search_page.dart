@@ -71,7 +71,8 @@ class SearchPage extends StatelessWidget {
                 Positioned(
                   left: -20,
                   bottom: -20,
-                  child: Image.asset(model.image),
+                  child: model.image[0] == null && (model.image != null && model.image.isNotEmpty) ?
+                  Icon(Icons.image_not_supported) : Image.asset(model.image[0]),
                 )
               ],
             ),

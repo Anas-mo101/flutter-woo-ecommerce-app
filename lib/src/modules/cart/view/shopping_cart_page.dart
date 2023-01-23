@@ -42,17 +42,14 @@ class ShoppingCartPage extends StatelessWidget {
                           alignment: Alignment.bottomLeft,
                           child: Container(
                             decoration: BoxDecoration(color: LightColor.lightGrey, borderRadius: BorderRadius.circular(10)),
+                            child: model.image[0] == null && model.image.isEmpty ?
+                            Icon(Icons.image_not_supported) : Image.network(model.image[0], scale: 6),
                           ),
                         ),
                       ],
                     ),
                   ),
                 ),
-                Positioned(
-                  left: -20,
-                  bottom: -20,
-                  child: Image.asset(model.image),
-                )
               ],
             ),
           ),

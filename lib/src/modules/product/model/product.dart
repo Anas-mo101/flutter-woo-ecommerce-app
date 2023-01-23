@@ -3,7 +3,7 @@ class Product {
   String name;
   String desc;
   String category;
-  String image;
+  List<String> image;
   double price;
 
   bool isliked;
@@ -36,7 +36,7 @@ class Product {
       name: json['name'],
       desc: json['desc'],
       category: json['category'],
-      image: json['image'],
+      image: json['image'].cast<String>(),
       price: json['price'].toDouble(),
       rating: json['price'].toInt(),
       isliked: json['isliked'],

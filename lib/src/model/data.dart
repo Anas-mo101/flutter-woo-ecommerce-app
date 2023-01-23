@@ -12,12 +12,12 @@ class AppData {
 
   static List<Product> productList = [
     Product(
-        id: 1,
+        id: 30,
         name: 'Nike Air Max 200',
         price: 240.00,
         isSelected: true,
         isliked: false,
-        image: 'assets/shooe_tilt_1.png',
+        image: ['assets/shooe_tilt_1.png'],
         category: "Trending Now",
         desc: "Product Desc",
         rating: 4,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_ecommerce_app/src/themes/theme.dart';
 import 'package:flutter_ecommerce_app/src/widgets/topbar.dart';
 import 'package:get/get.dart';
+import '../../../api/data providers/cache_manager.dart';
 import '../controllers/settings_controller.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -89,11 +90,11 @@ class SettingsPage extends StatelessWidget {
                                             )
                                         ),
                                         child: ListTile(
-                                          title: Text('More Settings'),
+                                          title: Text('Clear Cache'),
                                           leading: Icon(Icons.settings),
                                           trailing: Icon(Icons.arrow_forward_ios),
                                           onTap: (){
-
+                                            AppCacheManager().clearCache();
                                           },
                                         ),
                                       )
