@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_ecommerce_app/src/themes/light_color.dart';
 import 'package:flutter_ecommerce_app/src/themes/theme.dart';
 import 'package:flutter_ecommerce_app/src/widgets/product_card.dart';
+import 'package:flutter_ecommerce_app/src/widgets/title_text.dart';
 import 'package:get/get.dart';
 import '../../../config/route.dart';
 import '../../../widgets/bottom_navigation_bar.dart';
@@ -17,7 +18,7 @@ class ShopPage extends StatelessWidget {
     return Container(
         height: MediaQuery.of(context).size.height,
         child: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
+          // physics: BouncingScrollPhysics(),
           dragStartBehavior: DragStartBehavior.down,
           child: GetBuilder<HomeController>(
             init: HomeController(),
@@ -28,10 +29,25 @@ class ShopPage extends StatelessWidget {
                 children: <Widget>[
                   _search(context),
                   CategoryWidget(),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TitleText(text: 'Mens'),
+                        InkWell(
+                            onTap: (){
+
+                            },
+                            child: Text('view more')
+                        )
+                      ],
+                    ),
+                  ),
                   Container(
                     margin: EdgeInsets.symmetric(vertical: 10),
                     width: AppTheme.fullWidth(context),
-                    height: AppTheme.fullWidth(context) * .7,
+                    height: AppTheme.fullWidth(context),
                     child: controller.isLoading ? Center(child: CircularProgressIndicator()) :
                     GridView(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -42,7 +58,76 @@ class ShopPage extends StatelessWidget {
                       ),
                       padding: EdgeInsets.only(left: 20),
                       scrollDirection: Axis.horizontal,
-                      children: controller.products.map(
+                      children: controller.products.getRange((controller.products.length / 2).floor(), controller.products.length-1).map(
+                          (product) => ProductCard( product: product, onSelected: (model) {
+                            Get.toNamed(Routes.product, arguments: model.id);
+                          },
+                        ),
+                      ).toList(),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TitleText(text: 'Trending'),
+                        InkWell(
+                            onTap: (){
+
+                            },
+                            child: Text('view more')
+                        )
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: 10),
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: controller.isLoading ? Center(child: CircularProgressIndicator()) :
+                    Column(
+                      children: [
+                        ...controller.products.getRange(0, 3).map(
+                              (product) => ProductCard(
+                            product: product,
+                            onSelected: (model) {
+                              Get.toNamed(Routes.product, arguments: model.id);
+                            },
+                          ),
+                        ).toList()
+                      ],
+                    )
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TitleText(text: 'Women'),
+                        InkWell(
+                          onTap: (){
+
+                          },
+                          child: Text('view more')
+                        )
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: 10),
+                    width: AppTheme.fullWidth(context),
+                    height: AppTheme.fullWidth(context),
+                    child: controller.isLoading ? Center(child: CircularProgressIndicator()) :
+                    GridView(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 1,
+                          childAspectRatio: 5 / 3,
+                          mainAxisSpacing: 30.0,
+                          crossAxisSpacing: 20.0
+                      ),
+                      padding: EdgeInsets.only(left: 20),
+                      scrollDirection: Axis.horizontal,
+                      children: controller.products.getRange(0, (controller.products.length / 2).floor()).map(
                             (product) => ProductCard(
                           product: product,
                           onSelected: (model) {
@@ -52,7 +137,7 @@ class ShopPage extends StatelessWidget {
                       ).toList(),
                     ),
                   ),
-                  SizedBox(height: 40)
+                  SizedBox(height: 50)
                 ],
               );
             }

@@ -32,9 +32,8 @@ class AppDataProvider{
         if(EndPoints.isCacheable(url)){
           AppCacheManager().cacheFile(url, res.bodyBytes, 7);
         }
-        var body = json.decode(res.body);
-        print(body);
-        return body;
+        print(json.decode(res.body));
+        return json.decode(res.body);
       } else {
         print('API RESPONSE: FAILED');
         // in case wifi response fails, check if cache is available as backup

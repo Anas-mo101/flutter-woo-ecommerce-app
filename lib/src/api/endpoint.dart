@@ -15,7 +15,7 @@ class EndPoints {
       'limit': limit,
     }).query;
 
-    return baseURL + 'products?' + params;
+    return baseURL + 'products/?' + params;
   }
 
 
@@ -23,7 +23,7 @@ class EndPoints {
 
   static bool isCacheable(String url){
     return avoidCache.firstWhere(
-            (element) => element == url, orElse: () => ''
+       (element) => element == url, orElse: () => ''
     ) == '' ? true : false;
   }
 }

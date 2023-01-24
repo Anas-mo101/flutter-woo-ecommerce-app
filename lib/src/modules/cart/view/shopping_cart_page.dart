@@ -208,7 +208,7 @@ class ShoppingCartPage extends StatelessWidget {
                               ),
                             ),
                             Container(
-                              padding: EdgeInsets.symmetric(vertical: 70,horizontal: 20),
+                              padding: EdgeInsets.fromLTRB(20, 0, 20, 50),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: <Widget>[

@@ -15,7 +15,7 @@ class SearchPage extends StatelessWidget {
 
   final searchController = Get.put(SearchController());
 
-  Widget _search(BuildContext context,{String keyword = ''}) {
+  Widget _search(BuildContext context) {
     return Container(
       margin: AppTheme.padding,
       child: Row(
@@ -26,7 +26,11 @@ class SearchPage extends StatelessWidget {
               alignment: Alignment.center,
               decoration: BoxDecoration(color: LightColor.lightGrey.withAlpha(100), borderRadius: BorderRadius.all(Radius.circular(10))),
               child: TextField(
-                controller: TextEditingController()..text = keyword,
+                controller: searchController.searchController,
+                onSubmitted: (val){
+                  print('SEARCH TEXT: $val');
+                  searchController.searchByText(search: val);
+                },
                 decoration: InputDecoration(
                   border: InputBorder.none,
                   hintText: "search_products".tr,
@@ -45,6 +49,7 @@ class SearchPage extends StatelessWidget {
   Widget _item(Product model) {
     return Container(
       height: 80,
+      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       child: Row(
         children: <Widget>[
           AspectRatio(
@@ -72,7 +77,7 @@ class SearchPage extends StatelessWidget {
                   left: -20,
                   bottom: -20,
                   child: model.image[0] == null && (model.image != null && model.image.isNotEmpty) ?
-                  Icon(Icons.image_not_supported) : Image.asset(model.image[0]),
+                  Icon(Icons.image_not_supported) : Image.network(model.image[0]),
                 )
               ],
             ),
@@ -104,7 +109,9 @@ class SearchPage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            Get.toNamed(Routes.product, arguments: model.id);
+                          },
                           child: Container(
                             width: 35,
                             height: 35,
@@ -130,48 +137,48 @@ class SearchPage extends StatelessWidget {
         child: Stack(
           fit: StackFit.expand,
           children: <Widget>[
-            SingleChildScrollView(
-              child: Container(
-                height: AppTheme.fullHeight(context) - 50,
+            Container(
+              height: AppTheme.fullHeight(context) - 50,
+              child: SingleChildScrollView(
                 child: Column(
                   children: <Widget>[
                     TopBar('search'.tr, Icons.sort,() => Get.toNamed(Routes.settings)),
                     GetBuilder<SearchController>(
                         init: SearchController(),
                         builder: (controller) {
-                          String args = Get.arguments != null ? '${Get.arguments}' : '';
-
                           return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              _search(context, keyword: args),
-                              SizedBox(height: 10),
-                              Container(
-                                padding: EdgeInsets.symmetric(horizontal: 20.0),
-                                child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text('filter_category'.tr),
-                                      InkWell(
-                                        onTap: () => Get.toNamed(Routes.filter),
-                                        child: Container(
-                                          padding: EdgeInsets.all(10),
-                                          decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(13)), color: Theme
-                                              .of(context)
-                                              .backgroundColor, boxShadow: AppTheme.shadow),
-                                          child: Icon(Icons.filter_list, color: Colors.black54),
-                                        ),
-                                      )
-                                    ]
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                _search(context),
+                                SizedBox(height: 10),
+                                Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 20.0),
+                                  child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text('filter_category'.tr),
+                                        InkWell(
+                                          onTap: () => Get.toNamed(Routes.filter),
+                                          child: Container(
+                                            padding: EdgeInsets.all(10),
+                                            decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(13)), color: Theme
+                                                .of(context)
+                                                .backgroundColor, boxShadow: AppTheme.shadow),
+                                            child: Icon(Icons.filter_list, color: Colors.black54),
+                                          ),
+                                        )
+                                      ]
+                                  ),
                                 ),
-                              ),
-                              CategoryWidget(),
-                              Column(
-                                children: [
-                                  // search results
-                                ],
-                              )
-                            ],
+                                CategoryWidget(),
+                                Column(
+                                  children: [
+                                    if(controller?.searchResults != null && controller.searchResults.isNotEmpty)
+                                    ...controller.searchResults.map((e) => _item(e)).toList(),
+                                    SizedBox(height: 50)
+                                  ],
+                                )
+                              ],
                           );
                         }
                      )

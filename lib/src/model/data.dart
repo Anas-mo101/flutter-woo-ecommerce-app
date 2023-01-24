@@ -35,8 +35,8 @@ class AppData {
 
 
   static List<Category> categoryList = [
-    Category(),
-    Category( id: 1, name: "Sneakers", image: 'assets/shoe_thumb_2.png', isSelected: true),
+    Category(id: 4, name: "All", image: '', isSelected: true),
+    Category( id: 1, name: "Sneakers", image: 'assets/shoe_thumb_2.png'),
     Category(id: 2, name: "Jacket", image: 'assets/jacket.png'),
     Category(id: 3, name: "Watch", image: 'assets/watch.png'),
   ];

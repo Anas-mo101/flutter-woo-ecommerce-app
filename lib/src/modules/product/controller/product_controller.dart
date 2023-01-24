@@ -1,8 +1,4 @@
-import 'package:flutter/animation.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_ecommerce_app/src/model/data.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import '../api/product_api.dart';
 import '../../cart/controller/cart_controller.dart';
 import '../model/product.dart';
@@ -20,6 +16,7 @@ class ProductController extends GetxController  {
 
   int selectedAvailableSizes = 0;
   int selectedAvailableSColor = 0;
+  int selectProductVariation = 0;
 
 
   @override
@@ -36,6 +33,11 @@ class ProductController extends GetxController  {
     // TODO: implement onReady
     setProductQtyInCart();
     super.onReady();
+  }
+
+  void toggleProduct(int index) {
+    selectProductVariation = index;
+    update();
   }
 
   void toggleSizeOptions(String selected) {

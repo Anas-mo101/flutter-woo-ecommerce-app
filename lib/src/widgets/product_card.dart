@@ -49,16 +49,14 @@ class ProductCard extends StatelessWidget {
                 ),
               ],
             ),
-            Align(
-              alignment: Alignment.topLeft,
+            Positioned(
+              top: -15,
+              left: 5,
               child: IconButton(
                 icon: Icon(
                   product.isliked ? Icons.favorite : Icons.favorite_border,
                   color: product.isliked ? LightColor.red : LightColor.iconColor,
                 ),
-                onPressed: () {
-                  product.isliked = true;
-                },
               ),
             ),
           ],

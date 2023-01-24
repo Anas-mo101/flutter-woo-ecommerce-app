@@ -18,7 +18,6 @@ class ProductDetailPage extends StatelessWidget {
     return GetBuilder<ProductController>(
         init: ProductController(),
         builder: (controller) {
-
           return Scaffold(
             floatingActionButton: FloatingActionButton(
               onPressed: () {
@@ -53,13 +52,17 @@ class ProductDetailPage extends StatelessWidget {
                       children: <Widget>[
                         _appBar(context, controller.isLiked),
                         if(!controller.isLoading && (controller.product?.image != null && controller.product.image.isNotEmpty) )
-                          _productImage(context, controller.product.image[0]),
+                          _productImage(context, controller.product.image[controller.selectProductVariation]),
                       ],
                     ),
                     if(!controller.isLoading && controller?.product?.image != null)
                       Positioned(
-                        top: 300,
-                          child: _categoryWidget(context, controller.product.image)
+                        top: 270,
+                          child: _categoryWidget(
+                            context,
+                            controller.product.image,
+                            controller.toggleProduct
+                          )
                       ),
                     if(controller.isLoading)
                       Center(child: CircularProgressIndicator()),
@@ -70,12 +73,12 @@ class ProductDetailPage extends StatelessWidget {
               ),
             ),
           );
-        });
+        }
+    );
   }
 
   Widget _appBar(BuildContext context, bool isLiked) {
     return Container(
-
       padding: AppTheme.padding,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -147,7 +150,7 @@ class ProductDetailPage extends StatelessWidget {
     );
   }
 
-  Widget _categoryWidget(BuildContext context, List<String> images) {
+  Widget _categoryWidget(BuildContext context, List<String> images, Function toggle) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 0),
       width: AppTheme.fullWidth(context),
@@ -155,19 +158,17 @@ class ProductDetailPage extends StatelessWidget {
       child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
-          children: images.map((x) => _thumbnail(x)).toList()
+          children: images.asMap().entries.map((x) =>
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 10),
+                child: Container(
+                  height: 40,
+                  width: 50,
+                  child: Image.network(x.value,scale: 0.5),
+                ).ripple(() => toggle(x.key), borderRadius: BorderRadius.all(Radius.circular(13))),
+              )
+          ).toList()
       ),
-    );
-  }
-
-  Widget _thumbnail(String image) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 10),
-      child: Container(
-        height: 40,
-        width: 50,
-        child: Image.network(image,scale: 0.5),
-      ).ripple(() {}, borderRadius: BorderRadius.all(Radius.circular(13))),
     );
   }
 
@@ -181,8 +182,8 @@ class ProductDetailPage extends StatelessWidget {
 
     return DraggableScrollableSheet(
       maxChildSize: .8,
-      initialChildSize: .53,
-      minChildSize: .53,
+      initialChildSize: .58,
+      minChildSize: .58,
       builder: (context, scrollController) {
         return Container(
           padding: AppTheme.padding.copyWith(bottom: 0),
@@ -208,36 +209,34 @@ class ProductDetailPage extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 10),
-                Container(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      TitleText(text: product?.name ?? '...', fontSize: 25),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: <Widget>[
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              TitleText(
-                                text: "\$ ",
-                                fontSize: 18,
-                                color: LightColor.red,
-                              ),
-                              TitleText(
-                                text: '${product?.price ?? '0.0'}',
-                                fontSize: 25,
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: <Widget>[...ratings],
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                TitleText(text: product?.name ?? '...', fontSize: 25),
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: <Widget>[
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            TitleText(
+                              text: "\$ ",
+                              fontSize: 18,
+                              color: LightColor.red,
+                            ),
+                            TitleText(
+                              text: '${product?.price ?? '0.0'}',
+                              fontSize: 25,
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: <Widget>[...ratings],
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
                 if (product?.availableSizes?.length != null && product.availableSizes.length > 0)
                 SizedBox(
