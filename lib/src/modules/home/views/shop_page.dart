@@ -191,8 +191,7 @@ class ShopPage extends StatelessWidget {
               ),
               child: TextField(
                 onSubmitted: (String value) {
-                  final navController = Get.put(NavController());
-                  navController.toggleNavBar(1, argument: value);
+                  Get.offAndToNamed(Routes.search, arguments: value);
                 },
                 decoration: InputDecoration(
                     border: InputBorder.none,

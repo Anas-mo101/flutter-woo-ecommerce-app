@@ -1,5 +1,7 @@
 import 'package:flutter_ecommerce_app/src/modules/home/views/main_page.dart';
 import 'package:get/get.dart';
+import '../modules/ads/ads_middleware.dart';
+import '../modules/ads/views/ads_bill_board.dart';
 import '../modules/checkout/views/billing_page.dart';
 import '../modules/checkout/views/checkout_page.dart';
 import '../modules/checkout/views/confirmation_page.dart';
@@ -28,18 +30,27 @@ class Routes {
   static const settings = '/settings';
   static const register = '/register';
   static const confirmation = '/confirmation';
-  static const product = '/product/:';
+  static const product = '/product';
+  static const billboard = '/billboard';
 
 
   static getRoute() {
     return [
-      GetPage(name: home, page: () => MainPage()),
+      GetPage(name: home, page: () => MainPage(), middlewares: [
+        MidScreensAdv()
+      ]),
       GetPage(name: splash, page: () => SplashScreen()),
       GetPage(name: cart, page: () => ShoppingCartPage()),
-      GetPage( name: product,  page: () => ProductDetailPage()),
+      GetPage( name: product,  page: () => ProductDetailPage(), middlewares: [
+        MidScreensAdv()
+      ]),
       GetPage( name: confirmation,  page: () => ConfirmationPage()),
-      GetPage( name: search,  page: () => SearchPage()),
-      GetPage( name: orders,  page: () => OrderPage()),
+      GetPage( name: search,  page: () => SearchPage(), middlewares: [
+        MidScreensAdv()
+      ]),
+      GetPage( name: orders,  page: () => OrderPage(), middlewares: [
+        MidScreensAdv()
+      ]),
       GetPage( name: filter,  page: () => SearchFilter()),
       GetPage( name: billing,  page: () => BillingPage()),
       GetPage( name: checkout,  page: () => CheckoutPage()),
@@ -47,6 +58,7 @@ class Routes {
       GetPage( name: profile,  page: () => ProfilePage()),
       GetPage( name: login,  page: () => LoginPage()),
       GetPage( name: register,  page: () => RegisterPage()),
+      GetPage( name: billboard,  page: () => AdBillBoard()),
     ];
   }
 }

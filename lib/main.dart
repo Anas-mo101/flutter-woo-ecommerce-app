@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ecommerce_app/src/config/internationalization.dart';
 import 'package:flutter_ecommerce_app/src/config/route.dart';
+import 'package:flutter_ecommerce_app/src/modules/ads/ads_middleware.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'src/themes/theme.dart';
 import 'package:get/get.dart';
 
 
-void main() => runApp(MyApp());
+main() async => {
+  await Get.putAsync<AdsService>(() => AdsService().init()),
+  runApp(MyApp())
+};
 
 class MyApp extends StatelessWidget {
   @override
