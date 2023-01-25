@@ -6,7 +6,6 @@ import 'package:flutter_ecommerce_app/src/widgets/product_card.dart';
 import 'package:flutter_ecommerce_app/src/widgets/title_text.dart';
 import 'package:get/get.dart';
 import '../../../config/route.dart';
-import '../../../widgets/bottom_navigation_bar.dart';
 import '../controller/home_controller.dart';
 import '../widget/category-widget.dart';
 
@@ -149,7 +148,6 @@ class ShopPage extends StatelessWidget {
 
 
   Widget _productWidget(BuildContext context, HomeController controller) {
-    print(controller.products.length);
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
       width: AppTheme.fullWidth(context),

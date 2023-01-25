@@ -8,7 +8,7 @@ class AdBillBoard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var follow_up = Get.arguments;
+    var followUp = Get.arguments;
 
     return Scaffold(
       body: SafeArea(
@@ -16,7 +16,7 @@ class AdBillBoard extends StatelessWidget {
           children: [
             InkWell(
               onTap: (){
-                Get.offAndToNamed(follow_up);
+                Get.offAndToNamed(followUp);
               },
               child: Container(
                 margin: EdgeInsets.all(20),

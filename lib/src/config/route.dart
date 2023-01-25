@@ -8,6 +8,7 @@ import '../modules/checkout/views/confirmation_page.dart';
 import '../modules/orders/views/orders_page.dart';
 import '../modules/product/views/product_detail.dart';
 import '../modules/cart/view/shopping_cart_page.dart';
+import '../modules/profile/middleware/auth_middleware.dart';
 import '../modules/profile/views/login.dart';
 import '../modules/profile/views/profile.dart';
 import '../modules/profile/views/register.dart';
@@ -40,7 +41,9 @@ class Routes {
         MidScreensAdv()
       ]),
       GetPage(name: splash, page: () => SplashScreen()),
-      GetPage(name: cart, page: () => ShoppingCartPage()),
+      GetPage(name: cart, page: () => ShoppingCartPage(), middlewares: [
+        MidScreensAdv()
+      ]),
       GetPage( name: product,  page: () => ProductDetailPage(), middlewares: [
         MidScreensAdv()
       ]),
@@ -52,11 +55,19 @@ class Routes {
         MidScreensAdv()
       ]),
       GetPage( name: filter,  page: () => SearchFilter()),
-      GetPage( name: billing,  page: () => BillingPage()),
-      GetPage( name: checkout,  page: () => CheckoutPage()),
+      GetPage( name: billing,  page: () => BillingPage(), middlewares: [
+        AuthMiddle()
+      ]),
+      GetPage( name: checkout,  page: () => CheckoutPage(), middlewares: [
+        AuthMiddle()
+      ]),
       GetPage( name: settings,  page: () => SettingsPage()),
-      GetPage( name: profile,  page: () => ProfilePage()),
-      GetPage( name: login,  page: () => LoginPage()),
+      GetPage( name: profile,  page: () => ProfilePage(), middlewares: [
+        AuthMiddle()
+      ]),
+      GetPage( name: login,  page: () => LoginPage(), middlewares: [
+        // AuthMiddle()
+      ]),
       GetPage( name: register,  page: () => RegisterPage()),
       GetPage( name: billboard,  page: () => AdBillBoard()),
     ];

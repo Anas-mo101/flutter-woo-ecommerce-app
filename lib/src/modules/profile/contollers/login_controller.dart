@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../config/route.dart';
-import '../../../model/data.dart';
+import '../api/auth_api.dart';
 
 class LoginController extends GetxController {
 
@@ -12,9 +12,9 @@ class LoginController extends GetxController {
   bool loginPassErr = false;
   String loginStatus = '';
 
-  void login() {
+  Future<void> login() async {
     if(validateCreds()){
-      if (loginEmail.text == AppData.user.email && loginPassword.text == AppData.user.password) {
+      if (await AuthApi().authUser(loginEmail.text, loginPassword.text)) {
         Get.offNamed(Routes.profile);
       } else {
         loginStatus = 'Incorrect Username/Password';

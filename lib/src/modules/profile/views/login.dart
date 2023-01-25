@@ -6,6 +6,7 @@ import '../../../themes/theme.dart';
 import '../../../widgets/title_text.dart';
 import '../../../widgets/topbar.dart';
 import '../contollers/login_controller.dart';
+import '../middleware/auth_middleware.dart';
 
 
 class LoginPage extends StatelessWidget {
@@ -37,7 +38,9 @@ class LoginPage extends StatelessWidget {
         ),
         SizedBox(height: 20),
         TextButton(
-          onPressed: () {},
+          onPressed: () {
+
+          },
           style: ButtonStyle(
             shape: MaterialStateProperty.all(
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),

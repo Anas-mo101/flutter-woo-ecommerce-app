@@ -5,27 +5,22 @@ import 'data_channel_decider.dart';
 import 'endpoint.dart';
 
 class AppDataProvider{
-
-  Future<http.Response> apiCall(String method, String url, {Map headers, Object body}) async {
+  Future<http.Response> apiCall(String method, String url, Map<String, String> headers, Object body) async {
     switch(method){
-      case 'get':
-        return await http.get(Uri.parse(url), headers: headers);
-      case 'post':
-        return await http.post(Uri.parse(url), body: body, headers: headers);
-      case 'update':
-        return await http.put(Uri.parse(url), body: body, headers: headers);
-      case 'delete':
-        return await http.delete(Uri.parse(url), headers: headers);
+      case 'get': return await http.get(Uri.parse(url), headers: headers);
+      case 'post': return await http.post(Uri.parse(url), body: body, headers: headers);
+      case 'update': return await http.put(Uri.parse(url), body: body, headers: headers);
+      case 'delete': return await http.delete(Uri.parse(url), headers: headers);
     }
   }
 
-
-  dynamic handleResponse(String method, String url, {Map headers, Object body}) async {
+  dynamic handleResponse(String method, String url, Map<String, String> headers, {Object body}) async {
+    print('apiCall: $method ==> $url');
     // check for connectivity, if connected fetch from api, else fetch from cache, else throw Exception
     final channel = await DataChannelDecider.decideChannel(url);
     print('DATA FROM CHANNEL: $channel');
     if (channel == DataChannels.INTERNET) {
-      final res = await apiCall(method, url, headers: headers, body: body);
+      final res = await apiCall(method, url, headers, body);
       print('API RESPONSE: ${res.statusCode}');
       if (res.statusCode == 200) {
         // update cache - not for all endpoints

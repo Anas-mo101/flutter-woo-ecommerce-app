@@ -1,64 +1,55 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
+import 'package:get/get.dart';
+import '../../modules/profile/middleware/auth_middleware.dart';
 import '../app_data_provider.dart';
 
 
-// funnel between fetch data from cache and api accordingly
+/// funnel between fetch data from cache and api accordingly
 class BaseApi extends AppDataProvider {
 
-  /// Basic Auth
-  static const CLIENT_KEY = '';
-  static const CLIENT_SECRET = '';
-  String basicAuth = 'Basic ' + base64.encode(utf8.encode('$CLIENT_KEY:$CLIENT_SECRET'));
-
   static Map<String, String> headers = {
-    // "Content-Type": "application/json",
-    // "Authorization": "Bearer $basicAuth",
+    "Content-Type": "application/json",
   };
 
-  Future<String> loginWithBearerAuth(String url, String email, String password) async {
-    final responseJson = await post(url, { "email": email, "password": password });
-    if(responseJson.containsKey("access_token")){
-      return responseJson["access_token"];
-    }else{
-      throw Exception("Failed to login, please check your credentials and try again");
+  BaseApi(){
+    final authService = Get.find<AuthService>();
+    if(authService.isAuthed()){
+      headers['Authorization'] = 'Bearer ${authService.token}';
     }
   }
 
-   Future<dynamic> get(String url) async {
+  Future<dynamic> get(String url) async {
     try {
-      return handleResponse('get',url, headers: headers);
+      return handleResponse('get', url, headers);
     } catch (e) {
       print('BaseApi GET Failed');
       return false;
     }
   }
 
-// Function for handling POST requests
-  Future<dynamic> post(String url, dynamic body) async {
+  // Function for handling POST requests
+  Future<dynamic> post(String url, dynamic body, {Map<String, String> mHeader}) async {
     try {
-      return handleResponse('post', url, body: body, headers: headers);
+      return handleResponse('post', url, mHeader, body: body);
     } catch (e) {
       return false;
     }
   }
 
-// Function for handling PUT requests
+  // Function for handling PUT requests
   Future<dynamic> put(String url, dynamic body) async {
     try {
-      return handleResponse('update', url, body: body, headers: headers);
+      return handleResponse('update', url, headers, body: body);
     } catch (e) {
       return false;
     }
   }
 
-// Function for handling DELETE requests
+  // Function for handling DELETE requests
   Future<dynamic> delete(String url) async {
     try {
-      return handleResponse('delete', url, headers: headers);
+      return handleResponse('delete', url, headers);
     } catch (e) {
       return false;
     }
   }
-
 }

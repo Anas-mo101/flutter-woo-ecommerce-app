@@ -17,6 +17,10 @@ class AdsService extends GetxService {
     print('AdsService isValidAdTiming(): $validation');
     return validation;
   }
+
+  bool isAdsAvailable() {
+    return true;
+  }
 }
 
 class MidScreensAdv extends GetMiddleware {

@@ -14,7 +14,7 @@ class TopBar extends StatelessWidget {
       this.goTo,
       {
         this.rightIcon = Icons.person,
-        this.rightGoTo = Routes.login,
+        this.rightGoTo = Routes.profile,
       }
   ) : super();
 

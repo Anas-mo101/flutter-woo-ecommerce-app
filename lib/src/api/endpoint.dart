@@ -1,10 +1,16 @@
-
-
 class EndPoints {
+  static List<String> avoidCache = [
+    login(),
+    loginValid()
+  ];
+
+  /// WORDPRESS AUTH
+  static login() => 'https://anmo.space/wp-json/jwt-auth/v1/token';
+  static loginValid() => 'https://anmo.space/wp-json/jwt-auth/v1/token/validate';
+  ///
+
   static final String baseURL = 'https://api.escuelajs.co/api/v1/';
-
   static product(String id) => baseURL + 'products/' + id;
-
   static products({String search, String category, String minPrice, String maxPrice, String offset, String limit}){
     String params = Uri(queryParameters: {
       'title': search,
@@ -17,9 +23,6 @@ class EndPoints {
 
     return baseURL + 'products/?' + params;
   }
-
-
-  static List<String> avoidCache = [];
 
   static bool isCacheable(String url){
     return avoidCache.firstWhere(

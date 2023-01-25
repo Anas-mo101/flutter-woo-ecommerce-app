@@ -3,6 +3,7 @@ import 'package:flutter_ecommerce_app/src/themes/theme.dart';
 import 'package:flutter_ecommerce_app/src/widgets/topbar.dart';
 import 'package:get/get.dart';
 import '../../../api/data providers/cache_manager.dart';
+import '../../profile/middleware/auth_middleware.dart';
 import '../controllers/settings_controller.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -95,6 +96,27 @@ class SettingsPage extends StatelessWidget {
                                           trailing: Icon(Icons.arrow_forward_ios),
                                           onTap: (){
                                             AppCacheManager().clearCache();
+                                          },
+                                        ),
+                                      ),
+                                      SizedBox(height: 30),
+                                      Container(
+                                        alignment: Alignment.center,
+                                        width: AppTheme.fullWidth(context),
+                                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(15.0),
+                                            border: Border.all(
+                                              color: Colors.grey,
+                                              width: 1.0,
+                                            )
+                                        ),
+                                        child: ListTile(
+                                          title: Text('un auth'),
+                                          leading: Icon(Icons.settings),
+                                          trailing: Icon(Icons.arrow_forward_ios),
+                                          onTap: (){
+                                            Get.find<AuthService>().unAuth();
                                           },
                                         ),
                                       )

@@ -1,11 +1,8 @@
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:flutter/material.dart';
 import '../../product/api/product_api.dart';
 import '../../product/model/product.dart';
 import '../../product/model/test_product_model.dart';
-
 
 
 class SearchController extends GetxController {
@@ -18,7 +15,7 @@ class SearchController extends GetxController {
   @override
   void onInit() {
     // TODO: implement onInit
-    searchArgs = Get.arguments != null ? '${Get.arguments}' : '';
+    searchArgs = Get.arguments ?? '';
     if(searchArgs != ''){
       searchController.text = searchArgs;
       searchByText(search: searchArgs);
@@ -50,7 +47,6 @@ class SearchController extends GetxController {
             isliked: false
         ));
       });
-
       isLoading = false;
     }catch(e){
       isLoading = false;
