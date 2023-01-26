@@ -42,4 +42,22 @@ class AuthApi extends BaseApi {
       return false;
     }
   }
+
+  Future<bool> createUser(String user, String pass, String email) async {
+    try{
+      String registerEndPoint = EndPoints.register();
+      var response = await post(registerEndPoint, {
+        'username': user,
+        'password': pass,
+        'email': email
+      });
+      if(response['data']['status'] == 200) {
+        return true;
+      }
+      return false;
+    }catch(e){
+      print('ProductApi createUser failed');
+      return false;
+    }
+  }
 }
