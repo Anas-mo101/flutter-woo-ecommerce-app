@@ -35,7 +35,7 @@ class ProductCard extends StatelessWidget {
                     Center(child: Image.network(product.image[0])),
                 SizedBox(height: 5),
                 TitleText(
-                  text: product.name,
+                  text: product.name.length > 20 ? product.name.substring(0,20) + '...' : product.name,
                   fontSize: product.isSelected ? 16 : 14,
                 ),
                 TitleText(

@@ -197,7 +197,7 @@ class ShoppingCartPage extends StatelessWidget {
                             TopBar('cart'.tr,Icons.sort,() => Get.toNamed(Routes.settings)),
                             Expanded(
                               child: Container(
-                                padding: AppTheme.padding,
+                                padding: EdgeInsets.symmetric(horizontal: 10),
                                 child: SingleChildScrollView(
                                   child: Column(
                                     children: [
@@ -219,6 +219,7 @@ class ShoppingCartPage extends StatelessWidget {
                                   _price(),
                                   SizedBox(height: 30),
                                   _submitButton(context),
+                                  SizedBox(height: 30),
                                 ],
                               ),
                             ),

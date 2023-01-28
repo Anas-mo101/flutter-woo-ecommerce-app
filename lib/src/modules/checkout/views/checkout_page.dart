@@ -271,7 +271,7 @@ class CheckoutPage extends StatelessWidget {
                             TopBar('checkout'.tr,Icons.arrow_back_sharp,() => Get.back(), rightIcon: null),
                             Expanded(
                               child: Container(
-                                padding: AppTheme.padding,
+                                padding: EdgeInsets.symmetric(horizontal: 20),
                                 child: SingleChildScrollView(
                                   child: Column(
                                     children: [
@@ -282,7 +282,8 @@ class CheckoutPage extends StatelessWidget {
                               ),
                             ),
                             Container(
-                              padding: EdgeInsets.symmetric(vertical: 30,horizontal: 20),
+                              // padding: EdgeInsets.symmetric(vertical: 30,horizontal: 20),
+                              padding: EdgeInsets.fromLTRB(20, 0, 20, 50),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: <Widget>[
