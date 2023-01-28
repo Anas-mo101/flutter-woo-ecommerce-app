@@ -48,10 +48,10 @@ class CheckoutPage extends StatelessWidget {
                   ),
                 ),
                 Positioned(
-                  left: -20,
-                  bottom: -20,
+                  left: -10,
+                  bottom: -5,
                   child: model.image[0] == null && model.image.isEmpty ?
-                      Icon(Icons.image_not_supported) : Image.asset(model.image[0]),
+                      Icon(Icons.image_not_supported) : Image.network(model.image[0], scale: 20),
                 )
               ],
             ),

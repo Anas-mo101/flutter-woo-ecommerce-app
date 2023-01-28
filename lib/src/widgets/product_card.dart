@@ -30,9 +30,9 @@ class ProductCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 SizedBox(height: product.isSelected ? 15 : 0),
-                product.image[0] == null ?
-                Icon(Icons.image_not_supported) :
-                Center(child: Image.network(product.image[0])),
+                product.image.isEmpty ?
+                  Icon(Icons.image_not_supported) :
+                    Center(child: Image.network(product.image[0])),
                 SizedBox(height: 5),
                 TitleText(
                   text: product.name,
@@ -54,8 +54,8 @@ class ProductCard extends StatelessWidget {
               left: 5,
               child: IconButton(
                 icon: Icon(
-                  product.isliked ? Icons.favorite : Icons.favorite_border,
-                  color: product.isliked ? LightColor.red : LightColor.iconColor,
+                  product.isliked != null && product.isliked ? Icons.favorite : Icons.favorite_border,
+                  color: product.isliked != null && product.isliked ? LightColor.red : LightColor.iconColor,
                 ),
               ),
             ),

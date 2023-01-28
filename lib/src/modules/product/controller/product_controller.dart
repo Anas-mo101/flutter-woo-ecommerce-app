@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
-import '../api/product_api.dart';
 import '../../cart/controller/cart_controller.dart';
+import '../api/woo_product_api.dart';
 import '../model/product.dart';
-import '../model/test_product_model.dart';
+import '../model/woocommerce_product.dart';
 
 
 class ProductController extends GetxController  {
@@ -62,18 +62,43 @@ class ProductController extends GetxController  {
     try{
       product_id = id;
       /// Connect API Model to View Model
-      TestProduct test = await getProduct(id);
+      WooCommerceProduct products_ = await getProduct(id);
+
+      List<String> sizes = [];
+      List<String> colors = [];
+      List<String> images = [];
+
+      if(products_.attributes != null){
+        products_.attributes.forEach((element) {
+          if(element.name == 'Sizes'){
+            sizes.addAll(element.options);
+          }
+          if(element.name == 'Colors'){
+            colors.addAll(element.options);
+          }
+        });
+      }
+
+      if(products_.images != null){
+        products_.images.forEach((element) {
+          images.add(element.src);
+        });
+      }
+
+
       product = Product(
-          id: test.id,
-          name: test.title,
-          image: test.images ?? [],
-          price: test.price.toDouble(),
-          category: '...',
-          desc: test.description,
-          rating: 4,
-          availableSizes: [],
-          availableSColor: []
+          id: products_.id,
+          name: products_.name,
+          image: images,
+          price: double.parse(products_.price),
+          category: products_.categories != null ? products_.categories.first.name : '',
+          desc: products_.description,
+          rating: products_.ratingCount,
+          availableSizes: sizes,
+          availableSColor: colors,
+          isliked: true
       );
+
       isLoading = false;
     }catch(e){
       isLoading = false;
@@ -88,14 +113,14 @@ class ProductController extends GetxController  {
   }
 
 
-  Future<TestProduct> getProduct(int id) async {
+  Future<WooCommerceProduct> getProduct(int id) async {
     try{
-      return await ProductApi.getProduct(id);
+      return await WooProductApi().getProduct(id);
     }catch(e){
-      return TestProduct(
+      return WooCommerceProduct(
           id: id,
-          title: 'Try Again Later',
-          price: 0,
+          name: 'Try Again Later',
+          price: '0.0',
           description: "...",
           images: [],
       );
