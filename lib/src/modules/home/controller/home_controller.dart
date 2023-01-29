@@ -1,8 +1,8 @@
 import 'package:flutter_ecommerce_app/src/modules/product/model/product.dart';
 import 'package:get/get.dart';
-import '../../../model/data.dart';
 import '../../product/api/woo_product_api.dart';
 import '../../product/model/woocommerce_product.dart';
+import '../../../model/category.dart';
 
 class HomeController extends GetxController {
 
@@ -10,20 +10,14 @@ class HomeController extends GetxController {
   List<Product> products = [];
 
   // Category bar
-  List categoryList = AppData.categoryList;
+  List<Category> categoryList = [];
 
-  void toggleCategoryOptions(dynamic model) {
-    categoryList.forEach((element) {
-      element.isSelected = false;
-    });
-    model.isSelected = true;
-    update();
-  }
 
   void onInit() {
     getHomeProducts();
     super.onInit();
   }
+
 
   void getHomeProducts() async {
     try{

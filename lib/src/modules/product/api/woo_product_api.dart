@@ -28,19 +28,33 @@ class WooProductApi extends BaseApi{
   }
 
   Future<List<WooCommerceProduct>> getProducts
-      ({String search, String minPrice, String maxPrice, String page, String per_page}) async{
+      ({String search, String minPrice, String maxPrice, String page, String per_page, String category}) async{
     try{
       String productsURL = EndPoints.wooProducts(
           search: search,
           minPrice: minPrice,
           maxPrice: maxPrice,
           page: page,
-          per_page: per_page
+          per_page: per_page,
+          category: category
       );
       var response = await BaseApi().get(productsURL, mHeader: {
         "Authorization": basicAuth
       });
       return response.map<WooCommerceProduct>((e) => WooCommerceProduct.fromJson(e)).toList();
+    }catch(e){
+      print('ProductApi getProducts(id) failed : $e');
+      throw Exception();
+    }
+  }
+
+  Future<List<Categories>> getWooCategories() async{
+    try{
+      String productsURL = EndPoints.wooCategories();
+      var response = await BaseApi().get(productsURL, mHeader: {
+        "Authorization": basicAuth
+      });
+      return response.map<Categories>((e) => Categories.fromJson(e)).toList();
     }catch(e){
       print('ProductApi getProducts(id) failed : $e');
       throw Exception();

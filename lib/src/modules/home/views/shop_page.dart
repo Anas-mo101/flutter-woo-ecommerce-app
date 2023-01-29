@@ -7,7 +7,7 @@ import 'package:flutter_ecommerce_app/src/widgets/title_text.dart';
 import 'package:get/get.dart';
 import '../../../config/route.dart';
 import '../controller/home_controller.dart';
-import '../widget/category-widget.dart';
+import '../../search/widgets/category-widget.dart';
 
 
 class ShopPage extends StatelessWidget {
@@ -27,7 +27,6 @@ class ShopPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   _search(context),
-                  CategoryWidget(),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Row(

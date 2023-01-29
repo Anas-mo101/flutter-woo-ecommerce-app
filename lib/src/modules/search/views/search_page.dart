@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import '../../../config/route.dart';
 import '../../../widgets/bottom_navigation_bar.dart';
 import '../../../widgets/topbar.dart';
-import '../../home/widget/category-widget.dart';
+import '../widgets/category-widget.dart';
 import '../controller/search_controller.dart';
 
 class SearchPage extends StatelessWidget {
