@@ -1,9 +1,20 @@
 import 'package:flutter_ecommerce_app/src/modules/product/api/woo_product_api.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import '../../../config/route.dart';
 import '../../product/model/product.dart';
 import '../../product/model/woocommerce_product.dart';
 import '../../../model/category.dart';
+
+
+class Filter{
+  String maxPrice;
+  String minPrice;
+  String category;
+  String searchKeyword;
+
+  Filter(this.maxPrice,this.minPrice,this.category,this.searchKeyword);
+}
 
 
 class SearchController extends GetxController {
@@ -13,16 +24,20 @@ class SearchController extends GetxController {
   bool isCategoryLoading = true;
   List<Product> searchResults = [];
   List<Category> categoryList = [];
-  String searchArgs;
+
+  bool searchFilterEnabled = false;
+  Filter searchFilter;
+  int selectedCategoryFilter = 0;
+  RangeValues searchPriceRange = RangeValues(10.0, 1000.0);
 
   @override
   void onInit() {
     // // TODO: implement onInit
-    // searchArgs = Get.arguments ?? '';
-    // if(searchArgs != ''){
-    //   searchController.text = searchArgs;
-    //   searchByText(search: searchArgs);
-    // }
+    var searchArgs = Get.arguments ?? false;
+    if(searchArgs != false){
+      searchController.text = searchArgs;
+      searchByText(search: searchArgs);
+    }
     getCategories();
     super.onInit();
   }
@@ -43,13 +58,7 @@ class SearchController extends GetxController {
 
       res.forEach((e) {
         if(e.name != 'Uncategorized') {
-          categoryList.add(
-              Category(
-                  id: e.id,
-                  name: e.name,
-                  image: ''
-              )
-          );
+          categoryList.add( Category(id: e.id, name: e.name) );
         }
       });
 
@@ -60,8 +69,16 @@ class SearchController extends GetxController {
     update();
   }
 
+  void toggleCategoryFilter(String newCategory){
+    categoryList.asMap().forEach((key, value) {
+      if(value.id == int.parse(newCategory)){
+        selectedCategoryFilter = key;
+      }
+    });
+    update();
+  }
+
   void searchByCategory(String categoryId) async {
-    print('searchByText');
     try{
       isLoading = true;
       update();
@@ -69,7 +86,8 @@ class SearchController extends GetxController {
       List<WooCommerceProduct> res = await WooProductApi().getProducts(
           page: '1',
           per_page: '20',
-          category: categoryId
+          category: categoryId,
+          search: searchController.text ?? ''
       );
 
       searchResults = [];
@@ -117,6 +135,77 @@ class SearchController extends GetxController {
     update();
   }
 
+  Future<void> searchByFilter() async {
+    try{
+      if(searchFilterEnabled == false) return;
+
+      isLoading = true;
+      update();
+
+      List<WooCommerceProduct> res = await WooProductApi().getProducts(
+          page: '1',
+          per_page: '20',
+          minPrice: searchFilter.minPrice,
+          maxPrice: searchFilter.maxPrice,
+          category: searchFilter.category,
+          search: searchFilter.searchKeyword
+      );
+
+      searchResults = [];
+      res.forEach((e) {
+        List<String> sizes = [];
+        List<String> colors = [];
+        List<String> images = [];
+        if(e.attributes != null){
+          e.attributes.forEach((element) {
+            if(element.name == 'Sizes'){
+              sizes.addAll(element.options);
+            }
+            if(element.name == 'Colors'){
+              colors.addAll(element.options);
+            }
+          });
+        }
+
+        if(e.images != null){
+          e.images.forEach((element) {
+            images.add(element.src);
+          });
+        }
+
+        searchResults.add(Product(
+            id: e.id,
+            name: e.name,
+            image: images,
+            price: double.parse(e.price),
+            category: e.categories != null ? e.categories.first.name : '',
+            desc: e.description,
+            rating: e.ratingCount,
+            availableSizes: sizes,
+            availableSColor: colors
+        ));
+      });
+
+      isLoading = false;
+    }catch(e){
+      print('searchByText: ${e}');
+      isLoading = false;
+    }
+    update();
+  }
+
+  void setFilter() async {
+    searchFilterEnabled = true;
+    searchFilter = Filter(
+        searchPriceRange.start.toString(),
+        searchPriceRange.end.toString(),
+        categoryList[selectedCategoryFilter].id.toString(),
+        searchController.text
+    );
+    Get.offAndToNamed(Routes.search);
+    searchByFilter();
+  }
+
   void searchByText({String search = ''}) async {
     print('searchByText');
     try{
@@ -124,15 +213,26 @@ class SearchController extends GetxController {
       update();
 
       String test = search ?? searchController.text;
-
-      List<WooCommerceProduct> res = await WooProductApi().getProducts(
-          page: '1',
-          per_page: '20',
-          search: test
-      );
+      List<WooCommerceProduct> res = [];
+      if(searchFilterEnabled){
+        toggleCategoryFilter(searchFilter.category);
+        res = await WooProductApi().getProducts(
+            page: '1',
+            per_page: '20',
+            minPrice: searchFilter.minPrice,
+            maxPrice: searchFilter.maxPrice,
+            category: searchFilter.category,
+            search: test
+        );
+      }else{
+        res = await WooProductApi().getProducts(
+            page: '1',
+            per_page: '20',
+            search: test
+        );
+      }
 
       searchResults = [];
-
       res.forEach((e) {
         List<String> sizes = [];
         List<String> colors = [];

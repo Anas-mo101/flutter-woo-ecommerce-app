@@ -74,10 +74,9 @@ class SearchPage extends StatelessWidget {
                   ),
                 ),
                 Positioned(
-                  left: -20,
-                  bottom: -20,
+                  top: 10,
                   child: model.image[0] == null && (model.image != null && model.image.isNotEmpty) ?
-                  Icon(Icons.image_not_supported) : Image.network(model.image[0]),
+                  Icon(Icons.image_not_supported) : Image.network(model.image[0], scale: 20),
                 )
               ],
             ),
@@ -161,9 +160,15 @@ class SearchPage extends StatelessWidget {
                                           onTap: () => Get.toNamed(Routes.filter),
                                           child: Container(
                                             padding: EdgeInsets.all(10),
-                                            decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(13)), color: Theme
-                                                .of(context)
-                                                .backgroundColor, boxShadow: AppTheme.shadow),
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.all(Radius.circular(13)),
+                                              color: Theme.of(context).backgroundColor,
+                                              boxShadow: AppTheme.shadow,
+                                              border:  Border.all(
+                                                color: controller.searchFilterEnabled ? LightColor.orange : LightColor.grey,
+                                                width: controller.searchFilterEnabled ? 2 : 1,
+                                              )
+                                            ),
                                             child: Icon(Icons.filter_list, color: Colors.black54),
                                           ),
                                         )
