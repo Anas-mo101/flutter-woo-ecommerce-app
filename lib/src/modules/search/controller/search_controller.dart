@@ -33,11 +33,6 @@ class SearchController extends GetxController {
   @override
   void onInit() {
     // // TODO: implement onInit
-    var searchArgs = Get.arguments ?? false;
-    if(searchArgs != false){
-      searchController.text = searchArgs;
-      searchByText(search: searchArgs);
-    }
     getCategories();
     super.onInit();
   }
@@ -49,6 +44,13 @@ class SearchController extends GetxController {
     searchByCategory(model.id.toString());
     model.isSelected = true;
     update();
+  }
+
+  void incomingSearchKeyword(){
+    var keyword = Get.arguments as String ?? false;
+    if(keyword != false){
+      searchController.text = keyword;
+    }
   }
 
   void getCategories() async {
@@ -209,6 +211,16 @@ class SearchController extends GetxController {
   void searchByText({String search = ''}) async {
     print('searchByText');
     try{
+      if(search == '') {
+        searchResults = [];
+        update();
+        return;
+      }
+
+      categoryList.forEach((element) {
+        element.isSelected = false;
+      });
+
       isLoading = true;
       update();
 

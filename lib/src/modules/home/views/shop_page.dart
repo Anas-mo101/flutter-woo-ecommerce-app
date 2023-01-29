@@ -7,8 +7,6 @@ import 'package:flutter_ecommerce_app/src/widgets/title_text.dart';
 import 'package:get/get.dart';
 import '../../../config/route.dart';
 import '../controller/home_controller.dart';
-import '../../search/widgets/category-widget.dart';
-
 
 class ShopPage extends StatelessWidget {
 
@@ -17,7 +15,6 @@ class ShopPage extends StatelessWidget {
     return Container(
         height: MediaQuery.of(context).size.height,
         child: SingleChildScrollView(
-          // physics: BouncingScrollPhysics(),
           dragStartBehavior: DragStartBehavior.down,
           child: GetBuilder<HomeController>(
             init: HomeController(),
@@ -27,6 +24,7 @@ class ShopPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   _search(context),
+                  SizedBox(height: 20),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Row(
@@ -144,35 +142,6 @@ class ShopPage extends StatelessWidget {
     );
   }
 
-
-
-  Widget _productWidget(BuildContext context, HomeController controller) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 10),
-      width: AppTheme.fullWidth(context),
-      height: AppTheme.fullWidth(context) * .7,
-      child: controller.isLoading ? Center(child: CircularProgressIndicator()) :
-      GridView(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 1,
-            childAspectRatio: 4 / 3,
-            crossAxisSpacing: 20.0
-        ),
-        padding: EdgeInsets.only(left: 20),
-        scrollDirection: Axis.horizontal,
-        children: controller.products.map(
-              (product) => ProductCard(
-                product: product,
-                onSelected: (model) {
-                  Get.toNamed(Routes.product, arguments: model.id);
-                },
-              ),
-            )
-            .toList(),
-      ),
-    );
-  }
-
   Widget _search(BuildContext context) {
     return Container(
       margin: AppTheme.padding,
@@ -188,7 +157,8 @@ class ShopPage extends StatelessWidget {
               ),
               child: TextField(
                 onSubmitted: (String value) {
-                  Get.offAndToNamed(Routes.search, arguments: value);
+                  print('SEARCH: $value');
+                  Get.toNamed(Routes.search, arguments: value);
                 },
                 decoration: InputDecoration(
                     border: InputBorder.none,

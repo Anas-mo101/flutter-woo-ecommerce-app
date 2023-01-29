@@ -12,6 +12,7 @@ class NavController extends GetxController {
 
   void toggleNavBar(int index, {String argument}){
     print(index);
+    print(_selectedIndex);
     if(_selectedIndex == index){
       return;
     }
@@ -53,9 +54,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
     return Expanded(
       child: InkWell(
         borderRadius: BorderRadius.all(Radius.circular(50)),
-        onTap: () {
-          navController.toggleNavBar(index);
-        },
+        onTap: () => navController.toggleNavBar(index),
         child: AnimatedContainer(
           duration: Duration(milliseconds: 500),
           alignment: isEnable ? Alignment.topCenter : Alignment.center,

@@ -116,7 +116,7 @@ class SearchPage extends StatelessWidget {
                             height: 35,
                             alignment: Alignment.center,
                             decoration: BoxDecoration(color: LightColor.lightGrey.withAlpha(150), borderRadius: BorderRadius.circular(10)),
-                            child: Icon(Icons.add),
+                            child: Icon(Icons.remove_red_eye_outlined),
                           ),
                         ),
                       ],
@@ -145,6 +145,7 @@ class SearchPage extends StatelessWidget {
                     GetBuilder<SearchController>(
                         init: SearchController(),
                         builder: (controller) {
+                          controller.incomingSearchKeyword();
                           return Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -179,7 +180,12 @@ class SearchPage extends StatelessWidget {
                                 Column(
                                   children: [
                                     if(controller?.searchResults != null && controller.searchResults.isNotEmpty)
-                                    ...controller.searchResults.map((e) => _item(e)).toList(),
+                                    ...controller.searchResults.map((e) => _item(e)).toList()
+                                    else
+                                      SizedBox(
+                                        height: 400,
+                                        child: Center(child: Text('No Search Results'))
+                                      ),
                                     SizedBox(height: 50)
                                   ],
                                 )
