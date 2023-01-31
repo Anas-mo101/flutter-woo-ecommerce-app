@@ -9,15 +9,15 @@ class ProductController extends GetxController  {
 
   bool isLoading = true;
 
-  int product_id;
+  int productId;
   int productQtyInCart = 0;
   Product product;
+  WooCommerceProduct _products;
   bool isLiked = true;
 
   int selectedAvailableSizes = 0;
-  int selectedAvailableSColor = 0;
+  int selectedAvailableColor = 0;
   int selectProductVariation = 0;
-
 
   @override
   void onInit() {
@@ -33,6 +33,13 @@ class ProductController extends GetxController  {
     // TODO: implement onReady
     setProductQtyInCart();
     super.onReady();
+  }
+
+  void addCurrentProductToCart(){
+    int selectedSizeId = _products.attributes[selectedAvailableSizes].id;
+    int selectedColorId = _products.attributes[selectedAvailableColor].id;
+
+    CartController.addToCart(product).then((value) => setProductQtyInCart());
   }
 
   void toggleProduct(int index) {
@@ -52,7 +59,7 @@ class ProductController extends GetxController  {
   void toggleColorOptions(String selected) {
     for (var element in product.availableSColor.asMap().entries) {
       if(selected == element.value){
-        selectedAvailableSColor = element.key;
+        selectedAvailableColor = element.key;
       }
     }
     update();
@@ -60,40 +67,44 @@ class ProductController extends GetxController  {
 
   void setProduct(int id) async {
     try{
-      product_id = id;
+      productId = id;
       /// Connect API Model to View Model
-      WooCommerceProduct products_ = await getProduct(id);
+      _products = await getProduct(id);
 
       List<String> sizes = [];
       List<String> colors = [];
       List<String> images = [];
 
-      if(products_.attributes != null){
-        products_.attributes.forEach((element) {
-          if(element.name == 'Sizes'){
+      if(_products.attributes != null){
+        _products.attributes.forEach((element) {
+          print(element.name);
+          if(element.name == 'Size'){
             sizes.addAll(element.options);
           }
-          if(element.name == 'Colors'){
+          if(element.name == 'Color'){
             colors.addAll(element.options);
           }
         });
       }
 
-      if(products_.images != null){
-        products_.images.forEach((element) {
+      if(_products.images != null){
+        _products.images.forEach((element) {
           images.add(element.src);
         });
       }
 
+      print('sizes: ${sizes.length}');
+      print('colors: ${colors.length}');
+      print('images: ${images.length}');
 
       product = Product(
-          id: products_.id,
-          name: products_.name,
+          id: _products.id,
+          name: _products.name,
           image: images,
-          price: double.parse(products_.price),
-          category: products_.categories != null ? products_.categories.first.name : '',
-          desc: products_.description,
-          rating: products_.ratingCount,
+          price: double.parse(_products.price),
+          category: _products.categories != null ? _products.categories.first.name : '',
+          desc: _products.description,
+          rating: _products.ratingCount,
           availableSizes: sizes,
           availableSColor: colors,
           isliked: true
@@ -107,8 +118,8 @@ class ProductController extends GetxController  {
   }
 
   void setProductQtyInCart() async {
-    if(product_id == null) return;
-    productQtyInCart = await CartController.getQtyFromCart(product_id);
+    if(productId == null) return;
+    productQtyInCart = await CartController.getQtyFromCart(productId);
     update();
   }
 

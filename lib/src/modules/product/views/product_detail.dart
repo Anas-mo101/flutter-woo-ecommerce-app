@@ -309,7 +309,7 @@ class ProductDetailPage extends StatelessWidget {
   Widget _availableColor(List availableColors) {
     List<Widget> colors = [];
     for (var element in availableColors.asMap().entries) {
-      if (productController.selectedAvailableSColor == element.key) {
+      if (productController.selectedAvailableColor == element.key) {
         colors.add(_colorWidget(element.value, isSelected: true));
       } else {
         colors.add(_colorWidget(element.value));
@@ -322,7 +322,7 @@ class ProductDetailPage extends StatelessWidget {
         TitleText(text: "available_colors".tr, fontSize: 14),
         SizedBox(height: 20),
         Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[...colors],
         )
       ],
@@ -336,10 +336,19 @@ class ProductDetailPage extends StatelessWidget {
       case 'lightBlue':
         color = LightColor.lightBlue;
         break;
-      case 'black':
-        color = LightColor.black;
+      case 'Blue':
+        color = Colors.blue;
         break;
-      case 'red':
+      case 'Black':
+        color = Colors.black;
+        break;
+      case 'White':
+        color = Colors.white54;
+        break;
+      case 'Yellow':
+        color = Colors.yellow;
+        break;
+      case 'Red':
         color = LightColor.red;
         break;
       case 'skyBlue':
@@ -357,12 +366,21 @@ class ProductDetailPage extends StatelessWidget {
         child: Column(
           children: [
             CircleAvatar(
-              radius: 12,
+              radius: 20,
               backgroundColor: color.withAlpha(150),
-              child: isSelected ? Icon(Icons.check_circle, color: color, size: 18) : CircleAvatar(radius: 7, backgroundColor: color),
+              child: isSelected ?
+                Icon(
+                    Icons.check,
+                    color: Colors.black,
+                    size: 25
+                ) :
+                CircleAvatar(
+                    radius: 7,
+                    backgroundColor: color
+                ),
             ),
             SizedBox(
-              width: 30,
+              width: 50,
             ),
           ],
         ),

@@ -1,3 +1,5 @@
+import 'package:flutter_ecommerce_app/src/modules/product/model/woocommerce_product.dart';
+
 class Product {
   int id;
   String name;
@@ -14,6 +16,9 @@ class Product {
 
   int rating = 0;
   int quantity = 0;
+
+  Attributes selectedSize;
+  Attributes selectedColor;
 
   Product({
     this.id,

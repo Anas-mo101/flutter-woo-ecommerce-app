@@ -3,7 +3,9 @@ import 'package:flutter_ecommerce_app/src/themes/theme.dart';
 import 'package:flutter_ecommerce_app/src/widgets/topbar.dart';
 import 'package:get/get.dart';
 import '../../../config/route.dart';
+import '../../../widgets/title_text.dart';
 import '../../cart/controller/cart_controller.dart';
+import '../middleware/auth_middleware.dart';
 
 class ProfilePage extends StatelessWidget {
   ProfilePage({Key key}) : super(key: key);
@@ -46,21 +48,74 @@ class ProfilePage extends StatelessWidget {
                                 padding: AppTheme.padding,
                                 child: SingleChildScrollView(
                                   child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
+                                      Icon(Icons.person, size: 200),
+                                      TitleText(text: 'Username'),
+                                      SizedBox(height: 50),
+                                      Container(
+                                        alignment: Alignment.center,
+                                        width: AppTheme.fullWidth(context),
+                                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(15.0),
+                                            border: Border.all(
+                                              color: Colors.grey,
+                                              width: 1.0,
+                                            )
+                                        ),
+                                        child: ListTile(
+                                          title: Text('Track Orders'),
+                                          leading: Icon(Icons.local_shipping),
+                                          onTap: (){
+
+                                          },
+                                        ),
+                                      ),
+                                      SizedBox(height: 20),
+                                      Container(
+                                        alignment: Alignment.center,
+                                        width: AppTheme.fullWidth(context),
+                                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(15.0),
+                                            border: Border.all(
+                                              color: Colors.grey,
+                                              width: 1.0,
+                                            )
+                                        ),
+                                        child: ListTile(
+                                          title: Text('Complains'),
+                                          leading: Icon(Icons.settings),
+                                          onTap: (){
+
+                                          },
+                                        ),
+                                      ),
+                                      SizedBox(height: 20),
+                                      Container(
+                                        alignment: Alignment.center,
+                                        width: AppTheme.fullWidth(context),
+                                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(15.0),
+                                            border: Border.all(
+                                              color: Colors.grey,
+                                              width: 1.0,
+                                            )
+                                        ),
+                                        child: ListTile(
+                                          title: Text('Logout'),
+                                          leading: Icon(Icons.logout_outlined),
+                                          onTap: (){
+                                            Get.find<AuthService>().unAuth();
+                                          },
+                                        ),
+                                      )
 
                                     ],
                                   ),
                                 ),
-                              ),
-                            ),
-                            Container(
-                              padding: EdgeInsets.symmetric(vertical: 30,horizontal: 20),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: <Widget>[
-
-
-                                ],
                               ),
                             ),
                           ],
