@@ -13,7 +13,7 @@ class ProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: LightColor.lightGrey,
+        color: Color(0xffeeeeee),
         borderRadius: BorderRadius.all(Radius.circular(20)),
         boxShadow: <BoxShadow>[
           BoxShadow(color: Color(0xfff8f8f8), blurRadius: 15, spreadRadius: 10),

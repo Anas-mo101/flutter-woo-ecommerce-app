@@ -6,6 +6,7 @@ import 'package:flutter_ecommerce_app/src/widgets/product_card.dart';
 import 'package:flutter_ecommerce_app/src/widgets/title_text.dart';
 import 'package:get/get.dart';
 import '../../../config/route.dart';
+import '../../../widgets/product_card_loading.dart';
 import '../controller/home_controller.dart';
 
 class ShopPage extends StatelessWidget {
@@ -44,17 +45,18 @@ class ShopPage extends StatelessWidget {
                     margin: EdgeInsets.symmetric(vertical: 10),
                     width: AppTheme.fullWidth(context),
                     height: AppTheme.fullWidth(context),
-                    child: controller.isLoading ? Center(child: CircularProgressIndicator()) :
-                    GridView(
+                    child: GridView(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 1,
                           childAspectRatio: 5 / 3,
                           mainAxisSpacing: 30.0,
                           crossAxisSpacing: 20.0
                       ),
-                      padding: EdgeInsets.only(left: 20),
+                      padding: EdgeInsets.symmetric(horizontal: 20),
                       scrollDirection: Axis.horizontal,
-                      children: controller.products.getRange((controller.products.length / 2).floor(), controller.products.length-1).map(
+                      children: controller.isLoading ?
+                      [ LoadingProductCard(), LoadingProductCard(), LoadingProductCard() ]
+                      : controller.products.map(
                           (product) => ProductCard( product: product, onSelected: (model) {
                             Get.toNamed(Routes.product, arguments: model.id);
                           },
@@ -80,10 +82,18 @@ class ShopPage extends StatelessWidget {
                   Container(
                     margin: EdgeInsets.symmetric(vertical: 10),
                     padding: EdgeInsets.symmetric(horizontal: 20),
-                    child: controller.isLoading ? Center(child: CircularProgressIndicator()) :
+                    child:
                     Column(
                       children: [
-                        ...controller.products.getRange(0, 3).map(
+                        if(controller.isLoading)
+                          LoadingProductCard(),
+                        if(controller.isLoading)
+                          LoadingProductCard(),
+                        if(controller.isLoading)
+                          LoadingProductCard(),
+
+                        if(!controller.isLoading)
+                        ...controller.products.getRange(0, (controller.products.length / 2).floor()).map(
                               (product) => ProductCard(
                             product: product,
                             onSelected: (model) {
@@ -113,17 +123,18 @@ class ShopPage extends StatelessWidget {
                     margin: EdgeInsets.symmetric(vertical: 10),
                     width: AppTheme.fullWidth(context),
                     height: AppTheme.fullWidth(context),
-                    child: controller.isLoading ? Center(child: CircularProgressIndicator()) :
-                    GridView(
+                    child: GridView(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 1,
                           childAspectRatio: 5 / 3,
                           mainAxisSpacing: 30.0,
                           crossAxisSpacing: 20.0
                       ),
-                      padding: EdgeInsets.only(left: 20),
+                      padding: EdgeInsets.symmetric(horizontal: 20),
                       scrollDirection: Axis.horizontal,
-                      children: controller.products.getRange(0, (controller.products.length / 2).floor()).map(
+                      children: controller.isLoading ?
+                      [ LoadingProductCard(), LoadingProductCard(), LoadingProductCard() ] :
+                      controller.products.getRange(0, (controller.products.length / 2).floor()).map(
                             (product) => ProductCard(
                           product: product,
                           onSelected: (model) {
