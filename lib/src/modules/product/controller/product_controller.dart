@@ -35,7 +35,6 @@ class ProductController extends GetxController  {
 
   @override
   void onReady() {
-    // TODO: implement onReady
     setProductQtyInCart();
     super.onReady();
   }
@@ -63,9 +62,8 @@ class ProductController extends GetxController  {
       productVars.forEach((element) {
         var id = element.id;
         var varCombinations = element.attributes.map((e) => e.option).toList();
-        print(varCombinations);
         if(areListsEqual(toMatchAgainst,varCombinations)){
-          CartController.addToCart(product, variantId: id)
+          CartController.addToCart(product, variantId: id, selectedVariations: varCombinations)
               .then((value) => setProductQtyInCart());
         }
       });

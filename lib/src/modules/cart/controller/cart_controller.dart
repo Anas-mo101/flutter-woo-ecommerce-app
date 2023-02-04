@@ -4,6 +4,9 @@ import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_ecommerce_app/src/modules/product/model/product.dart';
 
+import '../model/cart_item_product.dart';
+import '../model/cart_model.dart';
+
 
 // store cart item in set() -> uniquely
 // keep track of each cart item's qty in may and id as key
@@ -15,24 +18,41 @@ class CartController extends GetxController {
     super.onInit();
   }
 
-  // tracks quantity of products in cart
-  // Map<int, int> itemsQty = {};
-  // unique list on products in cart
-  List<Product> uniqueList = [];
-  // cart list for wooCommerce order
-  List<LineItems> wooCartItems = [];
+  List<CartModel> wooCartItems = [];
 
-  int getQty(int id){
-    for(var i = 0; i < wooCartItems.length; i++){
-      if(wooCartItems[i].productId == id){
-        return wooCartItems[i].quantity;
+  int getQty(int id, int varId){
+    if(varId != -1){
+      for(var i = 0; i < wooCartItems.length; i++){
+        if(wooCartItems[i].productId == id && wooCartItems[i].variationId == varId){
+          return wooCartItems[i].quantity;
+        }
+      }
+    }else{
+      for(var i = 0; i < wooCartItems.length; i++){
+        if(wooCartItems[i].productId == id){
+          return wooCartItems[i].quantity;
+        }
       }
     }
+
     return 0;
   }
 
-  List<Product> getCart() {
-    return uniqueList.toList();
+  List<CartItemProduct> getCart() {
+    List<CartItemProduct> items = [];
+    wooCartItems.forEach((e) {
+
+      items.add(CartItemProduct(
+        id: e.productId,
+        name: e.product.name,
+        price: e.product.price,
+        image: e.product.image,
+        quantity: e.quantity,
+        variationIdentifier: e.variationIdentifier.join(', '),
+        variationId: e.variationId
+      ));
+    });
+    return items;
   }
 
   int getCartTotal() {
@@ -45,9 +65,8 @@ class CartController extends GetxController {
 
   double getPrice() {
     double price = 0.0;
-    uniqueList.forEach((element) {
-      LineItems found = wooCartItems.firstWhere((e) => e.productId == element.id);
-      price += element.price * found.quantity;
+    wooCartItems.forEach((element) {
+      price += element.product.price * element.quantity;
     });
     return price;
   }
@@ -55,7 +74,7 @@ class CartController extends GetxController {
   static Future<int> getQtyFromCart(int id) async {
     final prefs = await SharedPreferences.getInstance();
     List<String> cartModel = prefs.getStringList("cartModel") ?? [];
-    var wooCartModel = cartModel.map((item) => LineItems.fromJson(jsonDecode(item))).toList();
+    var wooCartModel = cartModel.map((item) => CartModel.fromJson(jsonDecode(item))).toList();
 
     int count = 0;
     wooCartModel.forEach((element) {
@@ -66,20 +85,10 @@ class CartController extends GetxController {
     return count;
   }
 
-  static Future<void> addToCart(Product item ,{int variantId}) async {
+  static Future<void> addToCart(Product item ,{int variantId, List<String> selectedVariations}) async {
     final prefs = await SharedPreferences.getInstance();
-    List<String> cart = prefs.getStringList("cart") ?? [];
     List<String> cartModel = prefs.getStringList("cartModel") ?? [];
-
-    List<Product> uniqueList = cart.map<Product>((e) =>
-        Product.fromJson(jsonDecode(e))).toList();
-
-    List<LineItems> wooCartModel = cartModel.map((e) =>
-        LineItems.fromJson(jsonDecode(e))).toList();
-
-    bool existFlag = false;
-    uniqueList.forEach((element) => { if(item.id == element.id) existFlag = true });
-    if(!existFlag) uniqueList.add(item); // fix condition for addition
+    List<CartModel> wooCartModel = cartModel.map((e) => CartModel.fromJson(jsonDecode(e))).toList();
 
     bool notExists = true;
     for(var i = 0; i < wooCartModel.length; i++){
@@ -100,40 +109,55 @@ class CartController extends GetxController {
 
     if(notExists){
       if(variantId != null){
-        wooCartModel.add(LineItems(
-          productId: item.id,
-          quantity: 1,
-          variationId: variantId
+        wooCartModel.add(CartModel(
+          item.id,
+          1,
+          item,
+          variationId: variantId,
+          variationIdentifier: selectedVariations
         ));
       }else{
-        wooCartModel.add(LineItems(
-          productId: item.id,
-          quantity: 1,
+        wooCartModel.add(CartModel(
+          item.id,
+          1,
+          item,
+          variationIdentifier: selectedVariations
         ));
       }
     }
 
+    wooCartModel.forEach((element) {
+      print(jsonEncode(element.toJson()));
+    });
+
     prefs.setStringList("cartModel", wooCartModel.map((item) => jsonEncode(item?.toJson())).toList());
-    prefs.setStringList("cart", uniqueList.map((item) => jsonEncode(item?.toJson())).toList());
   }
 
   static Future<void> emptyCart() async {
     final prefs = await SharedPreferences.getInstance();
-    // prefs.setStringList("cartQty", []);
-    // prefs.setStringList("cart", []);
     prefs.setStringList("cartModel", []);
   }
 
-  void removeFromCart(Product item) {
+  void removeFromCart(int id, int varId) {
     for(var i = 0; i < wooCartItems.length; i++){
-      if(wooCartItems[i].productId == item.id){
+      if(varId != -1){
+        if(wooCartItems[i].productId == id && wooCartItems[i].variationId == varId){
           if(wooCartItems[i].quantity <= 1){
-            uniqueList.removeWhere((element) => item.id == element.id);
-            wooCartItems.removeWhere((element) => item.id == element.productId);
+            wooCartItems.removeWhere((element) => id == element.productId && varId == element.variationId);
           }else{
             wooCartItems[i].quantity--;
           }
           break;
+        }
+      }else{
+        if(wooCartItems[i].productId == id){
+          if(wooCartItems[i].quantity <= 1){
+            wooCartItems.removeWhere((element) => id == element.productId);
+          }else{
+            wooCartItems[i].quantity--;
+          }
+          break;
+        }
       }
     }
 
@@ -143,18 +167,13 @@ class CartController extends GetxController {
 
   void _saveCartItems() async {
     final prefs = await SharedPreferences.getInstance();
-    prefs.setStringList("cart", uniqueList.map((item) => jsonEncode(item?.toJson())).toList());
     prefs.setStringList("cartModel", wooCartItems.map((item) => jsonEncode(item?.toJson())).toList());
   }
 
   void loadCartItems() async {
     final prefs = await SharedPreferences.getInstance();
-
-    List<String> cart = prefs.getStringList("cart") ?? [];
-    uniqueList = cart.map((item) => Product.fromJson(jsonDecode(item))).toList();
-
     List<String> cartModel = prefs.getStringList("cartModel") ?? [];
-    wooCartItems = cartModel.map((item) => LineItems.fromJson(jsonDecode(item))).toList();
+    wooCartItems = cartModel.map((item) => CartModel.fromJson(jsonDecode(item))).toList();
     update();
   }
 }
