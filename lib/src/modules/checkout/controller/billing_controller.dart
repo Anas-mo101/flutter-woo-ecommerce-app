@@ -1,11 +1,15 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_ecommerce_app/src/modules/checkout/views/billing_page.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_ecommerce_app/src/modules/product/model/product.dart';
 
+import '../../../config/route.dart';
 import '../models/order.dart';
+import '../models/woo_order.dart';
 
 
 // store cart item in set() -> uniquely
@@ -36,12 +40,66 @@ class BillingController extends GetxController {
   bool cusZipErr = false;
   bool cusCountryErr = false;
 
-  Map<int, int> itemsQty = {};
+  // Map<int, int> itemsQty = {};
+  List<LineItems> itemsQty;
   List<Product> uniqueList = [];
 
-  void setCartItems( Map<int, int> qty,List<Product> uniqueList){
-    itemsQty = qty;
-    uniqueList = uniqueList;
+  // void setCartItems( Map<int, int> qty,List<Product> uniqueList){
+  //   itemsQty = qty;
+  //   uniqueList = uniqueList;
+  // }
+
+  submitBillingInfo(){
+    if(uniqueList.isNotEmpty && validateCustomerInfo()){
+      // Billing billing = Billing(
+      //   firstName: billingController.cusName.value.text,
+      //   address1: billingController.cusBilling.value.text,
+      //   email: billingController.cusEmail.value.text,
+      //   phone: billingController.cusPhone.value.text,
+      //   country: billingController.shippingOptions[billingController.selectedShippingOptions],
+      //   postcode: billingController.cusZip.value.text,
+      // );
+      //
+      // Shipping shipping = Shipping(
+      //   firstName: billingController.cusName.value.text,
+      //   address1: billingController.cusBilling.value.text,
+      //   country: billingController.shippingOptions[billingController.selectedShippingOptions],
+      //   postcode: billingController.cusZip.value.text,
+      // );
+      //
+      // ShippingLines shippingLines = ShippingLines(
+      //   methodId: '0',
+      //   methodTitle: billingController.shippingOptions[billingController.selectedShippingOptions],
+      //   total: '10.0'
+      // );
+      //
+      // WooOrder order = WooOrder(
+      //   paymentMethod: billingController.paymentOptions[billingController.selectedPaymentOptions],
+      //   paymentMethodTitle: billingController.paymentOptions[billingController.selectedPaymentOptions],
+      //   setPaid: false,
+      //   shipping: shipping,
+      //   billing: billing,
+      //   lineItems: billingController.itemsQty,
+      //   shippingLines: [
+      //     shippingLines
+      //   ]
+      // );
+
+      // Get.toNamed(Routes.checkout, arguments: order.toJson());
+
+      Get.toNamed(Routes.checkout, arguments: [
+        itemsQty,
+        uniqueList,
+        paymentOptions[selectedPaymentOptions],
+        cusName.value.text,
+        cusPhone.value.text,
+        cusEmail.value.text,
+        cusBilling.value.text,
+        cusShipping.value.text,
+        cusZip.value.text,
+        shippingOptions[selectedShippingOptions],
+      ]);
+    }
   }
 
   togglePaymentOption(String option){

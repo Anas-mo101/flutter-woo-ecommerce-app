@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_ecommerce_app/src/themes/light_color.dart';
 import 'package:flutter_ecommerce_app/src/themes/theme.dart';
@@ -6,6 +8,7 @@ import 'package:get/get.dart';
 import '../../../config/route.dart';
 import '../../../widgets/topbar.dart';
 import '../controller/billing_controller.dart';
+import '../models/woo_order.dart';
 import '../widgets/toggle_payment_options.dart';
 
 class BillingPage extends StatelessWidget {
@@ -23,22 +26,7 @@ class BillingPage extends StatelessWidget {
           ),
           backgroundColor: MaterialStateProperty.all<Color>(LightColor.orange),
         ),
-        onPressed: () {
-          if(billingController.uniqueList.isNotEmpty && billingController.validateCustomerInfo()){
-            Get.toNamed(Routes.checkout, arguments: [
-              billingController.itemsQty,
-              billingController.uniqueList,
-              billingController.paymentOptions[billingController.selectedPaymentOptions],
-              billingController.cusName.value.text,
-              billingController.cusPhone.value.text,
-              billingController.cusEmail.value.text,
-              billingController.cusBilling.value.text,
-              billingController.cusShipping.value.text,
-              billingController.cusZip.value.text,
-              billingController.shippingOptions[billingController.selectedShippingOptions],
-            ]);
-          }
-        },
+        onPressed: () => billingController.submitBillingInfo(),
         child: Container(
           alignment: Alignment.center,
           padding: EdgeInsets.symmetric(vertical: 4),
@@ -65,7 +53,7 @@ class BillingPage extends StatelessWidget {
                 if(!(args is List)) Get.offAndToNamed(Routes.cart);
 
                 if(args[0] is List) controller.uniqueList = args[0];
-                if(args[1] is Map) controller.itemsQty = args[1];
+                if(args[1] is LineItems) controller.itemsQty = args[1];
 
                 return Stack(
                   fit: StackFit.expand,

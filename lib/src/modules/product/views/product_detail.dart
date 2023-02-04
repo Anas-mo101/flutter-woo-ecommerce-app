@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import '../model/product.dart';
 import '../../cart/controller/cart_controller.dart';
 import '../controller/product_controller.dart';
+import '../model/woocommerce_product.dart';
 
 class ProductDetailPage extends StatelessWidget {
   ProductDetailPage({Key key}) : super(key: key);
@@ -21,7 +22,8 @@ class ProductDetailPage extends StatelessWidget {
           return Scaffold(
             floatingActionButton: FloatingActionButton(
               onPressed: () {
-                CartController.addToCart(controller.product).then((value) => controller.setProductQtyInCart());
+                controller.addCurrentProductToCart();
+                // CartController.addToCart(controller.product).then((value) => controller.setProductQtyInCart());
               },
               backgroundColor: LightColor.orange,
               child: Stack(
@@ -262,15 +264,17 @@ class ProductDetailPage extends StatelessWidget {
     );
   }
 
-  Widget _availableSize(List availableSizes) {
+  Widget _availableSize(List<WooAttributes> availableSizes) {
     List<Widget> sizes = [];
-    for (var element in availableSizes.asMap().entries) {
-      if (productController.selectedAvailableSizes == element.key) {
-        sizes.add(_sizeWidget(element.value, isSelected: true));
-      } else {
-        sizes.add(_sizeWidget(element.value));
+    availableSizes.forEach((e) {
+      for (var element in e.options.asMap().entries) {
+        if (productController.selectedAvailableSizes == element.key) {
+          sizes.add(_sizeWidget(element.value, isSelected: true));
+        } else {
+          sizes.add(_sizeWidget(element.value));
+        }
       }
-    }
+    });
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -280,9 +284,18 @@ class ProductDetailPage extends StatelessWidget {
           fontSize: 14,
         ),
         SizedBox(height: 20),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[...sizes],
+        Container(
+            height: 80,
+            child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (BuildContext context, int index) {
+                  return sizes[index];
+                },
+                separatorBuilder: (BuildContext context, int index) {
+                  return SizedBox(width: 20);
+                },
+                itemCount: sizes.length
+            )
         )
       ],
     );
@@ -306,24 +319,35 @@ class ProductDetailPage extends StatelessWidget {
     }, borderRadius: BorderRadius.all(Radius.circular(13)));
   }
 
-  Widget _availableColor(List availableColors) {
+  Widget _availableColor(List<WooAttributes> availableColors) {
     List<Widget> colors = [];
-    for (var element in availableColors.asMap().entries) {
-      if (productController.selectedAvailableColor == element.key) {
-        colors.add(_colorWidget(element.value, isSelected: true));
-      } else {
-        colors.add(_colorWidget(element.value));
+    availableColors.forEach((e) {
+      for (var element in e.options.asMap().entries) {
+        if (productController.selectedAvailableColor == element.key) {
+          colors.add(_colorWidget(element.value, isSelected: true));
+        } else {
+          colors.add(_colorWidget(element.value));
+        }
       }
-    }
+    });
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         TitleText(text: "available_colors".tr, fontSize: 14),
         SizedBox(height: 20),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[...colors],
+        Container(
+          height: 80,
+          child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (BuildContext context, int index) {
+                return colors[index];
+              },
+              separatorBuilder: (BuildContext context, int index) {
+                return SizedBox(width: 20);
+              },
+              itemCount: colors.length
+          )
         )
       ],
     );

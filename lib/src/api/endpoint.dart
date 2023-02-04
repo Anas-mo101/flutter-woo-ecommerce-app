@@ -23,6 +23,7 @@ class EndPoints {
     }).query;
     return baseURL + 'wp-json/wc/v3/products?' + params;
   }
+  static wooProductVars(String id) => baseURL + 'wp-json/wc/v3/products/$id/variations';
   static wooCategories() => baseURL + 'wp-json/wc/v3/products/categories';
   ///
 

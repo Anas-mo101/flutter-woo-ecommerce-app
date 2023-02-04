@@ -29,17 +29,17 @@ class HomeController extends GetxController {
       print('Products => ${res.length}');
 
       res.forEach((e) {
-        List<String> sizes = [];
-        List<String> colors = [];
+        List<WooAttributes> sizes = [];
+        List<WooAttributes> colors = [];
         List<String> images = [];
 
         if(e.attributes != null){
           e.attributes.forEach((element) {
             if(element.name == 'Sizes'){
-              sizes.addAll(element.options);
+              sizes.add(element);
             }
             if(element.name == 'Colors'){
-              colors.addAll(element.options);
+              colors.add(element);
             }
           });
         }

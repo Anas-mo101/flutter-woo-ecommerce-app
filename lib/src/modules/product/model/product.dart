@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter_ecommerce_app/src/modules/product/model/woocommerce_product.dart';
 
 class Product {
@@ -11,14 +12,14 @@ class Product {
   bool isliked;
   bool isSelected;
 
-  List<String> availableSizes = [];
-  List<String> availableSColor = [];
+  List<WooAttributes> availableSizes = [];
+  List<WooAttributes> availableSColor = [];
 
   int rating = 0;
   int quantity = 0;
 
-  Attributes selectedSize;
-  Attributes selectedColor;
+  WooAttributes selectedSize;
+  WooAttributes selectedColor;
 
   Product({
     this.id,
@@ -35,20 +36,30 @@ class Product {
     this.quantity = 0,
   });
 
-  factory Product.fromJson(Map<String, dynamic> json) {
-    return Product(
-      id: json['id'],
-      name: json['name'],
-      desc: json['desc'],
-      category: json['category'],
-      image: json['image'].cast<String>(),
-      price: json['price'].toDouble(),
-      rating: json['price'].toInt(),
-      isliked: json['isliked'],
-      isSelected: json['isSelected'],
-      availableSizes: json['availableSizes'].cast<String>(),
-      availableSColor: json['availableSColor'].cast<String>(),
-    );
+  Product.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    desc = json['desc'];
+    category = json['category'];
+    image = json['image'].cast<String>();
+    price = json['price'].toDouble();
+    rating = json['price'].toInt();
+    isliked = json['isliked'];
+    isSelected = json['isSelected'];
+
+    if (json['availableSizes'] != null) {
+      availableSizes = <WooAttributes>[];
+      json['availableSizes'].forEach((v) {
+        availableSizes.add(new WooAttributes.fromJson(v));
+      });
+    }
+
+    if (json['availableSColor'] != null) {
+      availableSColor = <WooAttributes>[];
+      json['availableSColor'].forEach((v) {
+        availableSColor.add(new WooAttributes.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {

@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import '../../cart/controller/cart_controller.dart';
 import '../api/woo_product_api.dart';
 import '../model/product.dart';
+import '../model/woo_product_variation.dart';
 import '../model/woocommerce_product.dart';
 
 
@@ -14,6 +15,10 @@ class ProductController extends GetxController  {
   Product product;
   WooCommerceProduct _products;
   bool isLiked = true;
+
+  List<WooProductVariation> productVars;
+  bool colorFlag = false;
+  bool sizeFlag = false;
 
   int selectedAvailableSizes = 0;
   int selectedAvailableColor = 0;
@@ -35,11 +40,56 @@ class ProductController extends GetxController  {
     super.onReady();
   }
 
-  void addCurrentProductToCart(){
-    int selectedSizeId = _products.attributes[selectedAvailableSizes].id;
-    int selectedColorId = _products.attributes[selectedAvailableColor].id;
+  Future<void> addCurrentProductToCart() async {
+    if(_products.attributes.isNotEmpty){
+      WooAttributes sizeOptions;
+      WooAttributes colorOptions;
+      List<String> toMatchAgainst = [];
 
-    CartController.addToCart(product).then((value) => setProductQtyInCart());
+      if(colorFlag) {
+        colorOptions = product.availableSColor.first;
+        toMatchAgainst.add(colorOptions.options[selectedAvailableColor]);
+      }
+
+      if(sizeFlag) {
+        sizeOptions = product.availableSizes.first;
+        toMatchAgainst.add(sizeOptions.options[selectedAvailableSizes]);
+      }
+      /// check if this element has combination of attributes
+      /// same as combination picked by user
+      /// if it matches then break and pass id
+      /// else look in next
+      print(toMatchAgainst);
+      productVars.forEach((element) {
+        var id = element.id;
+        var varCombinations = element.attributes.map((e) => e.option).toList();
+        print(varCombinations);
+        if(areListsEqual(toMatchAgainst,varCombinations)){
+          CartController.addToCart(product, variantId: id)
+              .then((value) => setProductQtyInCart());
+        }
+      });
+    }else{
+      CartController.addToCart(product).then((value) => setProductQtyInCart());
+    }
+  }
+
+  bool areListsEqual(var list1, var list2) {
+    // check if both are lists
+    if(!(list1 is List && list2 is List)
+        // check if both have same length
+        || list1.length!=list2.length) {
+      return false;
+    }
+
+    // check if elements are equal
+    for(int i=0;i<list1.length;i++) {
+      if(list1[i]!=list2[i]) {
+        return false;
+      }
+    }
+
+    return true;
   }
 
   void toggleProduct(int index) {
@@ -48,20 +98,25 @@ class ProductController extends GetxController  {
   }
 
   void toggleSizeOptions(String selected) {
-    for (var element in product.availableSizes.asMap().entries) {
-      if(selected == element.value){
-        selectedAvailableSizes = element.key;
+    product.availableSizes.forEach((e) {
+      for (var element in e.options.asMap().entries) {
+        if (selected == element.value) {
+          selectedAvailableSizes = element.key;
+        }
       }
-    }
+    });
+
     update();
   }
 
   void toggleColorOptions(String selected) {
-    for (var element in product.availableSColor.asMap().entries) {
-      if(selected == element.value){
-        selectedAvailableColor = element.key;
+    product.availableSColor.forEach((e) {
+      for (var element in e.options.asMap().entries) {
+        if (selected == element.value) {
+          selectedAvailableColor = element.key;
+        }
       }
-    }
+    });
     update();
   }
 
@@ -71,18 +126,18 @@ class ProductController extends GetxController  {
       /// Connect API Model to View Model
       _products = await getProduct(id);
 
-      List<String> sizes = [];
-      List<String> colors = [];
+      List<WooAttributes> sizes = [];
+      List<WooAttributes> colors = [];
       List<String> images = [];
-
       if(_products.attributes != null){
         _products.attributes.forEach((element) {
-          print(element.name);
           if(element.name == 'Size'){
-            sizes.addAll(element.options);
+            sizeFlag = true;
+            sizes.add(element);
           }
           if(element.name == 'Color'){
-            colors.addAll(element.options);
+            colorFlag = true;
+            colors.add(element);
           }
         });
       }
@@ -92,10 +147,6 @@ class ProductController extends GetxController  {
           images.add(element.src);
         });
       }
-
-      print('sizes: ${sizes.length}');
-      print('colors: ${colors.length}');
-      print('images: ${images.length}');
 
       product = Product(
           id: _products.id,
@@ -109,6 +160,8 @@ class ProductController extends GetxController  {
           availableSColor: colors,
           isliked: true
       );
+
+      getProductVars(_products.id);
 
       isLoading = false;
     }catch(e){
@@ -137,4 +190,15 @@ class ProductController extends GetxController  {
       );
     }
   }
+
+
+  Future<void> getProductVars(int id) async {
+    try{
+      productVars = await WooProductApi().getProductVars(id);
+    }catch(e){
+      productVars = [];
+    }
+  }
+
+
 }

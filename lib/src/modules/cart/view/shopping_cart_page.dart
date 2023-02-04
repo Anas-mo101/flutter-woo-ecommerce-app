@@ -18,8 +18,7 @@ class ShoppingCartPage extends StatelessWidget {
   List<Widget> _cartItems(BuildContext context, CartController controller) {
     List<Product> items = controller.getCart();
     if (items.isEmpty) return [];
-    List<Widget> itemsWidget = items.map((e) => _item(e)).toList();
-    return itemsWidget;
+    return items.map((e) => _item(e)).toList();
   }
 
   Widget _item(Product model) {
@@ -129,10 +128,10 @@ class ShoppingCartPage extends StatelessWidget {
   Widget _submitButton(BuildContext context) {
     return TextButton(
       onPressed: () {
-        if(cartController.uniqueList.isNotEmpty && cartController.itemsQty.isNotEmpty){
+        if(cartController.uniqueList.isNotEmpty && cartController.wooCartItems.isNotEmpty){
           Get.toNamed(Routes.billing, arguments: [
             cartController.uniqueList,
-            cartController.itemsQty
+            cartController.wooCartItems
           ]);
         }
       },
@@ -153,18 +152,6 @@ class ShoppingCartPage extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Widget _icon(BuildContext context, IconData icon, {Color color = LightColor.iconColor}) {
-    return Container(
-      padding: EdgeInsets.all(10),
-      decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(13)), color: Theme
-          .of(context)
-          .backgroundColor, boxShadow: AppTheme.shadow),
-      child: Icon(icon, color: color),
-    ).ripple(() {
-      Get.toNamed(Routes.settings);
-    }, borderRadius: BorderRadius.all(Radius.circular(13)));
   }
 
 
@@ -236,7 +223,6 @@ class ShoppingCartPage extends StatelessWidget {
                 );
             }
         )
-
       ),
     );
   }

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import '../../../api/endpoint.dart';
 import '../../../api/data providers/base_api.dart';
+import '../model/woo_product_variation.dart';
 import '../model/woocommerce_product.dart';
 
 
@@ -21,6 +22,20 @@ class WooProductApi extends BaseApi{
         "Authorization": basicAuth
       });
       return WooCommerceProduct.fromJson(response);
+    }catch(e){
+      print('ProductApi getProduct(id) failed');
+      throw Exception();
+    }
+  }
+
+  Future<List<WooProductVariation>> getProductVars(int id) async {
+    try{
+      String product = EndPoints.wooProductVars('$id');
+      var response = await BaseApi().get(product, mHeader: {
+        "Authorization": basicAuth
+      });
+      print('========================');
+      return response.map<WooProductVariation>((e) => WooProductVariation.fromJson(e)).toList();
     }catch(e){
       print('ProductApi getProduct(id) failed');
       throw Exception();

@@ -10,28 +10,28 @@ class AppData {
       'anas@gmail.com'
   );
 
-  static List<Product> productList = [
-    Product(
-        id: 30,
-        name: 'Nike Air Max 200',
-        price: 240.00,
-        isSelected: true,
-        isliked: false,
-        image: ['assets/shooe_tilt_1.png'],
-        category: "Trending Now",
-        desc: "Product Desc",
-        rating: 4,
-        availableSColor: [
-          'red',
-          'black'
-        ],
-        availableSizes: [
-          'S',
-          'L',
-          'XL'
-        ]
-    ),
-  ];
+  // static List<Product> productList = [
+  //   Product(
+  //       id: 30,
+  //       name: 'Nike Air Max 200',
+  //       price: 240.00,
+  //       isSelected: true,
+  //       isliked: false,
+  //       image: ['assets/shooe_tilt_1.png'],
+  //       category: "Trending Now",
+  //       desc: "Product Desc",
+  //       rating: 4,
+  //       availableSColor: [
+  //         'red',
+  //         'black'
+  //       ],
+  //       availableSizes: [
+  //         'S',
+  //         'L',
+  //         'XL'
+  //       ]
+  //   ),
+  // ];
 
 
   static List<Category> categoryList = [

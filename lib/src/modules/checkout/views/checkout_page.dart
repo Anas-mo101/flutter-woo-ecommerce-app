@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_ecommerce_app/src/modules/product/model/product.dart';
 import 'package:flutter_ecommerce_app/src/themes/light_color.dart';
@@ -8,6 +10,7 @@ import '../../../config/route.dart';
 import '../../../widgets/topbar.dart';
 import '../../cart/controller/cart_controller.dart';
 import '../controller/checkout_controller.dart';
+import '../models/woo_order.dart';
 
 class CheckoutPage extends StatelessWidget {
   CheckoutPage({Key key}) : super(key: key);
@@ -248,6 +251,11 @@ class CheckoutPage extends StatelessWidget {
                 if(order is List) {
                   controller.calcCartItems(order);
                 }
+
+                // var wooOrder = Get.arguments;
+                // if(order is Map) {
+                //   WooOrder wOrder = WooOrder.fromJson(order);
+                // }
 
                 return Stack(
                   fit: StackFit.expand,
