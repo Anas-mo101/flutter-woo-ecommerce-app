@@ -138,6 +138,25 @@ class CartController extends GetxController {
     prefs.setStringList("cartModel", []);
   }
 
+  void incrementCartItems(int id, int varId) {
+    for(var i = 0; i < wooCartItems.length; i++){
+      if(varId != -1){
+        if(wooCartItems[i].productId == id && wooCartItems[i].variationId == varId){
+          wooCartItems[i].quantity++;
+          break;
+        }
+      }else{
+        if(wooCartItems[i].productId == id){
+          wooCartItems[i].quantity++;
+          break;
+        }
+      }
+    }
+
+    _saveCartItems();
+    update();
+  }
+
   void removeFromCart(int id, int varId) {
     for(var i = 0; i < wooCartItems.length; i++){
       if(varId != -1){

@@ -7,6 +7,7 @@ import 'package:flutter_ecommerce_app/src/widgets/title_text.dart';
 import 'package:get/get.dart';
 import '../../../config/route.dart';
 import '../../../widgets/topbar.dart';
+import '../../cart/model/cart_model.dart';
 import '../controller/billing_controller.dart';
 import '../models/woo_order.dart';
 import '../widgets/toggle_payment_options.dart';
@@ -49,11 +50,6 @@ class BillingPage extends StatelessWidget {
           child: GetBuilder<BillingController>(
               init: BillingController(),
               builder: (controller) {
-                var args = Get.arguments;
-                if(!(args is List)) Get.offAndToNamed(Routes.cart);
-
-                if(args[0] is List) controller.uniqueList = args[0];
-                if(args[1] is LineItems) controller.itemsQty = args[1];
 
                 return Stack(
                   fit: StackFit.expand,

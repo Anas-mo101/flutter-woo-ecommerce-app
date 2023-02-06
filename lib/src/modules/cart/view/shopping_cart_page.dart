@@ -23,6 +23,9 @@ class ShoppingCartPage extends StatelessWidget {
   }
 
   Widget _item(CartItemProduct model) {
+    int qty = cartController.getQty(model.id, model.variationId);
+
+
     return ListTile(
         title: TitleText(
           text: model.name,
@@ -52,7 +55,7 @@ class ShoppingCartPage extends StatelessWidget {
           Icon(Icons.image_not_supported) : Image.network(model.image[0], scale: 6),
         ),
         trailing: Container(
-          width: 90,
+          width: 120,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -64,18 +67,30 @@ class ShoppingCartPage extends StatelessWidget {
                   height: 35,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(color: LightColor.lightGrey.withAlpha(150), borderRadius: BorderRadius.circular(10)),
-                  child: Center(child: Icon(Icons.delete, color: Colors.black)),
+                  child: Center(child: Icon(qty > 1 ? Icons.remove : Icons.delete, color: Colors.black)),
                 ),
               ),
-              SizedBox(width: 10),
+              SizedBox(width: 5),
               Container(
                 width: 35,
                 height: 35,
                 alignment: Alignment.center,
-                decoration: BoxDecoration(color: LightColor.lightGrey.withAlpha(150), borderRadius: BorderRadius.circular(10)),
+                decoration: BoxDecoration(color: LightColor.orange, borderRadius: BorderRadius.circular(10)),
                 child: TitleText(
                   text: 'x${cartController.getQty(model.id, model.variationId)}',
                   fontSize: 12,
+                  color: Colors.white,
+                ),
+              ),
+              SizedBox(width: 5),
+              InkWell(
+                onTap: () => cartController.incrementCartItems(model.id, model.variationId),
+                child: Container(
+                  width: 35,
+                  height: 35,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(color: LightColor.lightGrey.withAlpha(150), borderRadius: BorderRadius.circular(10)),
+                  child: Center(child: Icon(Icons.add, color: Colors.black)),
                 ),
               ),
             ],

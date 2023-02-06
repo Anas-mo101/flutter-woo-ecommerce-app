@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_ecommerce_app/src/modules/product/model/product.dart';
 
 import '../../../config/route.dart';
+import '../../cart/model/cart_model.dart';
 import '../models/order.dart';
 import '../models/woo_order.dart';
 
@@ -43,6 +44,17 @@ class BillingController extends GetxController {
   // Map<int, int> itemsQty = {};
   List<LineItems> itemsQty;
   List<Product> uniqueList = [];
+  List<CartModel> cartItems = [];
+
+  @override
+  void onInit() {
+    var args = Get.arguments;
+    if(args is List<CartModel>){
+      cartItems = args;
+    }
+
+    super.onInit();
+  }
 
   // void setCartItems( Map<int, int> qty,List<Product> uniqueList){
   //   itemsQty = qty;
