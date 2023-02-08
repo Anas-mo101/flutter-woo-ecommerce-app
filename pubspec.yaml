@@ -34,6 +34,21 @@ dependencies:
       ref: master
   flutter_secure_storage: ^7.0.1
 
+
+  image_picker: 0.8.4
+  tflite:
+    git:
+      url: https://github.com/zhengbomo/flutter_tflite.git
+      ref: master
+  image_cropper: ^3.0.1
+  camera: ^0.10.0+5
+
+  dio: ^4.0.4
+  permission_handler: ^10.2.0
+  open_file: ^3.2.1
+  download_assets: ^3.0.1
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

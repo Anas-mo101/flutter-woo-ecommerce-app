@@ -5,6 +5,7 @@ import '../../../config/route.dart';
 import '../../product/model/product.dart';
 import '../../product/model/woocommerce_product.dart';
 import '../../../model/category.dart';
+import '../image_search/item_detector.dart';
 
 
 class Filter{
@@ -34,7 +35,15 @@ class SearchController extends GetxController {
   void onInit() {
     // // TODO: implement onInit
     getCategories();
+    ImageDetectionSearch()..loadTFLiteModels();
     super.onInit();
+  }
+
+  @override
+  void onClose() {
+    // TODO: implement onClose
+    ImageDetectionSearch().close();
+    super.onClose();
   }
 
   void toggleCategoryOptions(Category model) {

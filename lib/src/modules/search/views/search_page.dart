@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import '../../../config/route.dart';
 import '../../../widgets/bottom_navigation_bar.dart';
 import '../../../widgets/topbar.dart';
+import '../image_search/item_detector.dart';
 import '../widgets/category-widget.dart';
 import '../controller/search_controller.dart';
 
@@ -129,6 +130,73 @@ class SearchPage extends StatelessWidget {
     );
   }
 
+  void showImageDetectionOption(BuildContext context){
+    showModalBottomSheet(
+      context: context,
+      clipBehavior: Clip.antiAlias,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadiusDirectional.only(
+          topStart: Radius.circular(20),
+          topEnd: Radius.circular(20),
+        ),
+      ),
+      builder: (context) => Container(
+        height: 150,
+        width: double.infinity,
+        child: Padding(
+          padding: const EdgeInsetsDirectional.only(top: 20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Text( 'Pick Image From' , style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold) ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Column(
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          ImageDetectionSearch().getSearchImageFromGallery().then((value) {
+                            print('search val: $value');
+                            if (value != null) {
+
+                            }
+                          });
+                        },
+                        icon: const Icon(Icons.image),
+                        iconSize: 40,
+                      ),
+                      Text('Gallery'),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          ImageDetectionSearch().getSearchImageFromCamera().then((value) {
+                            print('search val: $value');
+                            if (value != null) {
+
+                            }
+                          });
+                        },
+                        icon: const Icon(Icons.camera_alt),
+                        iconSize: 40,
+                      ),
+                      Text('Camera'),
+                    ],
+                  ),
+                ],
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -157,21 +225,59 @@ class SearchPage extends StatelessWidget {
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text('filter_category'.tr),
-                                        InkWell(
-                                          onTap: () => Get.toNamed(Routes.filter),
-                                          child: Container(
-                                            padding: EdgeInsets.all(10),
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.all(Radius.circular(13)),
-                                              color: Theme.of(context).backgroundColor,
-                                              boxShadow: AppTheme.shadow,
-                                              border:  Border.all(
-                                                color: controller.searchFilterEnabled ? LightColor.orange : LightColor.grey,
-                                                width: controller.searchFilterEnabled ? 2 : 1,
-                                              )
+                                        Row(
+                                          children: [
+                                            InkWell(
+                                              onTap: () => {},
+                                              child: Container(
+                                                padding: EdgeInsets.all(10),
+                                                decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.all(Radius.circular(13)),
+                                                    color: Theme.of(context).backgroundColor,
+                                                    boxShadow: AppTheme.shadow,
+                                                    border:  Border.all(
+                                                      color: controller.searchFilterEnabled ? LightColor.orange : LightColor.grey,
+                                                      width: controller.searchFilterEnabled ? 2 : 1,
+                                                    )
+                                                ),
+                                                child: Icon(Icons.mic, color: Colors.black54),
+                                              ),
                                             ),
-                                            child: Icon(Icons.filter_list, color: Colors.black54),
-                                          ),
+                                            SizedBox(width: 10),
+                                            InkWell(
+                                              onTap: () => showImageDetectionOption(context),
+                                              child: Container(
+                                                padding: EdgeInsets.all(10),
+                                                decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.all(Radius.circular(13)),
+                                                    color: Theme.of(context).backgroundColor,
+                                                    boxShadow: AppTheme.shadow,
+                                                    border:  Border.all(
+                                                      color: controller.searchFilterEnabled ? LightColor.orange : LightColor.grey,
+                                                      width: controller.searchFilterEnabled ? 2 : 1,
+                                                    )
+                                                ),
+                                                child: Icon(Icons.image, color: Colors.black54),
+                                              ),
+                                            ),
+                                            SizedBox(width: 10),
+                                            InkWell(
+                                              onTap: () => Get.toNamed(Routes.filter),
+                                              child: Container(
+                                                padding: EdgeInsets.all(10),
+                                                decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.all(Radius.circular(13)),
+                                                    color: Theme.of(context).backgroundColor,
+                                                    boxShadow: AppTheme.shadow,
+                                                    border:  Border.all(
+                                                      color: controller.searchFilterEnabled ? LightColor.orange : LightColor.grey,
+                                                      width: controller.searchFilterEnabled ? 2 : 1,
+                                                    )
+                                                ),
+                                                child: Icon(Icons.filter_list, color: Colors.black54),
+                                              ),
+                                            )
+                                          ],
                                         )
                                       ]
                                   ),
