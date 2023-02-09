@@ -125,10 +125,6 @@ class CartController extends GetxController {
       }
     }
 
-    wooCartModel.forEach((element) {
-      print(jsonEncode(element.toJson()));
-    });
-
     prefs.setStringList("cartModel", wooCartModel.map((item) => jsonEncode(item?.toJson())).toList());
   }
 
@@ -192,6 +188,7 @@ class CartController extends GetxController {
     final prefs = await SharedPreferences.getInstance();
     List<String> cartModel = prefs.getStringList("cartModel") ?? [];
     wooCartItems = cartModel.map((item) => CartModel.fromJson(jsonDecode(item))).toList();
+    print('cart count: ${wooCartItems.length}');
     update();
   }
 }

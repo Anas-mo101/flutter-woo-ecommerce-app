@@ -41,9 +41,6 @@ class BillingController extends GetxController {
   bool cusZipErr = false;
   bool cusCountryErr = false;
 
-  // Map<int, int> itemsQty = {};
-  List<LineItems> itemsQty;
-  List<Product> uniqueList = [];
   List<CartModel> cartItems = [];
 
   @override
@@ -52,65 +49,63 @@ class BillingController extends GetxController {
     if(args is List<CartModel>){
       cartItems = args;
     }
-
     super.onInit();
   }
 
-  // void setCartItems( Map<int, int> qty,List<Product> uniqueList){
-  //   itemsQty = qty;
-  //   uniqueList = uniqueList;
-  // }
-
   submitBillingInfo(){
-    if(uniqueList.isNotEmpty && validateCustomerInfo()){
-      // Billing billing = Billing(
-      //   firstName: billingController.cusName.value.text,
-      //   address1: billingController.cusBilling.value.text,
-      //   email: billingController.cusEmail.value.text,
-      //   phone: billingController.cusPhone.value.text,
-      //   country: billingController.shippingOptions[billingController.selectedShippingOptions],
-      //   postcode: billingController.cusZip.value.text,
-      // );
-      //
-      // Shipping shipping = Shipping(
-      //   firstName: billingController.cusName.value.text,
-      //   address1: billingController.cusBilling.value.text,
-      //   country: billingController.shippingOptions[billingController.selectedShippingOptions],
-      //   postcode: billingController.cusZip.value.text,
-      // );
-      //
-      // ShippingLines shippingLines = ShippingLines(
-      //   methodId: '0',
-      //   methodTitle: billingController.shippingOptions[billingController.selectedShippingOptions],
-      //   total: '10.0'
-      // );
-      //
-      // WooOrder order = WooOrder(
-      //   paymentMethod: billingController.paymentOptions[billingController.selectedPaymentOptions],
-      //   paymentMethodTitle: billingController.paymentOptions[billingController.selectedPaymentOptions],
-      //   setPaid: false,
-      //   shipping: shipping,
-      //   billing: billing,
-      //   lineItems: billingController.itemsQty,
-      //   shippingLines: [
-      //     shippingLines
-      //   ]
-      // );
+    if(cartItems.isNotEmpty && validateCustomerInfo()){
+      Billing billing = Billing(
+        firstName: cusName.value.text,
+        address1: cusBilling.value.text,
+        email: cusEmail.value.text,
+        phone: cusPhone.value.text,
+        country: shippingOptions[selectedShippingOptions],
+        postcode: cusZip.value.text,
+      );
 
-      // Get.toNamed(Routes.checkout, arguments: order.toJson());
+      Shipping shipping = Shipping(
+        firstName: cusName.value.text,
+        address1: cusShipping.value.text,
+        country: shippingOptions[selectedShippingOptions],
+        postcode: cusZip.value.text,
+      );
 
-      Get.toNamed(Routes.checkout, arguments: [
-        itemsQty,
-        uniqueList,
-        paymentOptions[selectedPaymentOptions],
-        cusName.value.text,
-        cusPhone.value.text,
-        cusEmail.value.text,
-        cusBilling.value.text,
-        cusShipping.value.text,
-        cusZip.value.text,
-        shippingOptions[selectedShippingOptions],
-      ]);
+      ShippingLines shippingLines = ShippingLines(
+        methodId: '0',
+        methodTitle: shippingOptions[selectedShippingOptions],
+        total: '10.0'
+      );
+
+      WooOrder order = WooOrder(
+        paymentMethod: paymentOptions[selectedPaymentOptions],
+        paymentMethodTitle: paymentOptions[selectedPaymentOptions],
+        setPaid: false,
+        shipping: shipping,
+        billing: billing,
+        lineItems: cartItems.map((e) => LineItems(
+            productId: e.productId,
+            quantity: e.quantity,
+            variationId: e.variationId
+        )).toList(),
+        shippingLines: [
+          shippingLines
+        ]
+      );
+
+      Get.toNamed(Routes.checkout, arguments: [order, cartItems]);
+
+      // Get.toNamed(Routes.checkout, arguments: [
+      //   itemsQty,
+      //   uniqueList,
+      //   paymentOptions[selectedPaymentOptions],
+      //   cusName.value.text,
+      //   cusPhone.value.text,
+      //   cusEmail.value.text,
+      //   cusBilling.value.text,
+      //   cusShipping.value.text,
+      //   cusZip.value.text,
+      //   shippingOptions[selectedShippingOptions],
+      // ]);
     }
   }
 

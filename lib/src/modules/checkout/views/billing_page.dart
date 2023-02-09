@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_ecommerce_app/src/themes/light_color.dart';
 import 'package:flutter_ecommerce_app/src/themes/theme.dart';
@@ -7,9 +5,7 @@ import 'package:flutter_ecommerce_app/src/widgets/title_text.dart';
 import 'package:get/get.dart';
 import '../../../config/route.dart';
 import '../../../widgets/topbar.dart';
-import '../../cart/model/cart_model.dart';
 import '../controller/billing_controller.dart';
-import '../models/woo_order.dart';
 import '../widgets/toggle_payment_options.dart';
 
 class BillingPage extends StatelessWidget {
@@ -50,7 +46,6 @@ class BillingPage extends StatelessWidget {
           child: GetBuilder<BillingController>(
               init: BillingController(),
               builder: (controller) {
-
                 return Stack(
                   fit: StackFit.expand,
                   children: <Widget>[

@@ -64,11 +64,8 @@ class ProductController extends GetxController  {
         var id = element.id;
         var varCombinations = element.attributes.map((e) => e.option).toList();
         if(areListsEqual(toMatchAgainst,varCombinations)){
-          print(varCombinations);
           CartController.addToCart(
-              product,
-              variantId: id,
-              selectedVariations: varCombinations
+              product, variantId: id, selectedVariations: varCombinations
           ).then((value) => setProductQtyInCart());
         }
       });
@@ -77,19 +74,20 @@ class ProductController extends GetxController  {
     }
   }
 
-  bool areListsEqual(var list1, var list2) {
+  bool areListsEqual(List listA, List listB) {
     // check if both are lists
-    if(!(list1 is List && list2 is List)
-        // check if both have same length
-        || list1.length!=list2.length) {
-      return false;
-    }
+    if(listA.length != listB.length) return false;
 
     // check if elements are equal
-    for(int i=0;i<list1.length;i++) {
-      if(list1[i]!=list2[i]) {
-        return false;
+    for(int i=0;i<listA.length;i++) {
+      var compareAgainst = listA[i];
+      bool flag = false;
+      for(int x=0;x<listB.length;x++) {
+        if(compareAgainst == listB[x]){
+          flag = true;
+        }
       }
+      if(flag == false) return false;
     }
 
     return true;

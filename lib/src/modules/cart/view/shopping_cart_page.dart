@@ -21,6 +21,80 @@ class ShoppingCartPage extends StatelessWidget {
     return items.map((e) => _item(e)).toList();
   }
 
+  // Widget __item(CartItemProduct model) {
+  //   return Container(
+  //     width: MediaQuery.of(Get.context).size.width * 0.94,
+  //     child: Row(
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       children: <Widget>[
+  //         Padding(
+  //           padding: const EdgeInsets.all(2.0),
+  //           child: ConstrainedBox(
+  //             constraints: BoxConstraints(
+  //               maxWidth: MediaQuery.of(Get.context).size.width * 0.25,
+  //               maxHeight: MediaQuery.of(Get.context).size.width * 0.25,
+  //             ),
+  //             child: model.image[0] == null && model.image.isEmpty ?
+  //             Center(child: Icon(Icons.image_not_supported)) :
+  //             Center(child: Image.network(model.image[0], scale: 8)),
+  //           ),
+  //         ),
+  //         Stack(
+  //           children: <Widget>[
+  //             Container(
+  //               width: MediaQuery.of(Get.context).size.width * 0.5,
+  //               child: Padding(
+  //                 padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
+  //                 child: Text(
+  //                   model.name,
+  //                   style: TextStyle(
+  //                     fontWeight: FontWeight.bold,
+  //                     fontSize: 15,
+  //                   ),
+  //                 ),
+  //               ),
+  //             ),
+  //             Positioned(
+  //               bottom: 50,
+  //               child: Container(
+  //                 width: MediaQuery.of(Get.context).size.width * 0.5,
+  //                 child: Padding(
+  //                   padding: const EdgeInsets.fromLTRB(5, 10, 0, 0),
+  //                   child: Row(
+  //                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                     children: <Widget>[
+  //                       Row(
+  //                         children: [
+  //                           TitleText(
+  //                             text: '\$ ',
+  //                             color: LightColor.red,
+  //                             fontSize: 12,
+  //                           ),
+  //                           TitleText(
+  //                             text: model.price.toString(),
+  //                             fontSize: 12,
+  //                           ),
+  //                           TitleText(
+  //                             text: ' - ${model.variationIdentifier}',
+  //                             fontSize: 12,
+  //                           ),
+  //                         ],
+  //                       ),
+  //                     ],
+  //                   ),
+  //                 ),
+  //               ),
+  //             ),
+  //             SizedBox(height: 10),
+  //             cartItemQuantity(model),
+  //             SizedBox(height: 10),
+  //           ],
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
+
   Widget _item(CartItemProduct model) {
     int qty = cartController.getQty(model.id, model.variationId);
 

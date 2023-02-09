@@ -19,20 +19,18 @@ class Order{
   String customerZipAddress;
   String customerCountry;
 
-  Order(
-      this.itemsQty,
-      this.uniqueList,
-      this.paymentOption,
-      this.customerName,
-
-      this.customerEmail,
-      this.customerPhone,
-      this.customerBillingAddress,
-      this.customerShippingAddress,
-
-      this.customerZipAddress,
-      this.customerCountry,
-  );
+  Order({
+    this.itemsQty,
+    this.uniqueList,
+    this.paymentOption,
+    this.customerName,
+    this.customerEmail,
+    this.customerPhone,
+    this.customerBillingAddress,
+    this.customerShippingAddress,
+    this.customerZipAddress,
+    this.customerCountry,
+  });
 
 
 }

@@ -1,7 +1,4 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_ecommerce_app/src/modules/product/model/product.dart';
 import 'package:flutter_ecommerce_app/src/themes/light_color.dart';
 import 'package:flutter_ecommerce_app/src/themes/theme.dart';
 import 'package:flutter_ecommerce_app/src/widgets/title_text.dart';
@@ -9,8 +6,8 @@ import 'package:get/get.dart';
 import '../../../config/route.dart';
 import '../../../widgets/topbar.dart';
 import '../../cart/controller/cart_controller.dart';
+import '../../cart/model/cart_item_product.dart';
 import '../controller/checkout_controller.dart';
-import '../models/woo_order.dart';
 
 class CheckoutPage extends StatelessWidget {
   CheckoutPage({Key key}) : super(key: key);
@@ -18,88 +15,51 @@ class CheckoutPage extends StatelessWidget {
   final checkoutController = Get.put(CheckoutController());
 
   List<Widget> _cartItems(BuildContext context, CheckoutController controller) {
-    List<Product> items = controller.ongoingOrder.uniqueList;
+    List<CartItemProduct> items = controller.getCart();
     if (items.isEmpty) return [];
     List<Widget> itemsWidget = items.map((e) => _item(e)).toList();
     return itemsWidget;
   }
 
-  Widget _item(Product model) {
-    return Container(
-      height: 80,
-      child: Row(
-        children: <Widget>[
-          AspectRatio(
-            aspectRatio: 1.2,
-            child: Stack(
-              children: <Widget>[
-                Align(
-                  alignment: Alignment.bottomLeft,
-                  child: Container(
-                    height: 70,
-                    width: 70,
-                    child: Stack(
-                      children: <Widget>[
-                        Align(
-                          alignment: Alignment.bottomLeft,
-                          child: Container(
-                            decoration: BoxDecoration(color: LightColor.lightGrey, borderRadius: BorderRadius.circular(10)),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Positioned(
-                  left: -10,
-                  bottom: -5,
-                  child: model.image[0] == null && model.image.isEmpty ?
-                      Icon(Icons.image_not_supported) : Image.network(model.image[0], scale: 20),
-                )
-              ],
+  Widget _item(CartItemProduct model) {
+    return ListTile(
+        leading: Container(
+          decoration: BoxDecoration(color: LightColor.lightGrey, borderRadius: BorderRadius.circular(10)),
+          child: model.image[0] == null && model.image.isEmpty ?
+          Icon(Icons.image_not_supported) : Image.network(model.image[0], scale: 6),
+        ),
+        title: TitleText(
+          text: model.name,
+          fontSize: 15,
+          fontWeight: FontWeight.w700,
+        ),
+        subtitle: Row(
+          children: <Widget>[
+            TitleText(
+              text: '\$ ',
+              color: LightColor.red,
+              fontSize: 12,
             ),
+            TitleText(
+              text: model.price.toString(),
+              fontSize: 14,
+            ),
+            TitleText(
+              text: ' - ${model.variationIdentifier}',
+              fontSize: 12,
+            ),
+          ],
+        ),
+        trailing: Container(
+          width: 35,
+          height: 35,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(color: LightColor.lightGrey.withAlpha(150), borderRadius: BorderRadius.circular(10)),
+          child: TitleText(
+            text: 'x${checkoutController.getQty(model.id, model.variationId)}',
+            fontSize: 12,
           ),
-          Expanded(
-              child: ListTile(
-                  title: TitleText(
-                    text: model.name,
-                    fontSize: 15,
-                    fontWeight: FontWeight.w700,
-                  ),
-                  subtitle: Row(
-                    children: <Widget>[
-                      TitleText(
-                        text: '\$ ',
-                        color: LightColor.red,
-                        fontSize: 12,
-                      ),
-                      TitleText(
-                        text: model.price.toString(),
-                        fontSize: 14,
-                      ),
-                    ],
-                  ),
-                  trailing: Container(
-                    width: 90,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: 35,
-                          height: 35,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(color: LightColor.lightGrey.withAlpha(150), borderRadius: BorderRadius.circular(10)),
-                          child: TitleText(
-                            text: 'x${checkoutController.getQty(model.id)}',
-                            fontSize: 12,
-                          ),
-                        ),
-                      ],
-                    ),
-                  )))
-        ],
-      ),
+        )
     );
   }
 
@@ -114,7 +74,7 @@ class CheckoutPage extends StatelessWidget {
           fontWeight: FontWeight.w500,
         ),
         TitleText(
-          text: '\$$subtotal',
+          text: '\$${subtotal.toStringAsFixed(2)}',
           fontSize: 18,
         ),
       ],
@@ -132,7 +92,7 @@ class CheckoutPage extends StatelessWidget {
           fontWeight: FontWeight.w500,
         ),
         TitleText(
-          text: '\$$tax',
+          text: '\$${tax.toStringAsFixed(2)}',
           fontSize: 18,
         ),
       ],
@@ -150,7 +110,7 @@ class CheckoutPage extends StatelessWidget {
           fontWeight: FontWeight.w500,
         ),
         TitleText(
-          text: '\$$delv',
+          text: '\$${delv.toStringAsFixed(2)}',
           fontSize: 18,
         ),
       ],
@@ -168,7 +128,7 @@ class CheckoutPage extends StatelessWidget {
           fontWeight: FontWeight.w500,
         ),
         TitleText(
-          text: '\$$total',
+          text: '\$${total.toStringAsFixed(2)}',
           fontSize: 18,
         ),
       ],
@@ -247,16 +207,6 @@ class CheckoutPage extends StatelessWidget {
         child: GetBuilder<CheckoutController>(
             init: CheckoutController(),
             builder: (controller) {
-                var order = Get.arguments;
-                if(order is List) {
-                  controller.calcCartItems(order);
-                }
-
-                // var wooOrder = Get.arguments;
-                // if(order is Map) {
-                //   WooOrder wOrder = WooOrder.fromJson(order);
-                // }
-
                 return Stack(
                   fit: StackFit.expand,
                   children: <Widget>[
@@ -290,14 +240,13 @@ class CheckoutPage extends StatelessWidget {
                               ),
                             ),
                             Container(
-                              // padding: EdgeInsets.symmetric(vertical: 30,horizontal: 20),
                               padding: EdgeInsets.fromLTRB(20, 0, 20, 50),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: <Widget>[
                                   Divider(
                                     thickness: 1,
-                                    height: 70,
+                                    // height: 70,
                                   ),
                                   _price(controller.getOrderTotalQty(),controller.ongoingOrder.subtotal),
                                   SizedBox(height: 30),
@@ -323,7 +272,6 @@ class CheckoutPage extends StatelessWidget {
                 );
             }
         )
-
       ),
     );
   }
