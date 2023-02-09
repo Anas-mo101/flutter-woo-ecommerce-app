@@ -93,16 +93,6 @@ class ProductDetailPage extends StatelessWidget {
             isOutLine: true,
             onPressed: () => Get.back(),
           ),
-          _icon(
-              isLiked ? Icons.favorite : Icons.favorite_border,
-              color: isLiked ? LightColor.red : LightColor.lightGrey,
-              size: 15,
-              padding: 12,
-              isOutLine: true,
-              onPressed: () {
-
-              }
-          ),
         ],
       ),
     );

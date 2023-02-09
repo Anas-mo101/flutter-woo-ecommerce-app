@@ -49,16 +49,6 @@ class ProductCard extends StatelessWidget {
                 ),
               ],
             ),
-            Positioned(
-              top: -15,
-              left: 5,
-              child: IconButton(
-                icon: Icon(
-                  product.isliked != null && product.isliked ? Icons.favorite : Icons.favorite_border,
-                  color: product.isliked != null && product.isliked ? LightColor.red : LightColor.iconColor,
-                ),
-              ),
-            ),
           ],
         ),
       ).ripple(() {

@@ -41,7 +41,6 @@ class CartController extends GetxController {
   List<CartItemProduct> getCart() {
     List<CartItemProduct> items = [];
     wooCartItems.forEach((e) {
-
       items.add(CartItemProduct(
         id: e.productId,
         name: e.product.name,

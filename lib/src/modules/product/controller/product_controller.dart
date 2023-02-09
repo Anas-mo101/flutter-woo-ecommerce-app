@@ -45,26 +45,31 @@ class ProductController extends GetxController  {
       WooAttributes colorOptions;
       List<String> toMatchAgainst = [];
 
-      if(colorFlag) {
-        colorOptions = product.availableSColor.first;
-        toMatchAgainst.add(colorOptions.options[selectedAvailableColor]);
-      }
-
       if(sizeFlag) {
         sizeOptions = product.availableSizes.first;
         toMatchAgainst.add(sizeOptions.options[selectedAvailableSizes]);
+      }
+
+      if(colorFlag) {
+        colorOptions = product.availableSColor.first;
+        toMatchAgainst.add(colorOptions.options[selectedAvailableColor]);
       }
       /// check if this element has combination of attributes
       /// same as combination picked by user
       /// if it matches then break and pass id
       /// else look in next
       print(toMatchAgainst);
+      print('==================');
       productVars.forEach((element) {
         var id = element.id;
         var varCombinations = element.attributes.map((e) => e.option).toList();
         if(areListsEqual(toMatchAgainst,varCombinations)){
-          CartController.addToCart(product, variantId: id, selectedVariations: varCombinations)
-              .then((value) => setProductQtyInCart());
+          print(varCombinations);
+          CartController.addToCart(
+              product,
+              variantId: id,
+              selectedVariations: varCombinations
+          ).then((value) => setProductQtyInCart());
         }
       });
     }else{

@@ -16,15 +16,13 @@ class ShoppingCartPage extends StatelessWidget {
 
   final cartController = Get.put(CartController());
 
-  List<Widget> _cartItems(BuildContext context, CartController controller) {
-    List<CartItemProduct> items = controller.getCart();
+  List<Widget> _cartItems(BuildContext context, List<CartItemProduct> items) {
     if (items.isEmpty) return [];
     return items.map((e) => _item(e)).toList();
   }
 
   Widget _item(CartItemProduct model) {
     int qty = cartController.getQty(model.id, model.variationId);
-
 
     return ListTile(
         title: TitleText(
@@ -57,8 +55,6 @@ class ShoppingCartPage extends StatelessWidget {
         trailing: Container(
           width: 120,
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               InkWell(
                 onTap: () => cartController.removeFromCart(model.id,model.variationId),
@@ -146,12 +142,14 @@ class ShoppingCartPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: SafeArea(
         child: GetBuilder<CartController>(
             init: CartController(),
             builder: (controller) {
-                return Stack(
+              List<CartItemProduct> items = controller.getCart();
+              return Stack(
                   fit: StackFit.expand,
                   children: <Widget>[
                     SingleChildScrollView(
@@ -174,10 +172,12 @@ class ShoppingCartPage extends StatelessWidget {
                             Expanded(
                               child: Container(
                                 padding: EdgeInsets.symmetric(horizontal: 10),
-                                child: SingleChildScrollView(
+                                child: items.isEmpty ?
+                                Center(child: Text('Cart is Empty')) :
+                                SingleChildScrollView(
                                   child: Column(
                                     children: [
-                                      ..._cartItems(context, controller),
+                                      ..._cartItems(context, items),
                                     ],
                                   ),
                                 ),
