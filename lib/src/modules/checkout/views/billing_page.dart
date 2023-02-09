@@ -61,7 +61,9 @@ class BillingPage extends StatelessWidget {
                           end: Alignment.bottomCenter,
                         ),
                       ),
-                      child: SingleChildScrollView(
+                      child: controller.isLoading ?
+                      Center(child: CircularProgressIndicator()) :
+                      SingleChildScrollView(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
@@ -140,19 +142,17 @@ class BillingPage extends StatelessWidget {
                                     ),
                                     child: DropdownButton<String>(
                                       hint: Text('country'.tr, style: TextStyle(fontSize: 14)),
-                                      value: controller.shippingOptions[controller.selectedShippingOptions],
+                                      value: controller.shippingOptions[controller.selectedShippingOptions].name,
                                       isExpanded: true,
                                       underline: Container(),
                                       borderRadius: BorderRadius.circular(15.0),
                                       items: [
                                         ...controller.shippingOptions.map((e) => DropdownMenuItem(
-                                          child: Text(e),
-                                          value: e,
+                                          child: Text(e.name),
+                                          value: e.name,
                                         )),
                                       ],
-                                      onChanged: (String newValue) {
-                                        controller.toggleShippingOption(newValue);
-                                      },
+                                      onChanged: (String newValue) => controller.toggleShippingOption(newValue),
                                     ),
                                   ),
                                   SizedBox(height: 20),
@@ -199,7 +199,6 @@ class BillingPage extends StatelessWidget {
                 );
               }
           )
-
       ),
     );
   }

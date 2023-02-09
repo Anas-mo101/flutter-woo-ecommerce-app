@@ -25,6 +25,9 @@ class EndPoints {
   }
   static wooProductVars(String id) => baseURL + 'wp-json/wc/v3/products/$id/variations';
   static wooCategories() => baseURL + 'wp-json/wc/v3/products/categories';
+
+  static wooPaymentGateways() => baseURL + 'wp-json/wc/v3/payment_gateways';
+  static wooShippingZone() => baseURL + 'wp-json/wc/v3/shipping/zones';
   ///
 
   static final String baseURL2 = 'https://api.escuelajs.co/api/v1/';

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import '../../../api/endpoint.dart';
 import '../../../api/data providers/base_api.dart';
 import '../model/woo_product_variation.dart';
@@ -7,13 +5,7 @@ import '../model/woocommerce_product.dart';
 
 
 class WooProductApi extends BaseApi{
-  String client = 'ck_2dc9ec0fac0a8d2d3abe0a5c6d60aaa2cf0f458e';
-  String secret = 'cs_ef4ce0ed19140f49e9960f877b718e983c5e77df';
-  static String basicAuth;
 
-  WooProductApi(){
-    basicAuth = 'Basic ' + base64.encode(utf8.encode('$client:$secret'));
-  }
 
   Future<WooCommerceProduct> getProduct(int id) async {
     try{
@@ -34,7 +26,6 @@ class WooProductApi extends BaseApi{
       var response = await BaseApi().get(product, mHeader: {
         "Authorization": basicAuth
       });
-      print('========================');
       return response.map<WooProductVariation>((e) => WooProductVariation.fromJson(e)).toList();
     }catch(e){
       print('ProductApi getProduct(id) failed');

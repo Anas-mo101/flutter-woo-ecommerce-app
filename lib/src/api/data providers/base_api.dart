@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
 import '../../modules/profile/middleware/auth_middleware.dart';
 import '../app_data_provider.dart';
@@ -5,6 +7,9 @@ import '../app_data_provider.dart';
 
 /// funnel between fetch data from cache and api accordingly
 class BaseApi extends AppDataProvider {
+  String client = 'ck_2dc9ec0fac0a8d2d3abe0a5c6d60aaa2cf0f458e';
+  String secret = 'cs_ef4ce0ed19140f49e9960f877b718e983c5e77df';
+  String basicAuth;
 
   static Map<String, String> headers = {
     // "Content-Type": "application/json",
@@ -15,6 +20,7 @@ class BaseApi extends AppDataProvider {
     if(authService.isAuthed()){
       headers['Authorization'] = 'Bearer ${authService.token}';
     }
+    basicAuth = 'Basic ' + base64.encode(utf8.encode('$client:$secret'));
   }
 
   Future<dynamic> get(String url, {Map<String, String> mHeader}) async {

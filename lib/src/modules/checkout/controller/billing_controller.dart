@@ -1,29 +1,21 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_ecommerce_app/src/modules/checkout/views/billing_page.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_state_manager/src/simple/get_controllers.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_ecommerce_app/src/modules/product/model/product.dart';
-
 import '../../../config/route.dart';
 import '../../cart/model/cart_model.dart';
+import '../api/woo_order_requirements_api.dart';
 import '../models/order.dart';
 import '../models/woo_order.dart';
-
-
-// store cart item in set() -> uniquely
-// keep track of each cart item's qty in may and id as key
+import '../models/woo_payment_gateway.dart';
+import '../models/woo_shipping_zone.dart';
 
 class BillingController extends GetxController {
 
   Order ongoingOrder;
 
-  List<String> paymentOptions = ['Cash On Delivery', 'Credit/Debt Card', 'Online Banking'];
+  List<WooPaymentGateway> paymentOptions = [];
   int selectedPaymentOptions = 0;
 
-  List<String> shippingOptions = ['Saudi', 'Egypt', 'Qatar'];
+  List<WooShippingZone> shippingOptions = [];
   int selectedShippingOptions = 0;
 
   final cusName = TextEditingController();
@@ -43,13 +35,39 @@ class BillingController extends GetxController {
 
   List<CartModel> cartItems = [];
 
+  bool isLoading = true;
+
   @override
   void onInit() {
     var args = Get.arguments;
     if(args is List<CartModel>){
       cartItems = args;
+      _init();
     }
     super.onInit();
+  }
+
+  Future _init() async {
+    await initShippingZones();
+    await initPaymentMethod();
+    isLoading = false;
+    update();
+  }
+
+  void initPaymentMethod() async {
+    try{
+      paymentOptions = await OrderRequirementApi().getPaymentGateways();
+    } catch (e){
+      paymentOptions = [];
+    }
+  }
+
+  void initShippingZones() async {
+    try{
+      shippingOptions = await OrderRequirementApi().getShippingZones();
+    } catch (e){
+      shippingOptions = [];
+    }
   }
 
   submitBillingInfo(){
@@ -59,26 +77,26 @@ class BillingController extends GetxController {
         address1: cusBilling.value.text,
         email: cusEmail.value.text,
         phone: cusPhone.value.text,
-        country: shippingOptions[selectedShippingOptions],
+        country: shippingOptions[selectedShippingOptions].name,
         postcode: cusZip.value.text,
       );
 
       Shipping shipping = Shipping(
         firstName: cusName.value.text,
         address1: cusShipping.value.text,
-        country: shippingOptions[selectedShippingOptions],
+        country: shippingOptions[selectedShippingOptions].name,
         postcode: cusZip.value.text,
       );
 
       ShippingLines shippingLines = ShippingLines(
-        methodId: '0',
-        methodTitle: shippingOptions[selectedShippingOptions],
+        methodId: shippingOptions[selectedShippingOptions].id.toString(),
+        methodTitle: shippingOptions[selectedShippingOptions].name,
         total: '10.0'
       );
 
       WooOrder order = WooOrder(
-        paymentMethod: paymentOptions[selectedPaymentOptions],
-        paymentMethodTitle: paymentOptions[selectedPaymentOptions],
+        paymentMethod: paymentOptions[selectedPaymentOptions].id,
+        paymentMethodTitle: paymentOptions[selectedPaymentOptions].title,
         setPaid: false,
         shipping: shipping,
         billing: billing,
@@ -93,34 +111,20 @@ class BillingController extends GetxController {
       );
 
       Get.toNamed(Routes.checkout, arguments: [order, cartItems]);
-
-      // Get.toNamed(Routes.checkout, arguments: [
-      //   itemsQty,
-      //   uniqueList,
-      //   paymentOptions[selectedPaymentOptions],
-      //   cusName.value.text,
-      //   cusPhone.value.text,
-      //   cusEmail.value.text,
-      //   cusBilling.value.text,
-      //   cusShipping.value.text,
-      //   cusZip.value.text,
-      //   shippingOptions[selectedShippingOptions],
-      // ]);
     }
   }
 
   togglePaymentOption(String option){
-    final opt = paymentOptions.indexOf(option);
+    final opt = paymentOptions.indexWhere((element) => element.title == option);
     selectedPaymentOptions = opt == -1 ? 0 : opt;
     update();
   }
 
   toggleShippingOption(String option){
-    final opt = shippingOptions.indexOf(option);
+    final opt = shippingOptions.indexWhere((element) => element.name == option);
     selectedShippingOptions = opt == -1 ? 0 : opt;
     update();
   }
-  /// BILLING
 
   bool validateCustomerInfo(){
 
