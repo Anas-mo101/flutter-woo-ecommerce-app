@@ -26,7 +26,6 @@ class ProductController extends GetxController  {
 
   @override
   void onInit() {
-    // TODO: implement onInit
     if(Get.arguments is int){
       setProduct(Get.arguments);
     }

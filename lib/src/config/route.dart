@@ -45,7 +45,7 @@ class Routes {
         MidScreensAdv()
       ]),
       GetPage( name: product,  page: () => ProductDetailPage(), middlewares: [
-        MidScreensAdv()
+        // MidScreensAdv()
       ]),
       GetPage( name: confirmation,  page: () => ConfirmationPage()),
       GetPage( name: search,  page: () => SearchPage(), middlewares: [
@@ -65,9 +65,7 @@ class Routes {
       GetPage( name: profile,  page: () => ProfilePage(), middlewares: [
         AuthMiddle()
       ]),
-      GetPage( name: login,  page: () => LoginPage(), middlewares: [
-        // AuthMiddle()
-      ]),
+      GetPage( name: login,  page: () => LoginPage()),
       GetPage( name: register,  page: () => RegisterPage()),
       GetPage( name: billboard,  page: () => AdBillBoard()),
     ];

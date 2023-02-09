@@ -21,10 +21,7 @@ class ProductDetailPage extends StatelessWidget {
         builder: (controller) {
           return Scaffold(
             floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                controller.addCurrentProductToCart();
-                // CartController.addToCart(controller.product).then((value) => controller.setProductQtyInCart());
-              },
+              onPressed: () => controller.addCurrentProductToCart(),
               backgroundColor: LightColor.orange,
               child: Stack(
                 children: [
