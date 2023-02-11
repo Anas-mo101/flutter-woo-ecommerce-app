@@ -6,6 +6,7 @@ import '../../product/model/product.dart';
 import '../../product/model/woocommerce_product.dart';
 import '../../../model/category.dart';
 import '../image_search/item_detector.dart';
+import '../image_search/tflite_model_manager.dart';
 
 
 class Filter{
@@ -31,18 +32,40 @@ class SearchController extends GetxController {
   int selectedCategoryFilter = 0;
   RangeValues searchPriceRange = RangeValues(10.0, 1000.0);
 
+  ImageDetectionSearch imageDetectionSearch = ImageDetectionSearch();
+  TfliteModelManager tfliteModelManager = TfliteModelManager();
+
+  bool isModelLoading = true;
+
+
   @override
   void onInit() {
     // // TODO: implement onInit
     getCategories();
-    ImageDetectionSearch()..loadTFLiteModels();
+    tfliteModelManager.loadModel().then((v) => {
+
+
+      imageDetectionSearch.loadTFLiteModels(v).then((value) => {
+        print('model loaded: search controller'),
+        isModelLoading = false,
+        update()
+      }).catchError((e){
+
+      })
+
+
+    }).catchError((e){
+      isModelLoading = false;
+    });
+
+
     super.onInit();
   }
 
   @override
   void onClose() {
     // TODO: implement onClose
-    ImageDetectionSearch().close();
+    imageDetectionSearch.close();
     super.onClose();
   }
 

@@ -157,7 +157,7 @@ class SearchPage extends StatelessWidget {
                       IconButton(
                         onPressed: () {
                           Navigator.pop(context);
-                          ImageDetectionSearch().getSearchImageFromGallery().then((value) {
+                          searchController.imageDetectionSearch.getSearchImageFromGallery().then((value) {
                             print('search val: $value');
                             if (value != null) {
 
@@ -175,7 +175,7 @@ class SearchPage extends StatelessWidget {
                       IconButton(
                         onPressed: () {
                           Navigator.pop(context);
-                          ImageDetectionSearch().getSearchImageFromCamera().then((value) {
+                          searchController.imageDetectionSearch.getSearchImageFromCamera().then((value) {
                             print('search val: $value');
                             if (value != null) {
 
@@ -245,7 +245,11 @@ class SearchPage extends StatelessWidget {
                                             ),
                                             SizedBox(width: 10),
                                             InkWell(
-                                              onTap: () => showImageDetectionOption(context),
+                                              onTap: () => {
+                                                if(!controller.isModelLoading){
+                                                  showImageDetectionOption(context)
+                                                }
+                                              },
                                               child: Container(
                                                 padding: EdgeInsets.all(10),
                                                 decoration: BoxDecoration(
@@ -257,7 +261,12 @@ class SearchPage extends StatelessWidget {
                                                       width: controller.searchFilterEnabled ? 2 : 1,
                                                     )
                                                 ),
-                                                child: Icon(Icons.image, color: Colors.black54),
+                                                child: !controller.isModelLoading ? Icon(Icons.image, color: Colors.black54) :
+                                                SizedBox(
+                                                  height: 22,
+                                                  width: 22,
+                                                  child: CircularProgressIndicator()
+                                                ),
                                               ),
                                             ),
                                             SizedBox(width: 10),

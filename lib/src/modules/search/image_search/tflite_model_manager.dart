@@ -6,21 +6,35 @@ import 'package:permission_handler/permission_handler.dart';
 
 class TfliteModelManager{
   bool _isModelDownloaded = false;
+  bool _isLoading = true;
 
-  get isModelDownloaded => _isModelDownloaded;
+  bool get isModelDownloaded => _isModelDownloaded;
+  bool get isLoading => _isLoading;
 
   Future<bool> _requestWritePermission() async {
     await Permission.storage.request();
     return await Permission.storage.request().isGranted;
   }
 
-  Future<void> loadModel() async {
+  // Future<bool> modelIsLoading() async {
+  //   final appDocDir = await getApplicationDocumentsDirectory();
+  //   final modelPath = appDocDir.path;
+  //
+  //   /// If exist return its path
+  //   if(File(modelPath + '/model_classification.tflite').existsSync()){
+  //     return true;
+  //   }
+  //
+  //   return false;
+  // }
+
+  Future<String> loadModel() async {
     /// check if file exists
     final appDocDir = await getApplicationDocumentsDirectory();
-    final modelPath = '${appDocDir.path}/model_classification.tflite';
+    final modelPath = appDocDir.path;
 
     /// If exist return its path
-    if(File(modelPath).existsSync()){
+    if(File(modelPath + '/model_classification.tflite').existsSync()){
       _isModelDownloaded = true;
       return modelPath;
     }
@@ -28,13 +42,15 @@ class TfliteModelManager{
     /// If does not exist, download from web using url
     try{
       await downloadModel();
+      return modelPath;
     }catch(e){
       throw Exception('Load model failed');
     }
   }
 
   Future<void> downloadModel() async {
-    final url = 'http://mokhtar.shop/wp-content/uploads/2023/02/model_classification.zip';
+    final url = 'http://mokhtar.shop/wp-content/uploads/model_classification.tflite';
+    final labelUrl = 'http://mokhtar.shop/wp-content/uploads/labels.txt';
     bool hasPermission = await _requestWritePermission();
     if (!hasPermission) {
       print('No Write Permission');
@@ -44,19 +60,26 @@ class TfliteModelManager{
     // gets the directory where we will download the file.
     final appDocDir = await getApplicationDocumentsDirectory();
     final modelPath = '${appDocDir.path}/model_classification.tflite';
+    final labelPath = '${appDocDir.path}/label.txt';
 
     // downloads the file
     try{
       await Dio().download(url, modelPath, onReceiveProgress: (received, total) {
           final progress = (received / total) * 100;
-          print('Downloading: $progress');
+          print('Downloading model: $progress');
+      });
 
-        }
-      );
+      await Dio().download(labelUrl, labelPath, onReceiveProgress: (received, total) {
+        final progress = (received / total) * 100;
+        print('Downloading label: $progress');
+      });
 
       _isModelDownloaded = true;
+      _isLoading = false;
     }catch(e){
-      throw Exception('No Write Permission');
+      print('Model failed to download: $e');
+      _isLoading = false;
+      throw Exception('Model failed to download: $e');
     }
   }
 

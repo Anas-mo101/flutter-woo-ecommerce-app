@@ -3,8 +3,8 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tflite/tflite.dart';
 import 'package:camera/camera.dart';
-
 import 'tflite_model_manager.dart';
+
 
 class ImageDetectionSearch{
 
@@ -12,7 +12,6 @@ class ImageDetectionSearch{
   XFile image;
   List<CameraDescription> cameras;
 
-  TfliteModelManager tmm = TfliteModelManager();
 
   Future getSearchImageFromGallery() async {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
@@ -34,8 +33,6 @@ class ImageDetectionSearch{
             IOSUiSettings(title: 'Cropper'),
           ]
       ).then((value) => getPickedImageClassificationModel(pickedFile.path));
-    } else {
-
     }
   }
 
@@ -58,35 +55,32 @@ class ImageDetectionSearch{
             IOSUiSettings(title: 'Cropper'),
           ]
       ).then((value) => getPickedImageClassificationModel(pickedFile.path));
-    } else {
-
     }
   }
 
-  void loadTFLiteModels() async {
+  Future<bool> loadTFLiteModels(String modelPath) async {
     ///http://mokhtar.shop/wp-content/uploads/model_classification.tflite
-    await tmm.loadModel();
+     bool flag = false;
      await Tflite.loadModel(
-         model: 'assets/model_classification.tflite',
-         labels: 'assets/labels.txt')
-     .then((value) {
-       print('load model ; $value');
+        model: modelPath + '/model_classification.tflite',
+        labels: modelPath + '/label.txt',
+        isAsset: false
+     ).then((value) {
+        print('load model ; $value');
+        flag = true;
      }).catchError((e){
         print('Error is : $e');
+        flag = false;
      });
+     return flag;
   }
 
   Future<String> getPickedImageClassificationModel(String path) async {
-    if(!tmm.isModelDownloaded) {
-      print('model not loaded yet');
-      return '';
-    } ///
-
     var result = await Tflite.runModelOnImage(
       path: path,
       imageMean: 0,
       imageStd: 255,
-    ).then((value) => value[0]['label'].toString());
+    ).then((value) => value != null && value.length > 0 ? value[0]['label'].toString() : '');
     return result.toString();
   }
 
