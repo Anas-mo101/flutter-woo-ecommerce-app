@@ -34,7 +34,6 @@ class SearchController extends GetxController {
 
   ImageDetectionSearch imageDetectionSearch = ImageDetectionSearch();
   TfliteModelManager tfliteModelManager = TfliteModelManager();
-
   bool isModelLoading = true;
 
 
@@ -42,22 +41,13 @@ class SearchController extends GetxController {
   void onInit() {
     // // TODO: implement onInit
     getCategories();
-    tfliteModelManager.loadModel().then((v) => {
 
-
-      imageDetectionSearch.loadTFLiteModels(v).then((value) => {
-        print('model loaded: search controller'),
+    tfliteModelManager.loadModel().then((value) => {
+      imageDetectionSearch.loadTFLiteModels(value).then((v) => {
         isModelLoading = false,
         update()
-      }).catchError((e){
-
       })
-
-
-    }).catchError((e){
-      isModelLoading = false;
     });
-
 
     super.onInit();
   }

@@ -58,21 +58,16 @@ class ImageDetectionSearch{
     }
   }
 
-  Future<bool> loadTFLiteModels(String modelPath) async {
-    ///http://mokhtar.shop/wp-content/uploads/model_classification.tflite
-     bool flag = false;
+  Future loadTFLiteModels(String modelPath) async {
      await Tflite.loadModel(
         model: modelPath + '/model_classification.tflite',
         labels: modelPath + '/label.txt',
         isAsset: false
      ).then((value) {
         print('load model ; $value');
-        flag = true;
      }).catchError((e){
         print('Error is : $e');
-        flag = false;
      });
-     return flag;
   }
 
   Future<String> getPickedImageClassificationModel(String path) async {

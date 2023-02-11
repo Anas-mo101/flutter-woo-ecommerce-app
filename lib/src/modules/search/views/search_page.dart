@@ -155,7 +155,7 @@ class SearchPage extends StatelessWidget {
                   Column(
                     children: [
                       IconButton(
-                        onPressed: () {
+                        onPressed: () async {
                           Navigator.pop(context);
                           searchController.imageDetectionSearch.getSearchImageFromGallery().then((value) {
                             print('search val: $value');
@@ -245,9 +245,12 @@ class SearchPage extends StatelessWidget {
                                             ),
                                             SizedBox(width: 10),
                                             InkWell(
-                                              onTap: () => {
-                                                if(!controller.isModelLoading){
+                                              onTap: () async => {
+                                                if(await controller.tfliteModelManager.modelExists()){
                                                   showImageDetectionOption(context)
+                                                }else{
+                                                  controller.isModelLoading = true,
+                                                  controller.update(),
                                                 }
                                               },
                                               child: Container(

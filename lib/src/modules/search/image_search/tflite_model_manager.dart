@@ -16,22 +16,22 @@ class TfliteModelManager{
     return await Permission.storage.request().isGranted;
   }
 
-  // Future<bool> modelIsLoading() async {
-  //   final appDocDir = await getApplicationDocumentsDirectory();
-  //   final modelPath = appDocDir.path;
-  //
-  //   /// If exist return its path
-  //   if(File(modelPath + '/model_classification.tflite').existsSync()){
-  //     return true;
-  //   }
-  //
-  //   return false;
-  // }
+  Future<bool> modelExists() async {
+    final appDocDir = await getApplicationDocumentsDirectory();
+    final modelPath = appDocDir.path;
+
+    /// If exist return its path
+    if(File(modelPath + '/label.txt').existsSync()){
+      return true;
+    }
+
+    return false;
+  }
 
   Future<String> loadModel() async {
     /// check if file exists
     final appDocDir = await getApplicationDocumentsDirectory();
-    final modelPath = appDocDir.path;
+      final modelPath = appDocDir.path;
 
     /// If exist return its path
     if(File(modelPath + '/model_classification.tflite').existsSync()){
