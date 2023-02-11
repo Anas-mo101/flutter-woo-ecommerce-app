@@ -12,8 +12,6 @@ import '../../cart/model/cart_model.dart';
 import '../models/order.dart';
 import '../models/woo_order.dart';
 
-// store cart item in set() -> uniquely
-// keep track of each cart item's qty in may and id as key
 
 class CheckoutController extends GetxController {
 
@@ -36,7 +34,15 @@ class CheckoutController extends GetxController {
     super.onInit();
   }
 
-  calcCartItems(){
+
+  void calcLineItemsTax(){
+    currentOrder.lineItems.forEach((element) {
+      var itemsId = element.productId;
+
+    });
+  }
+
+  void calcCartItems(){
     ongoingOrder.subtotal = calSubTotalPrice();
     ongoingOrder.tax = ongoingOrder.subtotal  * 0.04;
     ongoingOrder.delv = 10;
