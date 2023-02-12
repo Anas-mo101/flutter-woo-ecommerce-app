@@ -6,7 +6,7 @@ import 'package:flutter_ecommerce_app/src/widgets/extentions.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
-import '../config/woo_store_service.dart';
+import '../config/woo_store/woo_store_service.dart';
 
 class ProductCard extends StatelessWidget {
   final Product product;

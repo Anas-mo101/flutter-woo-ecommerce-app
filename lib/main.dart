@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ecommerce_app/src/config/internationalization.dart';
 import 'package:flutter_ecommerce_app/src/config/route.dart';
-import 'package:flutter_ecommerce_app/src/config/woo_store_service.dart';
+import 'package:flutter_ecommerce_app/src/config/woo_store/woo_store_service.dart';
 import 'package:flutter_ecommerce_app/src/modules/ads/ads_middleware.dart';
 import 'package:flutter_ecommerce_app/src/modules/profile/middleware/auth_middleware.dart';
 import 'package:google_fonts/google_fonts.dart';

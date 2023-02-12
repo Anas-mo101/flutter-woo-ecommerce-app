@@ -31,6 +31,8 @@ class EndPoints {
 
   static wooStoreTax() => baseURL + 'wp-json/wc/v3/taxes';
   static wooStoreCurrency() => baseURL + 'wp-json/wc/v3/data/currencies/current';
+
+  static wooStoreCoupons() => baseURL + 'wp-json/wc/v3/coupons';
   ///
 
   static final String baseURL2 = 'https://api.escuelajs.co/api/v1/';

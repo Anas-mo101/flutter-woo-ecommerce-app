@@ -4,7 +4,7 @@ import 'package:flutter_ecommerce_app/src/themes/theme.dart';
 import 'package:flutter_ecommerce_app/src/widgets/title_text.dart';
 import 'package:flutter_ecommerce_app/src/widgets/extentions.dart';
 import 'package:get/get.dart';
-import '../../../config/woo_store_service.dart';
+import '../../../config/woo_store/woo_store_service.dart';
 import '../model/product.dart';
 import '../../cart/controller/cart_controller.dart';
 import '../controller/product_controller.dart';
