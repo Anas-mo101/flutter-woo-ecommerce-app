@@ -3,14 +3,22 @@ import 'package:flutter_ecommerce_app/src/modules/product/model/product.dart';
 import 'package:flutter_ecommerce_app/src/themes/light_color.dart';
 import 'package:flutter_ecommerce_app/src/widgets/title_text.dart';
 import 'package:flutter_ecommerce_app/src/widgets/extentions.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+
+import '../config/woo_store_service.dart';
 
 class ProductCard extends StatelessWidget {
   final Product product;
   final ValueChanged<Product> onSelected;
   ProductCard({Key key, this.product, this.onSelected}) : super(key: key);
 
+
+
   @override
   Widget build(BuildContext context) {
+    final currencyCode = Get.find<WooStoreService>().storeCurrency.code ?? '\$';
+
     return Container(
       decoration: BoxDecoration(
         color: Color(0xffeeeeee),
@@ -44,7 +52,7 @@ class ProductCard extends StatelessWidget {
                   color: LightColor.orange,
                 ),
                 TitleText(
-                  text: product.price.toString(),
+                  text: product.price.toString() + ' $currencyCode',
                   fontSize: product.isSelected ? 18 : 16,
                 ),
               ],

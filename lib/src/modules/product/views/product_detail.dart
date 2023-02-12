@@ -4,6 +4,7 @@ import 'package:flutter_ecommerce_app/src/themes/theme.dart';
 import 'package:flutter_ecommerce_app/src/widgets/title_text.dart';
 import 'package:flutter_ecommerce_app/src/widgets/extentions.dart';
 import 'package:get/get.dart';
+import '../../../config/woo_store_service.dart';
 import '../model/product.dart';
 import '../../cart/controller/cart_controller.dart';
 import '../controller/product_controller.dart';
@@ -169,6 +170,8 @@ class ProductDetailPage extends StatelessWidget {
       }
     }
 
+    final currencyCode = Get.find<WooStoreService>().storeCurrency.code ?? '\$';
+
     return DraggableScrollableSheet(
       maxChildSize: .8,
       initialChildSize: .58,
@@ -210,12 +213,12 @@ class ProductDetailPage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
                             TitleText(
-                              text: "\$ ",
+                              text: "$currencyCode ",
                               fontSize: 18,
                               color: LightColor.red,
                             ),
                             TitleText(
-                              text: '${product?.price ?? '0.0'}',
+                              text: '${product?.price ?? '--'}',
                               fontSize: 25,
                             ),
                           ],

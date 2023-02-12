@@ -28,6 +28,9 @@ class EndPoints {
 
   static wooPaymentGateways() => baseURL + 'wp-json/wc/v3/payment_gateways';
   static wooShippingZone() => baseURL + 'wp-json/wc/v3/shipping/zones';
+
+  static wooStoreTax() => baseURL + 'wp-json/wc/v3/taxes';
+  static wooStoreCurrency() => baseURL + 'wp-json/wc/v3/data/currencies/current';
   ///
 
   static final String baseURL2 = 'https://api.escuelajs.co/api/v1/';
