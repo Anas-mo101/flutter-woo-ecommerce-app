@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import '../../cart/controller/cart_controller.dart';
 import '../api/woo_product_api.dart';
 import '../model/product.dart';
+import '../model/woo_product_review.dart';
 import '../model/woo_product_variation.dart';
 import '../model/woocommerce_product.dart';
 
@@ -9,10 +10,13 @@ import '../model/woocommerce_product.dart';
 class ProductController extends GetxController  {
 
   bool isLoading = true;
+  bool isReviewsLoading = true;
+  bool isRelatedProductsLoading = true;
 
   int productId;
   int productQtyInCart = 0;
   Product product;
+  List<Product> relatedProducts = [];
   WooCommerceProduct _products;
   bool isLiked = true;
 
@@ -23,6 +27,8 @@ class ProductController extends GetxController  {
   int selectedAvailableSizes = 0;
   int selectedAvailableColor = 0;
   int selectProductVariation = 0;
+
+  List<WooProductReview> productReviews = [];
 
   @override
   void onInit() {
@@ -120,6 +126,70 @@ class ProductController extends GetxController  {
     update();
   }
 
+
+  void setRelatedProducts() async {
+    try{
+      List<WooCommerceProduct> res = await WooProductApi().getProducts(
+        page: '1',
+        per_page: _products.relatedIds.length.toString(),
+        include: _products.relatedIds.join(',')
+      );
+
+      print('Products => ${res.length}');
+
+      res.forEach((e) {
+        List<WooAttributes> sizes = [];
+        List<WooAttributes> colors = [];
+        List<String> images = [];
+
+        if(e.attributes != null){
+          e.attributes.forEach((element) {
+            if(element.name == 'Sizes'){
+              sizes.add(element);
+            }
+            if(element.name == 'Colors'){
+              colors.add(element);
+            }
+          });
+        }
+
+        if(e.images != null){
+          e.images.forEach((element) {
+            images.add(element.src);
+          });
+        }
+
+        relatedProducts.add(Product(
+            id: e.id,
+            name: e.name,
+            image: images,
+            price: double.parse(e.price),
+            category: e.categories != null ? e.categories.first.name : '',
+            desc: e.description,
+            rating: e.ratingCount,
+            availableSizes: sizes,
+            availableSColor: colors
+        ));
+      });
+
+      isRelatedProductsLoading = false;
+    }catch(e){
+      print('getHomeProducts: ${e}');
+      isRelatedProductsLoading = false;
+    }
+    update();
+  }
+
+  void setProductReviews() async {
+    try{
+      productReviews = await getProductReviews(productId);
+      isReviewsLoading = false;
+    }catch(e){
+      isReviewsLoading = false;
+    }
+    update();
+  }
+
   void setProduct(int id) async {
     try{
       productId = id;
@@ -164,6 +234,8 @@ class ProductController extends GetxController  {
       getProductVars(_products.id);
 
       isLoading = false;
+      setProductReviews();
+      setRelatedProducts();
     }catch(e){
       isLoading = false;
     }
@@ -177,6 +249,26 @@ class ProductController extends GetxController  {
   }
 
 
+  String getDurationAgo(String dateCreated) {
+    Duration duration = DateTime.now().difference(DateTime.parse(dateCreated));
+
+    if (duration.inSeconds <= 0) {
+      return "Just now";
+    } else if (duration.inSeconds < 60) {
+      return "${duration.inSeconds} seconds ago";
+    } else if (duration.inMinutes < 60) {
+      return "${duration.inMinutes} minutes ago";
+    } else if (duration.inHours < 24) {
+      return "${duration.inHours} hours ago";
+    } else if (duration.inDays < 30) {
+      return "${duration.inDays} days ago";
+    } else if (duration.inDays < 365) {
+      return "${(duration.inDays / 30).round()} months ago";
+    } else {
+      return "${(duration.inDays / 365).round()} years ago";
+    }
+  }
+
   Future<WooCommerceProduct> getProduct(int id) async {
     try{
       return await WooProductApi().getProduct(id);
@@ -188,6 +280,14 @@ class ProductController extends GetxController  {
           description: "...",
           images: [],
       );
+    }
+  }
+
+  Future<List<WooProductReview>> getProductReviews(int id) async {
+    try{
+      return await WooProductApi().getProductReviews(id);
+    }catch(e){
+      return [];
     }
   }
 

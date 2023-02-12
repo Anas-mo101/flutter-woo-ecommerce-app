@@ -51,7 +51,7 @@ class ProfilePage extends StatelessWidget {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Icon(Icons.person, size: 200),
-                                      TitleText(text: 'Username'),
+                                      TitleText(text: Get.find<AuthService>().authedUser.displayName ?? 'Username'),
                                       SizedBox(height: 50),
                                       Container(
                                         alignment: Alignment.center,

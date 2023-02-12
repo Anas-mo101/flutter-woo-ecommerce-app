@@ -12,14 +12,15 @@ class EndPoints {
   static register() => baseURL + 'wp-json/jwt-auth/v1/register';
   /// WooCommerce Products
   static wooProduct(String id) => baseURL + 'wp-json/wc/v3/products/' + id;
-  static wooProducts({String search, String minPrice, String maxPrice, String page, String per_page,String category}){
+  static wooProducts({String search, String minPrice, String maxPrice, String page, String per_page,String category, String include}){
     String params = Uri(queryParameters: {
       'search': search,
       'max_price': minPrice,
       'min_price': maxPrice,
       'page': page,
       'per_page': per_page,
-      'category': category
+      'category': category,
+      'include': include
     }).query;
     return baseURL + 'wp-json/wc/v3/products?' + params;
   }
@@ -33,6 +34,16 @@ class EndPoints {
   static wooStoreCurrency() => baseURL + 'wp-json/wc/v3/data/currencies/current';
 
   static wooStoreCoupons() => baseURL + 'wp-json/wc/v3/coupons';
+
+  static wooCreateProductReview() => baseURL + 'wp-json/wc/v3/products/reviews';
+  static wooProductReview(String productId,{String page, String perPage}){
+    String params = Uri(queryParameters: {
+      'page': page,
+      'per_page': perPage,
+      'product': productId,
+    }).query;
+    return baseURL + 'wp-json/wc/v3/products/reviews?' + params;
+  }
   ///
 
   static final String baseURL2 = 'https://api.escuelajs.co/api/v1/';
