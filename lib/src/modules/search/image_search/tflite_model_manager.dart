@@ -51,11 +51,11 @@ class TfliteModelManager{
   Future<void> downloadModel() async {
     final url = 'http://mokhtar.shop/wp-content/uploads/model_classification.tflite';
     final labelUrl = 'http://mokhtar.shop/wp-content/uploads/labels.txt';
-    bool hasPermission = await _requestWritePermission();
-    if (!hasPermission) {
-      print('No Write Permission');
-      throw Exception('No Write Permission');
-    }
+    // bool hasPermission = await _requestWritePermission();
+    // if (!hasPermission) {
+    //   print('No Write Permission');
+    //   throw Exception('No Write Permission');
+    // }
 
     // gets the directory where we will download the file.
     final appDocDir = await getApplicationDocumentsDirectory();
