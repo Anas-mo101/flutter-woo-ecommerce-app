@@ -13,7 +13,6 @@ import '../model/product.dart';
 import '../controller/product_controller.dart';
 import '../model/woo_product_review.dart';
 import '../model/woocommerce_product.dart';
-import 'package:intl/intl.dart';
 
 class ProductDetailPage extends StatelessWidget {
   ProductDetailPage({Key key}) : super(key: key);

@@ -7,6 +7,8 @@ import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_ecommerce_app/src/modules/product/model/product.dart';
 
+import '../../../config/woo_store/woo_store_service.dart';
+import '../../../model/woo_product_tax.dart';
 import '../../cart/model/cart_item_product.dart';
 import '../../cart/model/cart_model.dart';
 import '../models/order.dart';
@@ -36,6 +38,11 @@ class CheckoutController extends GetxController {
 
 
   void calcLineItemsTax(){
+    /// in woo_product tax_class match w woo_tax class
+    List<WooTax> taxesRates = Get.find<WooStoreService>().storeTax;
+    taxesRates.forEach((element) {
+      
+    });
     currentOrder.lineItems.forEach((element) {
       var itemsId = element.productId;
 

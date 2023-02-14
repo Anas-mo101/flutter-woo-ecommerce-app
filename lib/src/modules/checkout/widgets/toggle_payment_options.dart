@@ -14,9 +14,8 @@ class TogglePaymentOptions extends StatelessWidget{
 
   Widget paymentOptions(String option){
     // bool selected = billingController.paymentOptions.indexOf(option) == billingController.selectedPaymentOptions;
-    bool selected =
-        billingController.paymentOptions.indexWhere((element) => element.title == option)
-            == billingController.selectedPaymentOptions;
+    int indexWhere = billingController.paymentOptions.indexWhere((element) => element.title == option);
+    bool selected = indexWhere == billingController.selectedPaymentOptions;
 
     return InkWell(
       onTap: () => billingController.togglePaymentOption(option),
@@ -32,7 +31,16 @@ class TogglePaymentOptions extends StatelessWidget{
                   width: 2.0,
                 )
             ),
-            child: Center(child: Text(option)),
+            child: Column(
+              children: [
+                Center(child: Text(option)),
+                if(selected)
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Text(billingController.paymentOptions[indexWhere].description, textAlign: TextAlign.center),
+                  ),
+              ],
+            ),
           ),
           SizedBox(height: 10),
         ],

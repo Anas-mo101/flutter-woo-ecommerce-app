@@ -1,9 +1,37 @@
 import '../../../api/endpoint.dart';
 import '../../../api/data providers/base_api.dart';
+import '../models/woo_country_info.dart';
 import '../models/woo_payment_gateway.dart';
+import '../models/woo_shipping_methods.dart';
 import '../models/woo_shipping_zone.dart';
 
 class OrderRequirementApi extends BaseApi{
+
+  Future<List<WooStates>> getCountryInfo(String zone) async {
+    try{
+      String endpoint = EndPoints.wooCountryInfo(zone);
+      var response = await BaseApi().get(endpoint, mHeader: {
+        "Authorization": basicAuth
+      });
+      return response['states'].map<WooStates>((e) => WooStates.fromJson(e)).toList();
+    }catch(e){
+      print('OrderRequirementApi getShippingMethods() failed: ${e}');
+      throw Exception();
+    }
+  }
+
+  Future<List<WooShippingMethods>> getShippingMethods(int zoneID) async {
+    try{
+      String endpoint = EndPoints.wooShippingMethods(zoneID.toString());
+      var response = await BaseApi().get(endpoint, mHeader: {
+        "Authorization": basicAuth
+      });
+      return response.map<WooShippingMethods>((e) => WooShippingMethods.fromJson(e)).toList();
+    }catch(e){
+      print('OrderRequirementApi getShippingMethods() failed: ${e}');
+      throw Exception();
+    }
+  }
 
   Future<List<WooPaymentGateway>> getPaymentGateways() async {
     try{

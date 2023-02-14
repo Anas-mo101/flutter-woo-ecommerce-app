@@ -4,9 +4,12 @@ import '../../../config/route.dart';
 import '../../cart/model/cart_model.dart';
 import '../api/woo_order_requirements_api.dart';
 import '../models/order.dart';
+import '../models/woo_country_info.dart';
 import '../models/woo_order.dart';
 import '../models/woo_payment_gateway.dart';
+import '../models/woo_shipping_methods.dart';
 import '../models/woo_shipping_zone.dart';
+import '../utils/countries_code.dart';
 
 class BillingController extends GetxController {
 
@@ -17,6 +20,12 @@ class BillingController extends GetxController {
 
   List<WooShippingZone> shippingOptions = [];
   int selectedShippingOptions = 0;
+  List<WooShippingMethods> shippingMethods = [];
+  int selectedShippingMethods = 0;
+
+  List<WooStates> countryState = [];
+  int selectedCountryState = 0;
+
 
   final cusName = TextEditingController();
   final cusEmail = TextEditingController();
@@ -50,6 +59,8 @@ class BillingController extends GetxController {
   Future _init() async {
     await initShippingZones();
     await initPaymentMethod();
+    await initShippingMethod();
+    await initCountryInfo();
     isLoading = false;
     update();
   }
@@ -62,6 +73,17 @@ class BillingController extends GetxController {
     }
   }
 
+  void initShippingMethod() async {
+    try{
+      if(shippingOptions.isNotEmpty){
+        shippingMethods = await OrderRequirementApi()
+            .getShippingMethods(shippingOptions[selectedShippingOptions].id);
+      }
+    } catch (e){
+      shippingMethods = [];
+    }
+  }
+
   void initShippingZones() async {
     try{
       shippingOptions = await OrderRequirementApi().getShippingZones();
@@ -70,27 +92,39 @@ class BillingController extends GetxController {
     }
   }
 
+  void initCountryInfo() async {
+    try{
+      if(shippingOptions.isNotEmpty){
+        var code = countryCode(shippingOptions[selectedShippingOptions].name) ;
+        countryState = await OrderRequirementApi().getCountryInfo(code);
+      }
+    } catch (e){
+      countryState = [];
+    }
+  }
+
   submitBillingInfo(){
     if(cartItems.isNotEmpty && validateCustomerInfo()){
       Billing billing = Billing(
         firstName: cusName.value.text,
         address1: cusBilling.value.text,
+        address2: cusShipping.value.text,
         email: cusEmail.value.text,
         phone: cusPhone.value.text,
         country: shippingOptions[selectedShippingOptions].name,
         postcode: cusZip.value.text,
       );
 
-      Shipping shipping = Shipping(
-        firstName: cusName.value.text,
-        address1: cusShipping.value.text,
-        country: shippingOptions[selectedShippingOptions].name,
-        postcode: cusZip.value.text,
-      );
+      // Shipping shipping = Shipping(
+      //   firstName: cusName.value.text,
+      //   address1: cusShipping.value.text,
+      //   country: shippingOptions[selectedShippingOptions].name,
+      //   postcode: cusZip.value.text,
+      // );
 
       ShippingLines shippingLines = ShippingLines(
-        methodId: shippingOptions[selectedShippingOptions].id.toString(),
-        methodTitle: shippingOptions[selectedShippingOptions].name,
+        methodId: shippingMethods[selectedShippingMethods].instanceId.toString(),
+        methodTitle: shippingMethods[selectedShippingMethods].title,
         total: '10.0'
       );
 
@@ -98,7 +132,7 @@ class BillingController extends GetxController {
         paymentMethod: paymentOptions[selectedPaymentOptions].id,
         paymentMethodTitle: paymentOptions[selectedPaymentOptions].title,
         setPaid: false,
-        shipping: shipping,
+        // shipping: shipping,
         billing: billing,
         lineItems: cartItems.map((e) => LineItems(
             productId: e.productId,
@@ -120,9 +154,29 @@ class BillingController extends GetxController {
     update();
   }
 
-  toggleShippingOption(String option){
+  toggleShippingOption(String option) async {
     final opt = shippingOptions.indexWhere((element) => element.name == option);
     selectedShippingOptions = opt == -1 ? 0 : opt;
+
+    isLoading = true;
+    update();
+
+    await initCountryInfo();
+    await initShippingMethod();
+
+    isLoading = false;
+    update();
+  }
+
+  toggleShippingMethods(String option){
+    final opt = shippingMethods.indexWhere((element) => element.title == option);
+    selectedShippingMethods = opt == -1 ? 0 : opt;
+    update();
+  }
+
+  toggleCountryStates(String option){
+    final opt = countryState.indexWhere((element) => element.name == option);
+    selectedCountryState = opt == -1 ? 0 : opt;
     update();
   }
 

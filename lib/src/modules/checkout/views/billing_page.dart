@@ -73,116 +73,10 @@ class BillingPage extends StatelessWidget {
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text('customer_info'.tr),
-                                  SizedBox(height: 20),
-                                  TextField(
-                                    controller: controller.cusName,
-                                    decoration: InputDecoration(
-                                      errorText: controller.cusNameErr ? 'invalid_input'.tr : null,
-                                      border:  OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(15.0),
-                                        borderSide: BorderSide(color: Colors.blue, width: 2.0),
-                                      ),
-                                      hintText: "name".tr,
-                                      hintStyle: TextStyle(fontSize: 12),
-                                      contentPadding: EdgeInsets.only(left: 10, right: 10, bottom: 0, top: 5),
-                                    ),
-                                  ),
-                                  SizedBox(height: 20),
-                                  TextField(
-                                    controller: controller.cusEmail,
-                                    decoration: InputDecoration(
-                                      errorText: controller.cusEmailErr ? 'invalid_input'.tr : null,
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(15.0),
-                                      ),
-                                      hintText: "email".tr,
-                                      hintStyle: TextStyle(fontSize: 12),
-                                      contentPadding: EdgeInsets.only(left: 10, right: 10, bottom: 0, top: 5),
-                                    ),
-                                  ),
-                                  SizedBox(height: 20),
-                                  TextField(
-                                    controller: controller.cusPhone,
-                                    decoration: InputDecoration(
-                                      errorText: controller.cusPhoneErr ? 'invalid_input'.tr : null,
-                                      border:  OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(15.0),
-                                      ),
-                                      hintText: "phone_number".tr,
-                                      hintStyle: TextStyle(fontSize: 12),
-                                      contentPadding: EdgeInsets.only(left: 10, right: 10, bottom: 0, top: 5),
-                                    ),
-                                  ),
-                                  SizedBox(height: 20),
-                                  TextField(
-                                    controller: controller.cusBilling,
-                                    decoration: InputDecoration(
-                                      errorText: controller.cusBillingErr ? 'invalid_input'.tr : null,
-                                      border:  OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(15.0),
-                                      ),
-                                      hintText: "billing_address".tr,
-                                      hintStyle: TextStyle(fontSize: 12),
-                                      contentPadding: EdgeInsets.only(left: 10, right: 10, bottom: 0, top: 5),
-                                    ),
-                                  ),
-                                  SizedBox(height: 20),
-                                  Text('shipping_info'.tr),
-                                  SizedBox(height: 20),
-                                  Container(
-                                    width: double.infinity,
-                                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(15.0),
-                                        border: Border.all(
-                                          color: controller.cusCountryErr ? Colors.red : Colors.grey,
-                                          width: 1.0,
-                                        )
-                                    ),
-                                    child: DropdownButton<String>(
-                                      hint: Text('country'.tr, style: TextStyle(fontSize: 14)),
-                                      value: controller.shippingOptions[controller.selectedShippingOptions].name,
-                                      isExpanded: true,
-                                      underline: Container(),
-                                      borderRadius: BorderRadius.circular(15.0),
-                                      items: [
-                                        ...controller.shippingOptions.map((e) => DropdownMenuItem(
-                                          child: Text(e.name),
-                                          value: e.name,
-                                        )),
-                                      ],
-                                      onChanged: (String newValue) => controller.toggleShippingOption(newValue),
-                                    ),
-                                  ),
-                                  SizedBox(height: 20),
-                                  TextField(
-                                    controller: controller.cusShipping,
-                                    decoration: InputDecoration(
-                                      errorText: controller.cusShippingErr ? 'invalid_input'.tr : null,
-                                      border:  OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(15.0),
-                                        borderSide: BorderSide(color: Colors.blue, width: 2.0),
-                                      ),
-                                      hintText: "shipping_address".tr,
-                                      hintStyle: TextStyle(fontSize: 12),
-                                      contentPadding: EdgeInsets.only(left: 10, right: 10, bottom: 0, top: 5),
-                                    ),
-                                  ),
-                                  SizedBox(height: 20),
-                                  TextField(
-                                    controller: controller.cusZip,
-                                    decoration: InputDecoration(
-                                      errorText: controller.cusZipErr ? 'invalid_input'.tr : null,
-                                      border:  OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(15.0),
-                                        borderSide: BorderSide(color: Colors.blue, width: 2.0),
-                                      ),
-                                      hintText: "zip_code".tr,
-                                      hintStyle: TextStyle(fontSize: 12),
-                                      contentPadding: EdgeInsets.only(left: 10, right: 10, bottom: 0, top: 5),
-                                    ),
-                                  ),
+                                  ..._customerInfo(controller),
+                                  ..._shippingInfo(controller),
+                                  if(controller.shippingMethods.isNotEmpty)
+                                    _shippingMethods(controller),
                                   SizedBox(height: 20),
                                   Text('payment_method'.tr),
                                   SizedBox(height: 20),
@@ -202,4 +96,201 @@ class BillingPage extends StatelessWidget {
       ),
     );
   }
+
+  List<Widget> _shippingInfo(BillingController controller){
+    return [
+      Text('shipping_info'.tr),
+      SizedBox(height: 20),
+      Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15.0),
+            border: Border.all(
+              color: controller.cusCountryErr ? Colors.red : Colors.grey,
+              width: 1.0,
+            )
+        ),
+        child: DropdownButton<String>(
+          hint: Text('country'.tr, style: TextStyle(fontSize: 14)),
+          value: controller.shippingOptions[controller.selectedShippingOptions].name,
+          isExpanded: true,
+          underline: Container(),
+          borderRadius: BorderRadius.circular(15.0),
+          items: [
+            ...controller.shippingOptions.map((e) => DropdownMenuItem(
+              child: Text(e.name),
+              value: e.name,
+            )),
+          ],
+          onChanged: (String newValue) => controller.toggleShippingOption(newValue),
+        ),
+      ),
+      SizedBox(height: 20),
+      TextField(
+        controller: controller.cusShipping,
+        decoration: InputDecoration(
+          errorText: controller.cusShippingErr ? 'invalid_input'.tr : null,
+          border:  OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15.0),
+            borderSide: BorderSide(color: Colors.blue, width: 2.0),
+          ),
+          hintText: 'Street Address 1',
+          hintStyle: TextStyle(fontSize: 12),
+          contentPadding: EdgeInsets.only(left: 10, right: 10, bottom: 0, top: 5),
+        ),
+      ),
+      SizedBox(height: 20),
+      TextField(
+        controller: controller.cusBilling,
+        decoration: InputDecoration(
+          errorText: controller.cusBillingErr ? 'invalid_input'.tr : null,
+          border:  OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+          hintText: 'Street Address 2 (Optional)',
+          hintStyle: TextStyle(fontSize: 12),
+          contentPadding: EdgeInsets.only(left: 10, right: 10, bottom: 0, top: 5),
+        ),
+      ),
+      SizedBox(height: 20),
+      TextField(
+        controller: controller.cusBilling,
+        decoration: InputDecoration(
+          errorText: controller.cusBillingErr ? 'invalid_input'.tr : null,
+          border:  OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+          hintText: 'Town / City',
+          hintStyle: TextStyle(fontSize: 12),
+          contentPadding: EdgeInsets.only(left: 10, right: 10, bottom: 0, top: 5),
+        ),
+      ),
+      SizedBox(height: 20),
+      Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15.0),
+            border: Border.all(
+              color: controller.cusCountryErr ? Colors.red : Colors.grey,
+              width: 1.0,
+            )
+        ),
+        child: DropdownButton<String>(
+          hint: Text('country'.tr, style: TextStyle(fontSize: 14)),
+          value: controller.countryState[controller.selectedCountryState].name,
+          isExpanded: true,
+          underline: Container(),
+          borderRadius: BorderRadius.circular(15.0),
+          items: [
+            ...controller.countryState.map((e) => DropdownMenuItem(
+              child: Text(e.name),
+              value: e.name,
+            )),
+          ],
+          onChanged: (String newValue) => controller.toggleCountryStates(newValue),
+        ),
+      ),
+      SizedBox(height: 20),
+      TextField(
+        controller: controller.cusZip,
+        decoration: InputDecoration(
+          errorText: controller.cusZipErr ? 'invalid_input'.tr : null,
+          border:  OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15.0),
+            borderSide: BorderSide(color: Colors.blue, width: 2.0),
+          ),
+          hintText: "zip_code".tr,
+          hintStyle: TextStyle(fontSize: 12),
+          contentPadding: EdgeInsets.only(left: 10, right: 10, bottom: 0, top: 5),
+        ),
+      ),
+      SizedBox(height: 20),
+    ];
+  }
+
+  List<Widget> _customerInfo(BillingController controller){
+    return [
+      Text('customer_info'.tr),
+      SizedBox(height: 20),
+      TextField(
+        controller: controller.cusName,
+        decoration: InputDecoration(
+          errorText: controller.cusNameErr ? 'invalid_input'.tr : null,
+          border:  OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15.0),
+            borderSide: BorderSide(color: Colors.blue, width: 2.0),
+          ),
+          hintText: "name".tr,
+          hintStyle: TextStyle(fontSize: 12),
+          contentPadding: EdgeInsets.only(left: 10, right: 10, bottom: 0, top: 5),
+        ),
+      ),
+      SizedBox(height: 20),
+      TextField(
+        controller: controller.cusEmail,
+        decoration: InputDecoration(
+          errorText: controller.cusEmailErr ? 'invalid_input'.tr : null,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+          hintText: "email".tr,
+          hintStyle: TextStyle(fontSize: 12),
+          contentPadding: EdgeInsets.only(left: 10, right: 10, bottom: 0, top: 5),
+        ),
+      ),
+      SizedBox(height: 20),
+      TextField(
+        controller: controller.cusPhone,
+        decoration: InputDecoration(
+          errorText: controller.cusPhoneErr ? 'invalid_input'.tr : null,
+          border:  OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+          hintText: "phone_number".tr,
+          hintStyle: TextStyle(fontSize: 12),
+          contentPadding: EdgeInsets.only(left: 10, right: 10, bottom: 0, top: 5),
+        ),
+      ),
+
+      SizedBox(height: 20),
+    ];
+  }
+
+  Widget _shippingMethods(BillingController controller){
+    return Column(
+      children: [
+        Text('Shipping Methods'),
+        SizedBox(height: 20),
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15.0),
+              border: Border.all(
+                color: controller.cusCountryErr ? Colors.red : Colors.grey,
+                width: 1.0,
+              )
+          ),
+          child: DropdownButton<String>(
+            hint: Text('country'.tr, style: TextStyle(fontSize: 14)),
+            value: controller.shippingMethods[controller.selectedShippingMethods].title,
+            isExpanded: true,
+            underline: Container(),
+            borderRadius: BorderRadius.circular(15.0),
+            items: [
+              ...controller.shippingMethods.map((e) => DropdownMenuItem(
+                child: Text(e.title),
+                value: e.title,
+              )),
+            ],
+            onChanged: (String newValue) => controller.toggleShippingMethods(newValue),
+          ),
+        ),
+      ],
+    );
+  }
+
+
 }

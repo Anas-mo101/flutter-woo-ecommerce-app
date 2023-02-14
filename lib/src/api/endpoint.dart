@@ -29,6 +29,8 @@ class EndPoints {
 
   static wooPaymentGateways() => baseURL + 'wp-json/wc/v3/payment_gateways';
   static wooShippingZone() => baseURL + 'wp-json/wc/v3/shipping/zones';
+  static wooShippingMethods(String id) => baseURL + 'wp-json/wc/v3/shipping/zones/$id/methods';
+  static wooCountryInfo(String id) => baseURL + '/wp-json/wc/v3/data/countries/$id';
 
   static wooStoreTax() => baseURL + 'wp-json/wc/v3/taxes';
   static wooStoreCurrency() => baseURL + 'wp-json/wc/v3/data/currencies/current';
