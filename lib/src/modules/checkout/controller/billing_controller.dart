@@ -26,13 +26,38 @@ class BillingController extends GetxController {
   List<WooStates> countryState = [];
   int selectedCountryState = 0;
 
+  ///
+  List<WooShippingZone> shippingOptions2 = [];
+  int selectedShippingOptions2 = 0;
+  List<WooShippingMethods> shippingMethods2 = [];
+  int selectedShippingMethods2 = 0;
+
+  List<WooStates> countryState2 = [];
+  int selectedCountryState2 = 0;
+
+  final cusBilling2 = TextEditingController();
+  final cusShipping2 = TextEditingController();
+  final cusZip2 = TextEditingController();
+  final cusCity2 = TextEditingController();
+
+  bool cusBillingErr2 = false;
+  bool cusShippingErr2 = false;
+  bool cusZipErr2 = false;
+  bool cusCountryErr2 = false;
+  bool cusCityErr2 = false;
+  bool cusStateErr2 = false;
+
+  ///
+
 
   final cusName = TextEditingController();
   final cusEmail = TextEditingController();
   final cusPhone = TextEditingController();
+
   final cusBilling = TextEditingController();
   final cusShipping = TextEditingController();
   final cusZip = TextEditingController();
+  final cusCity = TextEditingController();
 
   bool cusNameErr = false;
   bool cusEmailErr = false;
@@ -41,6 +66,10 @@ class BillingController extends GetxController {
   bool cusShippingErr = false;
   bool cusZipErr = false;
   bool cusCountryErr = false;
+  bool cusCityErr = false;
+  bool cusStateErr = false;
+
+  bool shipToDifferentAddress = false;
 
   List<CartModel> cartItems = [];
 
@@ -73,6 +102,17 @@ class BillingController extends GetxController {
     }
   }
 
+
+  void initShippingZones() async {
+    try{
+      shippingOptions = await OrderRequirementApi().getShippingZones();
+      shippingOptions2 = shippingOptions;
+    } catch (e){
+      shippingOptions = [];
+      shippingOptions2 = [];
+    }
+  }
+
   void initShippingMethod() async {
     try{
       if(shippingOptions.isNotEmpty){
@@ -81,14 +121,6 @@ class BillingController extends GetxController {
       }
     } catch (e){
       shippingMethods = [];
-    }
-  }
-
-  void initShippingZones() async {
-    try{
-      shippingOptions = await OrderRequirementApi().getShippingZones();
-    } catch (e){
-      shippingOptions = [];
     }
   }
 
@@ -103,6 +135,45 @@ class BillingController extends GetxController {
     }
   }
 
+  ///
+
+  void initShippingMethod2() async {
+    try{
+      if(shippingOptions.isNotEmpty){
+        shippingMethods2 = await OrderRequirementApi()
+            .getShippingMethods(shippingOptions[selectedShippingOptions2].id);
+      }
+    } catch (e){
+      shippingMethods2 = [];
+    }
+  }
+
+  void initCountryInfo2() async {
+    try{
+      if(shippingOptions.isNotEmpty){
+        var code = countryCode(shippingOptions2[selectedShippingOptions2].name) ;
+        countryState2 = await OrderRequirementApi().getCountryInfo(code);
+      }
+    } catch (e){
+      countryState2 = [];
+    }
+  }
+
+  toggleShippingToDifferentAddress() async {
+    shipToDifferentAddress = !shipToDifferentAddress;
+    if(shipToDifferentAddress){
+      if(countryState2.isEmpty){
+        countryState2 = countryState;
+      }
+      if(shippingMethods2.isEmpty){
+        shippingMethods2 = shippingMethods;
+      }
+    }
+    update();
+  }
+
+  ///
+
   submitBillingInfo(){
     if(cartItems.isNotEmpty && validateCustomerInfo()){
       Billing billing = Billing(
@@ -112,15 +183,20 @@ class BillingController extends GetxController {
         email: cusEmail.value.text,
         phone: cusPhone.value.text,
         country: shippingOptions[selectedShippingOptions].name,
+        state: countryState[selectedCountryState].name,
+        city: cusCity.value.text,
         postcode: cusZip.value.text,
       );
 
-      // Shipping shipping = Shipping(
-      //   firstName: cusName.value.text,
-      //   address1: cusShipping.value.text,
-      //   country: shippingOptions[selectedShippingOptions].name,
-      //   postcode: cusZip.value.text,
-      // );
+      Shipping shipping = Shipping(
+        firstName: cusName.value.text,
+        address1: cusBilling2.value.text,
+        address2: cusShipping2.value.text,
+        country: shipToDifferentAddress ? shippingOptions2[selectedShippingOptions2].name : '',
+        state: shipToDifferentAddress ? countryState2[selectedCountryState2].name : '',
+        city: cusCity2.value.text,
+        postcode: cusZip2.value.text,
+      );
 
       ShippingLines shippingLines = ShippingLines(
         methodId: shippingMethods[selectedShippingMethods].instanceId.toString(),
@@ -132,13 +208,13 @@ class BillingController extends GetxController {
         paymentMethod: paymentOptions[selectedPaymentOptions].id,
         paymentMethodTitle: paymentOptions[selectedPaymentOptions].title,
         setPaid: false,
-        // shipping: shipping,
         billing: billing,
         lineItems: cartItems.map((e) => LineItems(
             productId: e.productId,
             quantity: e.quantity,
             variationId: e.variationId
         )).toList(),
+        shipping: shipToDifferentAddress ? shipping : null,
         shippingLines: [
           shippingLines
         ]
@@ -154,15 +230,25 @@ class BillingController extends GetxController {
     update();
   }
 
-  toggleShippingOption(String option) async {
-    final opt = shippingOptions.indexWhere((element) => element.name == option);
-    selectedShippingOptions = opt == -1 ? 0 : opt;
-
+  toggleShippingOption(String option, {bool flag = true}) async {
     isLoading = true;
     update();
 
-    await initCountryInfo();
-    await initShippingMethod();
+    if(flag){
+      final opt = shippingOptions.indexWhere((element) => element.name == option);
+      selectedShippingOptions = opt == -1 ? 0 : opt;
+
+      await initCountryInfo();
+      if(!shipToDifferentAddress){
+        await initShippingMethod();
+      }
+    }else{
+      final opt = shippingOptions2.indexWhere((element) => element.name == option);
+      selectedShippingOptions2 = opt == -1 ? 0 : opt;
+
+      await initCountryInfo2();
+      await initShippingMethod2();
+    }
 
     isLoading = false;
     update();
@@ -174,9 +260,14 @@ class BillingController extends GetxController {
     update();
   }
 
-  toggleCountryStates(String option){
-    final opt = countryState.indexWhere((element) => element.name == option);
-    selectedCountryState = opt == -1 ? 0 : opt;
+  toggleCountryStates(String option, {bool flag = true}){
+    if(flag){
+      final opt = countryState.indexWhere((element) => element.name == option);
+      selectedCountryState = opt == -1 ? 0 : opt;
+    }else{
+      final opt = countryState2.indexWhere((element) => element.name == option);
+      selectedCountryState2 = opt == -1 ? 0 : opt;
+    }
     update();
   }
 
@@ -237,6 +328,15 @@ class BillingController extends GetxController {
     //   return false;
     // }
     //
+    // /// Validate Billing
+    // if(cusCity.value.text.isEmpty){
+    //   print(4);
+    //
+    //   resetError();
+    //   cusCityErr = true;
+    //   update();
+    //   return false;
+    // }
     //
     // if(cusZip.value.text.isEmpty || !isZipCode(cusZip.value.text)){
     //   print(6);
@@ -258,6 +358,8 @@ class BillingController extends GetxController {
     cusBillingErr = false;
     cusShippingErr = false;
     cusZipErr = false;
+    cusCityErr = false;
+    cusStateErr = false;
   }
 
   bool isPhoneNumber(String phone) {

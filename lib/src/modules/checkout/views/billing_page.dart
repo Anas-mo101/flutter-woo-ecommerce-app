@@ -74,7 +74,30 @@ class BillingPage extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   ..._customerInfo(controller),
-                                  ..._shippingInfo(controller),
+                                  ..._shippingInfo(controller, 'Billing Information'),
+                                  InkWell(
+                                    onTap: () => controller.toggleShippingToDifferentAddress(),
+                                    child: Container(
+                                        width: AppTheme.fullWidth(context)/1.5,
+                                        padding: EdgeInsets.all(5),
+                                        decoration: BoxDecoration(
+                                            border: controller.shipToDifferentAddress ? null : Border.all(),
+                                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                                            color: controller.shipToDifferentAddress ? LightColor.orange : Colors.white
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Icon(Icons.check, color: controller.shipToDifferentAddress ? Colors.white : Colors.black, size: 20),
+                                            SizedBox(width: 10),
+                                            Text('Ship to a different address?', style: TextStyle(color: controller.shipToDifferentAddress ? Colors.white : Colors.black )),
+                                          ],
+                                        )
+                                    ),
+                                  ),
+                                  SizedBox(height: 30),
+                                  if(controller.shipToDifferentAddress)
+                                    ..._shippingInfo2(controller),
                                   if(controller.shippingMethods.isNotEmpty)
                                     _shippingMethods(controller),
                                   SizedBox(height: 20),
@@ -97,9 +120,10 @@ class BillingPage extends StatelessWidget {
     );
   }
 
-  List<Widget> _shippingInfo(BillingController controller){
+  List<Widget> _shippingInfo(BillingController controller, String header){
     return [
-      Text('shipping_info'.tr),
+      Text(header),
+      // Text('shipping_info'.tr),
       SizedBox(height: 20),
       Container(
         width: double.infinity,
@@ -155,9 +179,9 @@ class BillingPage extends StatelessWidget {
       ),
       SizedBox(height: 20),
       TextField(
-        controller: controller.cusBilling,
+        controller: controller.cusCity,
         decoration: InputDecoration(
-          errorText: controller.cusBillingErr ? 'invalid_input'.tr : null,
+          errorText: controller.cusCityErr ? 'invalid_input'.tr : null,
           border:  OutlineInputBorder(
             borderRadius: BorderRadius.circular(15.0),
           ),
@@ -167,13 +191,14 @@ class BillingPage extends StatelessWidget {
         ),
       ),
       SizedBox(height: 20),
+      if(controller.countryState.isNotEmpty)
       Container(
         width: double.infinity,
         padding: const EdgeInsets.symmetric(horizontal: 10),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15.0),
             border: Border.all(
-              color: controller.cusCountryErr ? Colors.red : Colors.grey,
+              color: controller.cusStateErr ? Colors.red : Colors.grey,
               width: 1.0,
             )
         ),
@@ -206,7 +231,121 @@ class BillingPage extends StatelessWidget {
           contentPadding: EdgeInsets.only(left: 10, right: 10, bottom: 0, top: 5),
         ),
       ),
+      SizedBox(height: 30),
+    ];
+  }
+
+  List<Widget> _shippingInfo2(BillingController controller){
+    return [
+      Text('shipping_info'.tr),
       SizedBox(height: 20),
+      Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15.0),
+            border: Border.all(
+              color: controller.cusCountryErr2 ? Colors.red : Colors.grey,
+              width: 1.0,
+            )
+        ),
+        child: DropdownButton<String>(
+          hint: Text('country'.tr, style: TextStyle(fontSize: 14)),
+          value: controller.shippingOptions2[controller.selectedShippingOptions2].name,
+          isExpanded: true,
+          underline: Container(),
+          borderRadius: BorderRadius.circular(15.0),
+          items: [
+            ...controller.shippingOptions2.map((e) => DropdownMenuItem(
+              child: Text(e.name),
+              value: e.name,
+            )),
+          ],
+          onChanged: (String newValue) => controller.toggleShippingOption(newValue, flag: false),
+        ),
+      ),
+      SizedBox(height: 20),
+      TextField(
+        controller: controller.cusShipping2,
+        decoration: InputDecoration(
+          errorText: controller.cusShippingErr2 ? 'invalid_input'.tr : null,
+          border:  OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15.0),
+            borderSide: BorderSide(color: Colors.blue, width: 2.0),
+          ),
+          hintText: 'Street Address 1',
+          hintStyle: TextStyle(fontSize: 12),
+          contentPadding: EdgeInsets.only(left: 10, right: 10, bottom: 0, top: 5),
+        ),
+      ),
+      SizedBox(height: 20),
+      TextField(
+        controller: controller.cusBilling2,
+        decoration: InputDecoration(
+          errorText: controller.cusBillingErr2 ? 'invalid_input'.tr : null,
+          border:  OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+          hintText: 'Street Address 2 (Optional)',
+          hintStyle: TextStyle(fontSize: 12),
+          contentPadding: EdgeInsets.only(left: 10, right: 10, bottom: 0, top: 5),
+        ),
+      ),
+      SizedBox(height: 20),
+      TextField(
+        controller: controller.cusCity2,
+        decoration: InputDecoration(
+          errorText: controller.cusCityErr2 ? 'invalid_input'.tr : null,
+          border:  OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+          hintText: 'Town / City',
+          hintStyle: TextStyle(fontSize: 12),
+          contentPadding: EdgeInsets.only(left: 10, right: 10, bottom: 0, top: 5),
+        ),
+      ),
+      SizedBox(height: 20),
+      if(controller.countryState2.isNotEmpty)
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15.0),
+              border: Border.all(
+                color: controller.cusStateErr2 ? Colors.red : Colors.grey,
+                width: 1.0,
+              )
+          ),
+          child: DropdownButton<String>(
+            hint: Text('country'.tr, style: TextStyle(fontSize: 14)),
+            value: controller.countryState2[controller.selectedCountryState2].name,
+            isExpanded: true,
+            underline: Container(),
+            borderRadius: BorderRadius.circular(15.0),
+            items: [
+              ...controller.countryState2.map((e) => DropdownMenuItem(
+                child: Text(e.name),
+                value: e.name,
+              )),
+            ],
+            onChanged: (String newValue) => controller.toggleCountryStates(newValue, flag: false),
+          ),
+        ),
+      SizedBox(height: 20),
+      TextField(
+        controller: controller.cusZip2,
+        decoration: InputDecoration(
+          errorText: controller.cusZipErr2 ? 'invalid_input'.tr : null,
+          border:  OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15.0),
+            borderSide: BorderSide(color: Colors.blue, width: 2.0),
+          ),
+          hintText: "zip_code".tr,
+          hintStyle: TextStyle(fontSize: 12),
+          contentPadding: EdgeInsets.only(left: 10, right: 10, bottom: 0, top: 5),
+        ),
+      ),
+      SizedBox(height: 30),
     ];
   }
 
@@ -253,7 +392,6 @@ class BillingPage extends StatelessWidget {
           contentPadding: EdgeInsets.only(left: 10, right: 10, bottom: 0, top: 5),
         ),
       ),
-
       SizedBox(height: 20),
     ];
   }
@@ -291,6 +429,4 @@ class BillingPage extends StatelessWidget {
       ],
     );
   }
-
-
 }

@@ -4,6 +4,7 @@ import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_ecommerce_app/src/modules/product/model/product.dart';
 
+import '../../product/model/woocommerce_product.dart';
 import '../model/cart_item_product.dart';
 import '../model/cart_model.dart';
 
@@ -84,7 +85,7 @@ class CartController extends GetxController {
     return count;
   }
 
-  static Future<void> addToCart(Product item ,{int variantId, List<String> selectedVariations}) async {
+  static Future<void> addToCart(Product item , WooCommerceProduct pItem,{int variantId, List<String> selectedVariations}) async {
     final prefs = await SharedPreferences.getInstance();
     List<String> cartModel = prefs.getStringList("cartModel") ?? [];
     List<CartModel> wooCartModel = cartModel.map((e) => CartModel.fromJson(jsonDecode(e))).toList();
@@ -111,7 +112,7 @@ class CartController extends GetxController {
         wooCartModel.add(CartModel(
           item.id,
           1,
-          item,
+          item, pItem,
           variationId: variantId,
           variationIdentifier: selectedVariations
         ));
@@ -119,7 +120,7 @@ class CartController extends GetxController {
         wooCartModel.add(CartModel(
           item.id,
           1,
-          item,
+          item, pItem,
           variationIdentifier: selectedVariations
         ));
       }

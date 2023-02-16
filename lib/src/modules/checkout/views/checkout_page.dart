@@ -81,12 +81,12 @@ class CheckoutPage extends StatelessWidget {
     );
   }
 
-  Widget tax(double tax) {
+  Widget tax(double tax, String rate) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         TitleText(
-          text: '${'tax'.tr} 4%',
+          text: '${'tax'.tr} $rate%',
           color: LightColor.grey,
           fontSize: 14,
           fontWeight: FontWeight.w500,
@@ -250,7 +250,7 @@ class CheckoutPage extends StatelessWidget {
                                   ),
                                   _price(controller.getOrderTotalQty(),controller.ongoingOrder.subtotal),
                                   SizedBox(height: 30),
-                                  tax(controller.getTax()),
+                                  tax(controller.getTax(), controller.taxRatePercentage),
                                   SizedBox(height: 30),
                                   del(controller.getDelv()),
                                   SizedBox(height: 30),

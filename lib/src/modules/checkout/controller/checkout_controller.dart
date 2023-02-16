@@ -14,12 +14,17 @@ import '../../cart/model/cart_model.dart';
 import '../models/order.dart';
 import '../models/woo_order.dart';
 
+///
+/// calculate cart total from backend
+/// and view here
 
 class CheckoutController extends GetxController {
 
   Order ongoingOrder;
   WooOrder currentOrder;
   List<CartModel> cartItems = [];
+
+  String taxRatePercentage;
 
   @override
   void onInit() {
@@ -28,7 +33,7 @@ class CheckoutController extends GetxController {
       currentOrder = args[0];
       cartItems = args[1];
       ongoingOrder = Order(
-        customerShippingAddress: currentOrder.shipping.address1,
+        customerShippingAddress: currentOrder.billing.address1,
         paymentOption: currentOrder.paymentMethod
       );
       calcCartItems();
@@ -36,23 +41,39 @@ class CheckoutController extends GetxController {
     super.onInit();
   }
 
-
-  void calcLineItemsTax(){
+  double calcLineItemsTax(){
     /// in woo_product tax_class match w woo_tax class
     List<WooTax> taxesRates = Get.find<WooStoreService>().storeTax;
-    taxesRates.forEach((element) {
-      
+    double totalTax = 0.0;
+    cartItems.forEach((item) {
+      taxesRates.forEach((tax) {
+        if(item.wooProduct?.taxStatus == 'taxable'){
+          if(tax.tclass == item.wooProduct.taxClass){
+            /// product -> 20$ and tax 4% and 3 qty
+            /// taxRate = ((4/100) * 20) * 3 = 2.4$ tax on top of total
+            double price = double.parse(item.wooProduct.price);
+            double shipping = double.parse(currentOrder.shippingLines.first.total);
+            // print('price: $price');
+            taxRatePercentage = double.parse(tax.rate).toStringAsFixed(1);
+            double taxPercentage = double.parse(tax.rate) / 100;
+            print('taxPercentage: $taxPercentage');
+            final taxRatePerPeice = (taxPercentage * price);
+            print('taxRate: $taxRatePerPeice');
+            final taxRate= taxRatePerPeice * item.quantity;
+            print('taxRate: $taxRate');
+            totalTax += taxRate;
+          }
+        }
+      });
     });
-    currentOrder.lineItems.forEach((element) {
-      var itemsId = element.productId;
-
-    });
+    return totalTax;
   }
 
   void calcCartItems(){
+    /// order important
     ongoingOrder.subtotal = calSubTotalPrice();
-    ongoingOrder.tax = ongoingOrder.subtotal  * 0.04;
-    ongoingOrder.delv = 10;
+    ongoingOrder.tax = calcLineItemsTax();
+    ongoingOrder.delv = double.parse(currentOrder.shippingLines.first.total);
     ongoingOrder.total = ongoingOrder.delv + ongoingOrder.tax + ongoingOrder.subtotal;
   }
 

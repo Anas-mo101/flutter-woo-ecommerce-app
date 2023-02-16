@@ -69,13 +69,12 @@ class ProductController extends GetxController  {
         var id = element.id;
         var varCombinations = element.attributes.map((e) => e.option).toList();
         if(areListsEqual(toMatchAgainst,varCombinations)){
-          CartController.addToCart(
-              product, variantId: id, selectedVariations: varCombinations
-          ).then((value) => setProductQtyInCart());
+          CartController.addToCart(product, _products, variantId: id, selectedVariations: varCombinations )
+              .then((value) => setProductQtyInCart());
         }
       });
     }else{
-      CartController.addToCart(product).then((value) => setProductQtyInCart());
+      CartController.addToCart(product, _products).then((value) => setProductQtyInCart());
     }
   }
 
