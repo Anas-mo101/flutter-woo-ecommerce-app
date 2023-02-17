@@ -246,7 +246,7 @@ class SearchPage extends StatelessWidget {
                                             SizedBox(width: 10),
                                             InkWell(
                                               onTap: () async => {
-                                                if(await controller.tfliteModelManager.modelExists()){
+                                                if(await controller.tfliteModelManager.modelRequirementsExists()){
                                                   showImageDetectionOption(context)
                                                 }else{
                                                   controller.isModelLoading = true,

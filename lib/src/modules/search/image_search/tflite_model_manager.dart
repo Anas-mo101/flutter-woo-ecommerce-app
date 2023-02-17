@@ -1,27 +1,21 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
-
 
 class TfliteModelManager{
-  bool _isModelDownloaded = false;
   bool _isLoading = true;
+  Map<String, double> _downloadProgress;
 
-  bool get isModelDownloaded => _isModelDownloaded;
   bool get isLoading => _isLoading;
+  double downloadProgress(String file) => _downloadProgress[file];
 
-  Future<bool> _requestWritePermission() async {
-    await Permission.storage.request();
-    return await Permission.storage.request().isGranted;
-  }
-
-  Future<bool> modelExists() async {
+  Future<bool> modelRequirementsExists() async {
     final appDocDir = await getApplicationDocumentsDirectory();
     final modelPath = appDocDir.path;
 
     /// If exist return its path
-    if(File(modelPath + '/label.txt').existsSync()){
+    if(File('$modelPath/label.txt').existsSync() &&
+        File('$modelPath/model_classification.tflite').existsSync()){
       return true;
     }
 
@@ -31,58 +25,79 @@ class TfliteModelManager{
   Future<String> loadModel() async {
     /// check if file exists
     final appDocDir = await getApplicationDocumentsDirectory();
-      final modelPath = appDocDir.path;
+    final modelPath = appDocDir.path;
 
     /// If exist return its path
-    if(File(modelPath + '/model_classification.tflite').existsSync()){
-      _isModelDownloaded = true;
+    if(File('$modelPath/label.txt').existsSync() && File('$modelPath/model_classification.tflite').existsSync()){
       return modelPath;
     }
 
     /// If does not exist, download from web using url
     try{
-      await downloadModel();
+      await _downloadModel(modelPath);
+      await _downloadLabel(modelPath);
       return modelPath;
     }catch(e){
       throw Exception('Load model failed');
     }
   }
 
-  Future<void> downloadModel() async {
+  Future<void> _downloadModel(String appDocDir) async {
+    _isLoading = true;
     final url = 'http://mokhtar.shop/wp-content/uploads/model_classification.tflite';
-    final labelUrl = 'http://mokhtar.shop/wp-content/uploads/labels.txt';
-    // bool hasPermission = await _requestWritePermission();
-    // if (!hasPermission) {
-    //   print('No Write Permission');
-    //   throw Exception('No Write Permission');
-    // }
-
-    // gets the directory where we will download the file.
-    final appDocDir = await getApplicationDocumentsDirectory();
-    final modelPath = '${appDocDir.path}/model_classification.tflite';
-    final labelPath = '${appDocDir.path}/label.txt';
-
-    // downloads the file
     try{
+      // gets the directory where we will download the file.
+      final modelPath = '$appDocDir/model_classification.tflite';
+
+      if(File(modelPath).existsSync()){
+        print('deleting old file');
+        await File(modelPath).delete();
+      }
+
       await Dio().download(url, modelPath, onReceiveProgress: (received, total) {
-          final progress = (received / total) * 100;
-          print('Downloading model: $progress');
+        final progress = (received / total);
+        _downloadProgress['model'] = progress;
+        print('Downloading model: $progress');
       });
+      print('done downloading model file');
+
+    }catch(e){
+      print('Model failed to download: $e');
+      throw Exception('Model failed to download: $e');
+    }
+    _isLoading = false;
+  }
+
+  Future<void> _downloadLabel(String appDocDir) async {
+    _isLoading = true;
+    final labelUrl = 'http://mokhtar.shop/wp-content/uploads/labels.txt';
+    try{
+      // gets the directory where we will download the file.
+      final labelPath = '$appDocDir/label.txt';
+
+      if(File(labelPath).existsSync()){
+        print('deleting old file');
+        await File(labelPath).delete();
+      }
+
+      print('downloading label file');
 
       await Dio().download(labelUrl, labelPath, onReceiveProgress: (received, total) {
-        final progress = (received / total) * 100;
+        final progress = received / total;
+        _downloadProgress['label'] = progress;
         print('Downloading label: $progress');
       });
 
-      _isModelDownloaded = true;
-      _isLoading = false;
+      print('done downloading label file');
     }catch(e){
-      print('Model failed to download: $e');
-      _isLoading = false;
+      print('Labels failed to download: $e');
       throw Exception('Model failed to download: $e');
     }
+    _isLoading = false;
   }
-
 }
+
+
+
 
 
