@@ -1,20 +1,12 @@
-import 'dart:convert';
-import 'package:flutter/material.dart';
-import 'package:flutter_ecommerce_app/src/modules/checkout/views/billing_page.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_ecommerce_app/src/modules/product/model/product.dart';
-
-import '../../../config/woo_store/woo_store_service.dart';
-import '../../../model/woo_product_tax.dart';
 import '../../cart/model/cart_item_product.dart';
 import '../../cart/model/cart_model.dart';
 import '../models/order.dart';
 import '../models/woo_order.dart';
 
-///
+
 /// calculate cart total from backend
 /// and view here
 
@@ -41,39 +33,11 @@ class CheckoutController extends GetxController {
     super.onInit();
   }
 
-  double calcLineItemsTax(){
-    /// in woo_product tax_class match w woo_tax class
-    List<WooTax> taxesRates = Get.find<WooStoreService>().storeTax;
-    double totalTax = 0.0;
-    cartItems.forEach((item) {
-      taxesRates.forEach((tax) {
-        if(item.wooProduct?.taxStatus == 'taxable'){
-          if(tax.tclass == item.wooProduct.taxClass){
-            /// product -> 20$ and tax 4% and 3 qty
-            /// taxRate = ((4/100) * 20) * 3 = 2.4$ tax on top of total
-            double price = double.parse(item.wooProduct.price);
-            double shipping = double.parse(currentOrder.shippingLines.first.total);
-            // print('price: $price');
-            taxRatePercentage = double.parse(tax.rate).toStringAsFixed(1);
-            double taxPercentage = double.parse(tax.rate) / 100;
-            print('taxPercentage: $taxPercentage');
-            final taxRatePerPeice = (taxPercentage * price);
-            print('taxRate: $taxRatePerPeice');
-            final taxRate= taxRatePerPeice * item.quantity;
-            print('taxRate: $taxRate');
-            totalTax += taxRate;
-          }
-        }
-      });
-    });
-    return totalTax;
-  }
-
   void calcCartItems(){
     /// order important
-    ongoingOrder.subtotal = calSubTotalPrice();
-    ongoingOrder.tax = calcLineItemsTax();
+    // ongoingOrder.subtotal = calSubTotalPrice();
     ongoingOrder.delv = double.parse(currentOrder.shippingLines.first.total);
+    // ongoingOrder.tax = calcLineItemsTax();
     ongoingOrder.total = ongoingOrder.delv + ongoingOrder.tax + ongoingOrder.subtotal;
   }
 
@@ -126,13 +90,6 @@ class CheckoutController extends GetxController {
     return total;
   }
 
-  double calSubTotalPrice() {
-    double price = 0.0;
-    cartItems.forEach((element) {
-      price += (element.product.price * element.quantity);
-    });
-    return price;
-  }
 
   double getTax() {
     return ongoingOrder.tax;
