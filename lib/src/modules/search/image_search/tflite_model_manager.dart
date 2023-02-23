@@ -4,10 +4,10 @@ import 'package:path_provider/path_provider.dart';
 
 class TfliteModelManager{
   bool _isLoading = true;
-  Map<String, double> _downloadProgress;
+  // Map<String, double> _downloadProgress;
 
   bool get isLoading => _isLoading;
-  double downloadProgress(String file) => _downloadProgress[file];
+  // double downloadProgress(String file) => _downloadProgress[file];
 
   Future<bool> modelRequirementsExists() async {
     final appDocDir = await getApplicationDocumentsDirectory();
@@ -56,7 +56,7 @@ class TfliteModelManager{
 
       await Dio().download(url, modelPath, onReceiveProgress: (received, total) {
         final progress = (received / total);
-        _downloadProgress['model'] = progress;
+        // _downloadProgress['model'] = progress;
         print('Downloading model: $progress');
       });
       print('done downloading model file');
@@ -84,7 +84,6 @@ class TfliteModelManager{
 
       await Dio().download(labelUrl, labelPath, onReceiveProgress: (received, total) {
         final progress = received / total;
-        _downloadProgress['label'] = progress;
         print('Downloading label: $progress');
       });
 

@@ -3,15 +3,12 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tflite/tflite.dart';
 import 'package:camera/camera.dart';
-import 'tflite_model_manager.dart';
 
 
 class ImageDetectionSearch{
-
   var picker = ImagePicker();
   XFile image;
   List<CameraDescription> cameras;
-
 
   Future getSearchImageFromGallery() async {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
