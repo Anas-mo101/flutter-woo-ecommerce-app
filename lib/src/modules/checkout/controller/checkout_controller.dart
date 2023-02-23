@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import '../../cart/model/cart_item_product.dart';
 import '../../cart/model/cart_model.dart';
+import '../api/woo_order_requirements_api.dart';
 import '../models/order.dart';
+import '../models/order_totals.dart';
 import '../models/woo_order.dart';
 
 
@@ -15,8 +19,9 @@ class CheckoutController extends GetxController {
   Order ongoingOrder;
   WooOrder currentOrder;
   List<CartModel> cartItems = [];
-
   String taxRatePercentage;
+
+  bool isLoading = true;
 
   @override
   void onInit() {
@@ -28,17 +33,9 @@ class CheckoutController extends GetxController {
         customerShippingAddress: currentOrder.billing.address1,
         paymentOption: currentOrder.paymentMethod
       );
-      calcCartItems();
+      setTotals();
     }
     super.onInit();
-  }
-
-  void calcCartItems(){
-    /// order important
-    // ongoingOrder.subtotal = calSubTotalPrice();
-    ongoingOrder.delv = double.parse(currentOrder.shippingLines.first.total);
-    // ongoingOrder.tax = calcLineItemsTax();
-    ongoingOrder.total = ongoingOrder.delv + ongoingOrder.tax + ongoingOrder.subtotal;
   }
 
   int getQty(int id, int varId){
@@ -74,13 +71,6 @@ class CheckoutController extends GetxController {
     return items;
   }
 
-  int getTotalQty() {
-    int total = 0;
-    currentOrder.lineItems.forEach((element) {
-      total += element.quantity;
-    });
-    return total;
-  }
 
   int getOrderTotalQty() {
     int total = 0;
@@ -89,7 +79,6 @@ class CheckoutController extends GetxController {
     });
     return total;
   }
-
 
   double getTax() {
     return ongoingOrder.tax;
@@ -103,4 +92,22 @@ class CheckoutController extends GetxController {
     return ongoingOrder.total;
   }
 
+  void setTotals() async {
+    try{
+      // current order, shipping and shippingline obj are null ??
+      OrderTotals totals = await OrderRequirementApi().getTotals({
+        "line_items": jsonEncode(currentOrder.lineItems)
+      });
+      ongoingOrder.subtotal = totals.subtotal;
+      ongoingOrder.delv = totals.shippingTotal;
+      ongoingOrder.tax = totals.taxTotal;
+      ongoingOrder.total = totals.total;
+
+      isLoading = false;
+      update();
+    } catch (e){
+      print('error: $e');
+      Get.back();
+    }
+  }
 }

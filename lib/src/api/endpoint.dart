@@ -3,7 +3,8 @@ class EndPoints {
   static List<String> avoidCache = [
     login(),
     loginValid(),
-    register()
+    register(),
+    orderTotals()
   ];
 
   /// WORDPRESS AUTH
@@ -46,6 +47,8 @@ class EndPoints {
     }).query;
     return baseURL + 'wp-json/wc/v3/products/reviews?' + params;
   }
+
+  static orderTotals() => baseURL + 'wp-json/app-utility/v1/totals';
   ///
 
   static final String baseURL2 = 'https://api.escuelajs.co/api/v1/';

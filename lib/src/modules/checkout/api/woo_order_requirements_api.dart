@@ -1,11 +1,26 @@
 import '../../../api/endpoint.dart';
 import '../../../api/data providers/base_api.dart';
+import '../models/order_totals.dart';
 import '../models/woo_country_info.dart';
 import '../models/woo_payment_gateway.dart';
 import '../models/woo_shipping_methods.dart';
 import '../models/woo_shipping_zone.dart';
 
 class OrderRequirementApi extends BaseApi{
+
+  Future<OrderTotals> getTotals(Map<String, dynamic> body) async {
+    try{
+      String endpoint = EndPoints.orderTotals();
+      var response = await BaseApi().post(endpoint, body);
+      // , mHeader: {
+      //   "Authorization": basicAuth
+      // });
+      return OrderTotals.fromJson(response);
+    }catch(e){
+      print('OrderRequirementApi getTotals() failed: ${e}');
+      throw Exception();
+    }
+  }
 
   Future<List<WooStates>> getCountryInfo(String zone) async {
     try{

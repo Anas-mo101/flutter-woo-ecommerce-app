@@ -239,7 +239,7 @@ class CheckoutPage extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            Container(
+                            controller.isLoading ? CircularProgressIndicator() : Container(
                               padding: EdgeInsets.fromLTRB(20, 0, 20, 50),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.end,
