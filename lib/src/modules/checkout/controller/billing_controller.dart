@@ -220,7 +220,7 @@ class BillingController extends GetxController {
         ]
       );
 
-      Get.toNamed(Routes.checkout, arguments: [order, cartItems]);
+      Get.toNamed(Routes.checkout, arguments: [order.toJson(), cartItems]);
     }
   }
 

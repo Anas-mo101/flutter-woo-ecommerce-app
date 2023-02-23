@@ -1,15 +1,10 @@
-import 'dart:convert';
-
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import '../../cart/model/cart_item_product.dart';
 import '../../cart/model/cart_model.dart';
 import '../api/woo_order_requirements_api.dart';
 import '../models/order.dart';
 import '../models/order_totals.dart';
 import '../models/woo_order.dart';
-
 
 /// calculate cart total from backend
 /// and view here
@@ -27,7 +22,8 @@ class CheckoutController extends GetxController {
   void onInit() {
     var args = Get.arguments;
     if(args is List){
-      currentOrder = args[0];
+      print(args[0]);
+      currentOrder = WooOrder.fromJson(args[0]);
       cartItems = args[1];
       ongoingOrder = Order(
         customerShippingAddress: currentOrder.billing.address1,
@@ -95,9 +91,7 @@ class CheckoutController extends GetxController {
   void setTotals() async {
     try{
       // current order, shipping and shippingline obj are null ??
-      OrderTotals totals = await OrderRequirementApi().getTotals({
-        "line_items": jsonEncode(currentOrder.lineItems)
-      });
+      OrderTotals totals = await OrderRequirementApi().getTotals(currentOrder);
       ongoingOrder.subtotal = totals.subtotal;
       ongoingOrder.delv = totals.shippingTotal;
       ongoingOrder.tax = totals.taxTotal;

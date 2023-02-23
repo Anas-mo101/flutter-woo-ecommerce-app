@@ -239,28 +239,18 @@ class CheckoutPage extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            controller.isLoading ? CircularProgressIndicator() : Container(
+                            Container(
                               padding: EdgeInsets.fromLTRB(20, 0, 20, 50),
-                              child: Column(
+                              child:  Column(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: <Widget>[
                                   Divider(
                                     thickness: 1,
                                     // height: 70,
                                   ),
-                                  _price(controller.getOrderTotalQty(),controller.ongoingOrder.subtotal),
-                                  SizedBox(height: 30),
-                                  tax(controller.getTax(), controller.taxRatePercentage),
-                                  SizedBox(height: 30),
-                                  del(controller.getDelv()),
-                                  SizedBox(height: 30),
-                                  total(controller.getGrandTotal()),
-                                  SizedBox(height: 30),
-                                  shippingTo(controller.ongoingOrder.customerShippingAddress),
-                                  SizedBox(height: 30),
-                                  paymentMethod(controller.ongoingOrder.paymentOption),
-                                  SizedBox(height: 30),
-                                  _submitButton(context),
+                                  controller.isLoading ?
+                                  CircularProgressIndicator() :
+                                  totals(controller),
                                 ],
                               ),
                             ),
@@ -274,5 +264,23 @@ class CheckoutPage extends StatelessWidget {
         )
       ),
     );
+  }
+
+  List<Widget> totals(CheckoutController controller){
+    return [
+      _price(controller.getOrderTotalQty(),controller.ongoingOrder.subtotal),
+      SizedBox(height: 30),
+      tax(controller.getTax(), controller.taxRatePercentage),
+      SizedBox(height: 30),
+      del(controller.getDelv()),
+      SizedBox(height: 30),
+      total(controller.getGrandTotal()),
+      SizedBox(height: 30),
+      shippingTo(controller.ongoingOrder.customerShippingAddress),
+      SizedBox(height: 30),
+      paymentMethod(controller.ongoingOrder.paymentOption),
+      SizedBox(height: 30),
+      _submitButton(Get.context),
+    ];
   }
 }
