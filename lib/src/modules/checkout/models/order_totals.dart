@@ -1,12 +1,12 @@
 
 
 class OrderTotals {
-  double subtotal;
-  double shippingTotal;
-  double cartTax;
-  double shippingTax;
-  double taxTotal;
-  double total;
+  int subtotal;
+  int shippingTotal;
+  int cartTax;
+  int shippingTax;
+  int taxTotal;
+  int total;
 
   OrderTotals(
       {this.subtotal,

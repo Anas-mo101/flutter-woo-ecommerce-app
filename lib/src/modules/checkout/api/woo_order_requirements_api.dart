@@ -14,17 +14,8 @@ class OrderRequirementApi extends BaseApi{
   Future<OrderTotals> getTotals(WooOrder order) async {
     try{
       String endpoint = EndPoints.orderTotals();
-
-      Map<String, dynamic> orderMap = {
-        "billing": jsonEncode(order.billing.toJson()),
-        // "shipping": jsonEncode(order.shipping?.toJson() ?? {}) ,
-        "shipping_lines": jsonEncode(order.shippingLines),
-        "line_items": jsonEncode(order.lineItems),
-      };
-
-      // server error 500
-
-      var response = await BaseApi().post(endpoint,order.toJson());
+      print(jsonEncode(order.toJson()));
+      var response = await BaseApi().post(endpoint,jsonEncode(order.toJson()));
       return OrderTotals.fromJson(response);
     }catch(e){
       print('OrderRequirementApi getTotals() failed: ${e}');

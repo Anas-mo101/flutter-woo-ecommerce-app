@@ -248,9 +248,10 @@ class CheckoutPage extends StatelessWidget {
                                     thickness: 1,
                                     // height: 70,
                                   ),
-                                  controller.isLoading ?
-                                  CircularProgressIndicator() :
-                                  totals(controller),
+                                  if(controller.isLoading)
+                                    CircularProgressIndicator()
+                                  else
+                                  ...totals(controller),
                                 ],
                               ),
                             ),

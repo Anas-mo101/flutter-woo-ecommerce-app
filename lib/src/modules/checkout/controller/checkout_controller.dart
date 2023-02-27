@@ -22,7 +22,6 @@ class CheckoutController extends GetxController {
   void onInit() {
     var args = Get.arguments;
     if(args is List){
-      print(args[0]);
       currentOrder = WooOrder.fromJson(args[0]);
       cartItems = args[1];
       ongoingOrder = Order(
@@ -90,12 +89,12 @@ class CheckoutController extends GetxController {
 
   void setTotals() async {
     try{
-      // current order, shipping and shippingline obj are null ??
       OrderTotals totals = await OrderRequirementApi().getTotals(currentOrder);
-      ongoingOrder.subtotal = totals.subtotal;
-      ongoingOrder.delv = totals.shippingTotal;
-      ongoingOrder.tax = totals.taxTotal;
-      ongoingOrder.total = totals.total;
+      // ongoingOrder.subtotal = double.parse(totals.subtotal);
+      ongoingOrder.subtotal = totals.subtotal.toDouble();
+      ongoingOrder.delv = totals.shippingTotal.toDouble();
+      ongoingOrder.tax = totals.taxTotal.toDouble();
+      ongoingOrder.total = totals.total.toDouble();
 
       isLoading = false;
       update();
