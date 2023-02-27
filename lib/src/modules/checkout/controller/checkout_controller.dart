@@ -90,11 +90,11 @@ class CheckoutController extends GetxController {
   void setTotals() async {
     try{
       OrderTotals totals = await OrderRequirementApi().getTotals(currentOrder);
-      // ongoingOrder.subtotal = double.parse(totals.subtotal);
-      ongoingOrder.subtotal = totals.subtotal.toDouble();
-      ongoingOrder.delv = totals.shippingTotal.toDouble();
-      ongoingOrder.tax = totals.taxTotal.toDouble();
-      ongoingOrder.total = totals.total.toDouble();
+      taxRatePercentage = totals.taxRate.toString();
+      ongoingOrder.subtotal = totals.subtotal;
+      ongoingOrder.delv = totals.shippingTotal;
+      ongoingOrder.tax = totals.taxTotal;
+      ongoingOrder.total = totals.total;
 
       isLoading = false;
       update();

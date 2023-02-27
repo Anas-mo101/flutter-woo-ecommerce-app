@@ -1,28 +1,40 @@
 
 
 class OrderTotals {
-  int subtotal;
-  int shippingTotal;
-  int cartTax;
-  int shippingTax;
-  int taxTotal;
-  int total;
+  double subtotal;
+  double shippingTotal;
+  double cartTax;
+  double shippingTax;
+  double taxTotal;
+  double total;
+  double taxRate;
 
-  OrderTotals(
-      {this.subtotal,
-        this.shippingTotal,
-        this.cartTax,
-        this.shippingTax,
-        this.taxTotal,
-        this.total});
+  OrderTotals({
+    this.subtotal,
+    this.shippingTotal,
+    this.cartTax,
+    this.shippingTax,
+    this.taxTotal,
+    this.total,
+    this.taxRate
+  });
 
   OrderTotals.fromJson(Map<String, dynamic> json) {
-    subtotal = json['subtotal'];
-    shippingTotal = json['shipping_total'];
-    cartTax = json['cart_tax'];
-    shippingTax = json['shipping_tax'];
-    taxTotal = json['tax_total'];
-    total = json['total'];
+    subtotal = checkDouble(json['subtotal']);
+    shippingTotal = checkDouble(json['shipping_total']);
+    cartTax = checkDouble(json['cart_tax']);
+    shippingTax = checkDouble(json['shipping_tax']);
+    taxTotal = checkDouble(json['tax_total']);
+    total = checkDouble(json['total']);
+    taxRate = checkDouble(json['tax_rate']);
+  }
+
+  static double checkDouble(dynamic value) {
+    if (value is String) {
+      return double.parse(value);
+    } else {
+      return value.toDouble();
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -33,6 +45,7 @@ class OrderTotals {
     data['shipping_tax'] = this.shippingTax;
     data['tax_total'] = this.taxTotal;
     data['total'] = this.total;
+    data['tax_rate'] = this.taxRate;
     return data;
   }
 }

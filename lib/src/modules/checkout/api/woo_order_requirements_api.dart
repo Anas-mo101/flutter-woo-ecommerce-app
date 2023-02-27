@@ -8,13 +8,14 @@ import '../models/woo_order.dart';
 import '../models/woo_payment_gateway.dart';
 import '../models/woo_shipping_methods.dart';
 import '../models/woo_shipping_zone.dart';
+import '../utils/countries_code.dart';
 
 class OrderRequirementApi extends BaseApi{
 
   Future<OrderTotals> getTotals(WooOrder order) async {
     try{
       String endpoint = EndPoints.orderTotals();
-      print(jsonEncode(order.toJson()));
+      order.billing.country = countryCode(order.billing.country);
       var response = await BaseApi().post(endpoint,jsonEncode(order.toJson()));
       return OrderTotals.fromJson(response);
     }catch(e){
