@@ -4,6 +4,7 @@ import 'package:flutter_ecommerce_app/src/themes/theme.dart';
 import 'package:flutter_ecommerce_app/src/widgets/title_text.dart';
 import 'package:get/get.dart';
 import '../../../config/route.dart';
+import '../../../config/woo_store/woo_store_service.dart';
 import '../../../widgets/topbar.dart';
 import '../../cart/controller/cart_controller.dart';
 import '../../cart/model/cart_item_product.dart';
@@ -13,6 +14,7 @@ class CheckoutPage extends StatelessWidget {
   CheckoutPage({Key key}) : super(key: key);
 
   final checkoutController = Get.put(CheckoutController());
+  final currencyCode = Get.find<WooStoreService>().storeCurrency.code ?? '\$';
 
   List<Widget> _cartItems(BuildContext context, CheckoutController controller) {
     List<CartItemProduct> items = controller.getCart();
@@ -36,7 +38,7 @@ class CheckoutPage extends StatelessWidget {
         subtitle: Row(
           children: <Widget>[
             TitleText(
-              text: '\$ ',
+              text: '$currencyCode ',
               color: LightColor.red,
               fontSize: 12,
             ),
@@ -73,9 +75,18 @@ class CheckoutPage extends StatelessWidget {
           fontSize: 14,
           fontWeight: FontWeight.w500,
         ),
-        TitleText(
-          text: '\$${subtotal.toStringAsFixed(2)}',
-          fontSize: 18,
+        Row(
+          children: [
+            TitleText(
+              text: '$currencyCode ',
+              color: LightColor.red,
+              fontSize: 12,
+            ),
+            TitleText(
+              text: subtotal.toStringAsFixed(2),
+              fontSize: 18,
+            ),
+          ],
         ),
       ],
     );
@@ -91,10 +102,19 @@ class CheckoutPage extends StatelessWidget {
           fontSize: 14,
           fontWeight: FontWeight.w500,
         ),
-        TitleText(
-          text: '\$${tax.toStringAsFixed(2)}',
-          fontSize: 18,
-        ),
+        Row(
+          children: [
+            TitleText(
+              text: '$currencyCode ',
+              color: LightColor.red,
+              fontSize: 12,
+            ),
+            TitleText(
+              text: tax.toStringAsFixed(2),
+              fontSize: 18,
+            ),
+          ],
+        )
       ],
     );
   }
@@ -109,10 +129,19 @@ class CheckoutPage extends StatelessWidget {
           fontSize: 14,
           fontWeight: FontWeight.w500,
         ),
-        TitleText(
-          text: '\$${delv.toStringAsFixed(2)}',
-          fontSize: 18,
-        ),
+        Row(
+          children: [
+            TitleText(
+              text: '$currencyCode ',
+              color: LightColor.red,
+              fontSize: 12,
+            ),
+            TitleText(
+              text: delv.toStringAsFixed(2),
+              fontSize: 18,
+            ),
+          ],
+        )
       ],
     );
   }
@@ -127,10 +156,19 @@ class CheckoutPage extends StatelessWidget {
           fontSize: 14,
           fontWeight: FontWeight.w500,
         ),
-        TitleText(
-          text: '\$${total.toStringAsFixed(2)}',
-          fontSize: 18,
-        ),
+        Row(
+          children: [
+            TitleText(
+              text: '$currencyCode ',
+              color: LightColor.red,
+              fontSize: 12,
+            ),
+            TitleText(
+              text: total.toStringAsFixed(2),
+              fontSize: 18,
+            ),
+          ],
+        )
       ],
     );
   }

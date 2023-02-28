@@ -152,7 +152,7 @@ class BillingPage extends StatelessWidget {
       ),
       SizedBox(height: 20),
       TextField(
-        controller: controller.cusShipping,
+        controller: controller.cusBilling,
         decoration: InputDecoration(
           errorText: controller.cusShippingErr ? 'invalid_input'.tr : null,
           border:  OutlineInputBorder(
@@ -166,7 +166,7 @@ class BillingPage extends StatelessWidget {
       ),
       SizedBox(height: 20),
       TextField(
-        controller: controller.cusBilling,
+        controller: controller.cusShipping,
         decoration: InputDecoration(
           errorText: controller.cusBillingErr ? 'invalid_input'.tr : null,
           border:  OutlineInputBorder(

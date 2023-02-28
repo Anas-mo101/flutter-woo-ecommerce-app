@@ -24,6 +24,7 @@ class CheckoutController extends GetxController {
     if(args is List){
       currentOrder = WooOrder.fromJson(args[0]);
       cartItems = args[1];
+      print('=====> ${currentOrder.billing.address1}');
       ongoingOrder = Order(
         customerShippingAddress: currentOrder.billing.address1,
         paymentOption: currentOrder.paymentMethod

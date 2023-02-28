@@ -6,6 +6,7 @@ import 'package:flutter_ecommerce_app/src/widgets/extentions.dart';
 import 'package:flutter_ecommerce_app/src/widgets/title_text.dart';
 import 'package:get/get.dart';
 import '../../../config/route.dart';
+import '../../../config/woo_store/woo_store_service.dart';
 import '../../../widgets/bottom_navigation_bar.dart';
 import '../../../widgets/topbar.dart';
 import '../controller/cart_controller.dart';
@@ -15,6 +16,7 @@ class ShoppingCartPage extends StatelessWidget {
   ShoppingCartPage({Key key}) : super(key: key);
 
   final cartController = Get.put(CartController());
+  final currencyCode = Get.find<WooStoreService>().storeCurrency.code ?? '\$';
 
   List<Widget> _cartItems(BuildContext context, List<CartItemProduct> items) {
     if (items.isEmpty) return [];
@@ -107,7 +109,7 @@ class ShoppingCartPage extends StatelessWidget {
         subtitle: Row(
           children: <Widget>[
             TitleText(
-              text: '\$ ',
+              text: '$currencyCode ',
               color: LightColor.red,
               fontSize: 12,
             ),
@@ -180,7 +182,7 @@ class ShoppingCartPage extends StatelessWidget {
           fontWeight: FontWeight.w500,
         ),
         TitleText(
-          text: '\$${cartController.getPrice()}',
+          text: '$currencyCode ${cartController.getPrice()}',
           fontSize: 18,
         ),
       ],
