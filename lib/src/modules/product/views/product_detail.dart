@@ -230,7 +230,7 @@ class ProductDetailPage extends StatelessWidget {
                               color: LightColor.red,
                             ),
                             TitleText(
-                              text: '${product?.price ?? '--'}',
+                              text: productController.getProductPrices(),
                               fontSize: 25,
                             ),
                           ],

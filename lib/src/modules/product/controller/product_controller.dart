@@ -69,8 +69,17 @@ class ProductController extends GetxController  {
         var id = element.id;
         var varCombinations = element.attributes.map((e) => e.option).toList();
         if(areListsEqual(toMatchAgainst,varCombinations)){
-          CartController.addToCart(product, _products, variantId: id, selectedVariations: varCombinations )
-              .then((value) => setProductQtyInCart());
+          CartController.addToCart(
+              Product(
+                price: double.parse(element.price),
+                id: product.id,
+                name: product.name,
+                image: product.image,
+              ),
+              _products,
+              variantId: id,
+              selectedVariations: varCombinations
+          ).then((value) => setProductQtyInCart());
         }
       });
     }else{
@@ -230,7 +239,7 @@ class ProductController extends GetxController  {
           isliked: true
       );
 
-      getProductVars(_products.id);
+      await getProductVars(_products.id);
 
       isLoading = false;
       setProductReviews();
@@ -299,5 +308,36 @@ class ProductController extends GetxController  {
     }
   }
 
+  String getProductPrices(){
+    if(! (product?.price != null)){
+      return '--';
+    }
+
+    if(productVars != null && productVars.length > 1){
+      var prices = productVars.map((e) => double.parse(e.price)).toList();
+      prices = removeDuplicates(prices);
+      prices.sort();
+
+      if(prices.length > 1){
+        double min = prices[0];
+        double max = prices[prices.length - 1];
+        return '$min - $max';
+      }
+
+      return _products.price;
+    }
+
+    return _products.price;
+  }
+
+  List<double> removeDuplicates(List<double> numbers) {
+    if (numbers == null || numbers.isEmpty) {
+      return [];
+    }
+
+    Set<double> uniqueNumbers = Set<double>.from(numbers);
+
+    return uniqueNumbers.toList();
+  }
 
 }
