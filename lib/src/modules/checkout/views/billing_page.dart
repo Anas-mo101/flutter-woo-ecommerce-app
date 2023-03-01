@@ -4,6 +4,7 @@ import 'package:flutter_ecommerce_app/src/themes/theme.dart';
 import 'package:flutter_ecommerce_app/src/widgets/title_text.dart';
 import 'package:get/get.dart';
 import '../../../config/route.dart';
+import '../../../config/woo_store/woo_store_service.dart';
 import '../../../widgets/topbar.dart';
 import '../controller/billing_controller.dart';
 import '../widgets/toggle_payment_options.dart';
@@ -397,6 +398,7 @@ class BillingPage extends StatelessWidget {
   }
 
   Widget _shippingMethods(BillingController controller){
+    final currencyCode = Get.find<WooStoreService>().storeCurrency.code ?? '\$';
     return Column(
       children: [
         Text('Shipping Methods'),
@@ -412,15 +414,21 @@ class BillingPage extends StatelessWidget {
               )
           ),
           child: DropdownButton<String>(
-            hint: Text('country'.tr, style: TextStyle(fontSize: 14)),
-            value: controller.shippingMethods[controller.selectedShippingMethods].title,
+            hint: Text('Shipping Method'.tr, style: TextStyle(fontSize: 14)),
+            value: controller.shippingMethods[controller.selectedShippingMethods].methodTitle,
             isExpanded: true,
             underline: Container(),
             borderRadius: BorderRadius.circular(15.0),
             items: [
               ...controller.shippingMethods.map((e) => DropdownMenuItem(
-                child: Text(e.title),
-                value: e.title,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(e.methodTitle),
+                    Text('$currencyCode ' + e.total),
+                  ],
+                ),
+                value: e.methodTitle,
               )),
             ],
             onChanged: (String newValue) => controller.toggleShippingMethods(newValue),

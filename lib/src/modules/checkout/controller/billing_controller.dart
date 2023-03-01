@@ -20,7 +20,7 @@ class BillingController extends GetxController {
 
   List<WooShippingZone> shippingOptions = [];
   int selectedShippingOptions = 0;
-  List<WooShippingMethods> shippingMethods = [];
+  List<ShippingLines> shippingMethods = [];
   int selectedShippingMethods = 0;
 
   List<WooStates> countryState = [];
@@ -29,7 +29,7 @@ class BillingController extends GetxController {
   ///
   List<WooShippingZone> shippingOptions2 = [];
   int selectedShippingOptions2 = 0;
-  List<WooShippingMethods> shippingMethods2 = [];
+  List<ShippingLines> shippingMethods2 = [];
   int selectedShippingMethods2 = 0;
 
   List<WooStates> countryState2 = [];
@@ -199,9 +199,9 @@ class BillingController extends GetxController {
       );
 
       ShippingLines shippingLines = ShippingLines(
-        methodId: shippingMethods[selectedShippingMethods].instanceId.toString(),
-        methodTitle: shippingMethods[selectedShippingMethods].title,
-        total: '10.0'
+        methodId: shippingMethods[selectedShippingMethods].methodId,
+        methodTitle: shippingMethods[selectedShippingMethods].methodTitle,
+        total: shippingMethods[selectedShippingMethods].total,
       );
 
       WooOrder order = WooOrder(
@@ -255,7 +255,7 @@ class BillingController extends GetxController {
   }
 
   toggleShippingMethods(String option){
-    final opt = shippingMethods.indexWhere((element) => element.title == option);
+    final opt = shippingMethods.indexWhere((element) => element.methodTitle == option);
     selectedShippingMethods = opt == -1 ? 0 : opt;
     update();
   }

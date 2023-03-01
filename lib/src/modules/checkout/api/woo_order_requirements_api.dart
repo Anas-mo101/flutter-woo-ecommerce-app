@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'package:get/get.dart';
 
 import '../../../api/endpoint.dart';
 import '../../../api/data providers/base_api.dart';
+import '../../profile/middleware/auth_middleware.dart';
 import '../models/order_totals.dart';
 import '../models/woo_country_info.dart';
 import '../models/woo_order.dart';
@@ -12,11 +14,21 @@ import '../utils/countries_code.dart';
 
 class OrderRequirementApi extends BaseApi{
 
+  String token;
+
+  OrderRequirementApi(){
+    token = Get.find<AuthService>().token;
+  }
+
   Future<OrderTotals> getTotals(WooOrder order) async {
     try{
       String endpoint = EndPoints.orderTotals();
       order.billing.country = countryCode(order.billing.country);
-      var response = await BaseApi().post(endpoint,jsonEncode(order.toJson()));
+      var response = await BaseApi().post(
+          endpoint,
+          jsonEncode(order.toJson()),
+          mHeader: BaseApi.headers
+      );
       return OrderTotals.fromJson(response);
     }catch(e){
       print('OrderRequirementApi getTotals() failed: ${e}');
@@ -37,13 +49,11 @@ class OrderRequirementApi extends BaseApi{
     }
   }
 
-  Future<List<WooShippingMethods>> getShippingMethods(int zoneID) async {
+  Future<List<ShippingLines>> getShippingMethods(int zoneID) async {
     try{
-      String endpoint = EndPoints.wooShippingMethods(zoneID.toString());
-      var response = await BaseApi().get(endpoint, mHeader: {
-        "Authorization": basicAuth
-      });
-      return response.map<WooShippingMethods>((e) => WooShippingMethods.fromJson(e)).toList();
+      String endpoint = EndPoints.utilityShippingMethods(zoneID.toString());
+      var response = await BaseApi().get(endpoint, mHeader: BaseApi.headers);
+      return response.map<ShippingLines>((e) => ShippingLines.fromJson(e)).toList();
     }catch(e){
       print('OrderRequirementApi getShippingMethods() failed: ${e}');
       throw Exception();

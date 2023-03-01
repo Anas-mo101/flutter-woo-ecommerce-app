@@ -32,6 +32,11 @@ class EndPoints {
   static wooShippingZone() => baseURL + 'wp-json/wc/v3/shipping/zones';
   static wooShippingMethods(String id) => baseURL + 'wp-json/wc/v3/shipping/zones/$id/methods';
   static wooCountryInfo(String id) => baseURL + '/wp-json/wc/v3/data/countries/$id';
+  static utilityShippingMethods(String id) {
+    String params = Uri(queryParameters: { 'zone_id': id }).query;
+    return baseURL + 'wp-json/app-utility/v1/shipping-methods-rates?' + params;
+  }
+
 
   static wooStoreTax() => baseURL + 'wp-json/wc/v3/taxes';
   static wooStoreCurrency() => baseURL + 'wp-json/wc/v3/data/currencies/current';
