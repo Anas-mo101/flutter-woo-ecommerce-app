@@ -71,6 +71,9 @@ class EndPoints {
     return baseURL2 + 'products/?' + params;
   }
 
+  ///
+  static createOrder() => baseURL + 'wp-json/wc/v3/orders';
+
   static bool isCacheable(String url){
     return avoidCache.firstWhere(
        (element) => element == url, orElse: () => ''

@@ -1,23 +1,33 @@
 import 'dart:convert';
-import 'package:get/get.dart';
-
 import '../../../api/endpoint.dart';
 import '../../../api/data providers/base_api.dart';
-import '../../profile/middleware/auth_middleware.dart';
 import '../models/order_totals.dart';
 import '../models/woo_country_info.dart';
 import '../models/woo_order.dart';
+import '../models/woo_order_response.dart';
 import '../models/woo_payment_gateway.dart';
-import '../models/woo_shipping_methods.dart';
 import '../models/woo_shipping_zone.dart';
 import '../utils/countries_code.dart';
 
 class OrderRequirementApi extends BaseApi{
 
-  String token;
-
-  OrderRequirementApi(){
-    token = Get.find<AuthService>().token;
+  Future<WooOrderResponse> createOrder(WooOrder order) async {
+    try{
+      String endpoint = EndPoints.createOrder();
+      print(jsonEncode(order.toJson()));
+      var response = await BaseApi().post(
+          endpoint,
+          jsonEncode(order.toJson()),
+          mHeader: {
+            "Authorization": basicAuth,
+            "Content-Type": "application/json"
+          }
+      );
+      return WooOrderResponse.fromJson(response);
+    }catch(e){
+      print('OrderRequirementApi getTotals() failed: ${e}');
+      throw Exception();
+    }
   }
 
   Future<OrderTotals> getTotals(WooOrder order) async {

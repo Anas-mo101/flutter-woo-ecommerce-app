@@ -22,7 +22,7 @@ class AppDataProvider{
     if (channel == DataChannels.INTERNET) {
       final res = await apiCall(method, url, headers, body);
       print('API RESPONSE: ${res.statusCode}');
-      if (res.statusCode == 200) {
+      if (res.statusCode == 200 || res.statusCode == 201) {
         // update cache - not for all endpoints
         if(EndPoints.isCacheable(url)){
           AppCacheManager().cacheFile(url, res.bodyBytes, 7);

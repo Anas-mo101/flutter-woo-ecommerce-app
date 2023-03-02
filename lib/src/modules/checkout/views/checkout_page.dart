@@ -213,10 +213,7 @@ class CheckoutPage extends StatelessWidget {
 
   Widget _submitButton(BuildContext context) {
     return InkWell(
-      onTap: (){
-        CartController.emptyCart();
-        Get.offAndToNamed(Routes.confirmation);
-      },
+      onTap: () => checkoutController.processOrder(),
       child: TextButton(
         style: ButtonStyle(
           shape: MaterialStateProperty.all(

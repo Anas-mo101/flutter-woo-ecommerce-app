@@ -1,10 +1,15 @@
 import 'package:get/get.dart';
+import '../../../config/route.dart';
+import '../../cart/controller/cart_controller.dart';
 import '../../cart/model/cart_item_product.dart';
 import '../../cart/model/cart_model.dart';
+import '../../payment/payment.dart';
 import '../api/woo_order_requirements_api.dart';
 import '../models/order.dart';
 import '../models/order_totals.dart';
 import '../models/woo_order.dart';
+import '../models/woo_order_response.dart';
+import '../views/confirmation_page.dart';
 
 /// calculate cart total from backend
 /// and view here
@@ -15,6 +20,7 @@ class CheckoutController extends GetxController {
   WooOrder currentOrder;
   List<CartModel> cartItems = [];
   String taxRatePercentage;
+  OrderTotals totals;
 
   bool isLoading = true;
 
@@ -89,7 +95,7 @@ class CheckoutController extends GetxController {
 
   void setTotals() async {
     try{
-      OrderTotals totals = await OrderRequirementApi().getTotals(currentOrder);
+      totals = await OrderRequirementApi().getTotals(currentOrder);
       taxRatePercentage = totals.taxRate.toString();
       ongoingOrder.subtotal = totals.subtotal;
       ongoingOrder.delv = totals.shippingTotal;
@@ -102,5 +108,24 @@ class CheckoutController extends GetxController {
       print('error: $e');
       Get.back();
     }
+  }
+
+  void processOrder(){
+    /// handle payment method accordingly
+    isLoading = true;
+    update();
+
+    var paymentMethod = currentOrder.paymentMethod;
+    Payment(currentOrder,totals).pay(paymentMethod).then((v) async {
+      /// submit currentOrder to create new order
+      WooOrderResponse orderResponse = await OrderRequirementApi().createOrder(currentOrder);
+      /// if order created successfully do following
+
+      CartController.emptyCart();
+      Get.offNamed(Routes.confirmation, arguments: orderResponse.toJson());
+    }).catchError((e){
+      /// handle payment failure
+      print('payment failed: $e');
+    });
   }
 }

@@ -178,6 +178,7 @@ class BillingController extends GetxController {
     if(cartItems.isNotEmpty && validateCustomerInfo()){
       Billing billing = Billing(
         firstName: cusName.value.text,
+        lastName: "",
         address1: cusBilling.value.text,
         address2: cusShipping.value.text,
         email: cusEmail.value.text,
