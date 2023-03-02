@@ -1,4 +1,8 @@
 import 'dart:convert';
+import 'package:flutter_ecommerce_app/src/modules/profile/middleware/auth_middleware.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+
 import '../../../api/endpoint.dart';
 import '../../../api/data providers/base_api.dart';
 import '../models/order_totals.dart';
@@ -13,8 +17,8 @@ class OrderRequirementApi extends BaseApi{
 
   Future<WooOrderResponse> createOrder(WooOrder order) async {
     try{
-      String endpoint = EndPoints.createOrder();
-      print(jsonEncode(order.toJson()));
+      int id = Get.find<AuthService>().authedUser.id;
+      String endpoint = EndPoints.createOrder(id);
       var response = await BaseApi().post(
           endpoint,
           jsonEncode(order.toJson()),

@@ -72,7 +72,13 @@ class EndPoints {
   }
 
   ///
-  static createOrder() => baseURL + 'wp-json/wc/v3/orders';
+  static createOrder(int userID) {
+    String params = Uri(queryParameters: {
+      'customer_id': userID.toString(),
+    }).query;
+
+    return baseURL + 'wp-json/wc/v3/orders?' + params;
+  }
 
   static bool isCacheable(String url){
     return avoidCache.firstWhere(

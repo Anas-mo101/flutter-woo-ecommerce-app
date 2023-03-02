@@ -425,7 +425,7 @@ class BillingPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(e.methodTitle),
-                    Text('$currencyCode ' + e.total),
+                    Text('$currencyCode ${e.total}'),
                   ],
                 ),
                 value: e.methodTitle,

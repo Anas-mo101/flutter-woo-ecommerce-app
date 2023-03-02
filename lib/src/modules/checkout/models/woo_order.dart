@@ -191,7 +191,7 @@ class ShippingLines {
   ShippingLines.fromJson(Map<String, dynamic> json) {
     methodId = json['method_id'];
     methodTitle = json['method_title'];
-    total = json['total'];
+    total = json['total'] ?? '0.0';
   }
 
   Map<String, dynamic> toJson() {
