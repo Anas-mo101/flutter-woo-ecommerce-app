@@ -1,11 +1,37 @@
-import 'dart:convert';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_ecommerce_app/src/modules/product/model/product.dart';
 
-// store cart item in set() -> uniquely
-// keep track of each cart item's qty in may and id as key
+import '../api/woo_order_api.dart';
+import '../model/woo_user_orders.dart';
 
 class OrderController extends GetxController {
+
+  bool isLoading = true;
+
+  List<WooUserOrder> orders = [];
+
+  @override
+  void onInit() {
+    init();
+    super.onInit();
+  }
+
+  void init() async {
+    await _setOrders();
+
+    isLoading = true;
+    update();
+  }
+
+
+  Future<void> _setOrders() async {
+    try{
+      orders = await WooOrderApi().getOrder();
+    }catch(e){
+      orders = [];
+    }
+  }
+
+
+
 
 }

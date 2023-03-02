@@ -80,6 +80,14 @@ class EndPoints {
     return baseURL + 'wp-json/wc/v3/orders?' + params;
   }
 
+  static getOrder(int userID) {
+    String params = Uri(queryParameters: {
+      'customer_id': userID.toString(),
+    }).query;
+
+    return baseURL + 'wp-json/wc/v3/orders?' + params;
+  }
+
   static bool isCacheable(String url){
     return avoidCache.firstWhere(
        (element) => element == url, orElse: () => ''
