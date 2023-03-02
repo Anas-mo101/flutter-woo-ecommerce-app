@@ -14,15 +14,10 @@ class AuthApi extends BaseApi {
       });
       if(response['token'] == null) return false;
       print('authUser: ${response['user_display_name']}');
-      Get.find<AuthService>().authCurrentUser(AuthProfile(
-          response['token'].toString(),
-          response['user_display_name'].toString(),
-          response['user_email'].toString(),
-          response['user_display_name'].toString(),
-      ));
+      Get.find<AuthService>().authCurrentUser(AuthProfile.fromJson(response));
       return true;
     }catch(e){
-      print('ProductApi authUser failed');
+      print('ProductApi authUser failed: $e');
       return false;
     }
   }
@@ -36,7 +31,6 @@ class AuthApi extends BaseApi {
       if(response['code'] == 'jwt_auth_valid_token') {
         return true;
       }
-      return false;
     }catch(e){
       print('ProductApi validateAuth failed');
       return false;

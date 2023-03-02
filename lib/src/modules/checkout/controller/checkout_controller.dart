@@ -9,7 +9,6 @@ import '../models/order.dart';
 import '../models/order_totals.dart';
 import '../models/woo_order.dart';
 import '../models/woo_order_response.dart';
-import '../views/confirmation_page.dart';
 
 /// calculate cart total from backend
 /// and view here
