@@ -37,7 +37,7 @@ class WooUserOrder {
   String dateCompletedGmt;
   String cartHash;
   List<MetaData> metaData;
-  List<LineItems> lineItems;
+  List<WooUserOrderLineItems> lineItems;
   List<TaxLines> taxLines;
   List<ShippingLines> shippingLines;
 
@@ -126,9 +126,9 @@ class WooUserOrder {
       });
     }
     if (json['line_items'] != null) {
-      lineItems = <LineItems>[];
+      lineItems = <WooUserOrderLineItems>[];
       json['line_items'].forEach((v) {
-        lineItems.add(new LineItems.fromJson(v));
+        lineItems.add(new WooUserOrderLineItems.fromJson(v));
       });
     }
     if (json['tax_lines'] != null) {
@@ -330,7 +330,7 @@ class MetaData {
   }
 }
 
-class LineItems {
+class WooUserOrderLineItems {
   int id;
   String name;
   int productId;
@@ -346,7 +346,7 @@ class LineItems {
   double price;
   List<MetaData> metaData;
 
-  LineItems(
+  WooUserOrderLineItems(
       {this.id,
         this.name,
         this.productId,
@@ -362,7 +362,7 @@ class LineItems {
         this.price,
         this.metaData});
 
-  LineItems.fromJson(Map<String, dynamic> json) {
+  WooUserOrderLineItems.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     productId = json['product_id'];

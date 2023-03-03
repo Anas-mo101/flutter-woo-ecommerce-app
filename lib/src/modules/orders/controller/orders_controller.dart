@@ -1,13 +1,14 @@
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
-
+import '../../product/model/product.dart';
 import '../api/woo_order_api.dart';
 import '../model/woo_user_orders.dart';
 
-class OrderController extends GetxController {
+class OrdersController extends GetxController {
 
   bool isLoading = true;
-
+  bool isOrderProductsLoading = true;
   List<WooUserOrder> orders = [];
+  List<Product> orderProduct = [];
 
   @override
   void onInit() {
@@ -18,8 +19,8 @@ class OrderController extends GetxController {
   void init() async {
     await _setOrders();
 
-    isLoading = true;
-    update();
+    isLoading = false;
+    await update();
   }
 
 
@@ -30,8 +31,5 @@ class OrderController extends GetxController {
       orders = [];
     }
   }
-
-
-
 
 }

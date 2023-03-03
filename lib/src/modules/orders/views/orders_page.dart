@@ -7,7 +7,10 @@ import 'package:flutter_ecommerce_app/src/widgets/title_text.dart';
 import 'package:get/get.dart';
 import '../../../config/route.dart';
 import '../../../widgets/bottom_navigation_bar.dart';
+import '../../../widgets/related_product_card.dart';
 import '../../../widgets/topbar.dart';
+import '../../product/api/woo_product_api.dart';
+import '../../product/model/woocommerce_product.dart';
 import '../controller/orders_controller.dart';
 import '../model/woo_user_orders.dart';
 
@@ -21,7 +24,7 @@ class OrderPage extends StatelessWidget {
 
   Widget _item(WooUserOrder order) {
     return ListTile(
-      leading: Icon(Icons.shopping_basket, color: Colors.black, size: 35),
+      leading: Icon(Icons.shopping_basket_outlined , color: Colors.black, size: 35),
         title: TitleText(
           text: 'Order ID: ${order.id}',
           fontSize: 17,
@@ -39,26 +42,25 @@ class OrderPage extends StatelessWidget {
         trailing: Container(
           width: 40,
           child: InkWell(
-            onTap: () {},
+            onTap: () => Get.toNamed(Routes.order, arguments: order.toJson()),
             child: Container(
               width: 35,
               height: 35,
               alignment: Alignment.center,
               decoration: BoxDecoration(color: LightColor.lightGrey.withAlpha(150), borderRadius: BorderRadius.circular(10)),
-              child: Center(child: Icon(Icons.arrow_forward_ios, color: Colors.black)),
+              child: Center(child: Icon(Icons.arrow_forward_ios, color: Colors.black, size: 20)),
             ),
           ),
         )
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-          child: GetBuilder<OrderController>(
-              init: OrderController(),
+          child: GetBuilder<OrdersController>(
+              init: OrdersController(),
               builder: (controller) {
                 return Stack(
                   fit: StackFit.expand,
@@ -81,7 +83,9 @@ class OrderPage extends StatelessWidget {
                           children: <Widget>[
                             TopBar('orders'.tr,Icons.sort,() => Get.toNamed(Routes.settings)),
                             Expanded(
-                              child: Container(
+                              child: controller.isLoading ?
+                              Center(child: CircularProgressIndicator()) :
+                              Container(
                                 padding: EdgeInsets.symmetric(horizontal: 10),
                                 child: controller.orders.isEmpty ?
                                 Center(child: Text('No Orders')) :
@@ -92,18 +96,6 @@ class OrderPage extends StatelessWidget {
                                     ],
                                   ),
                                 ),
-                              ),
-                            ),
-                            Container(
-                              padding: EdgeInsets.fromLTRB(20, 0, 20, 50),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: <Widget>[
-                                  Divider(
-                                    thickness: 1,
-                                    height: 70,
-                                  ),
-                                ],
                               ),
                             ),
                           ],

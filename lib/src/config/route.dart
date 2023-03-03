@@ -5,6 +5,7 @@ import '../modules/ads/views/ads_bill_board.dart';
 import '../modules/checkout/views/billing_page.dart';
 import '../modules/checkout/views/checkout_page.dart';
 import '../modules/checkout/views/confirmation_page.dart';
+import '../modules/orders/views/order_page.dart';
 import '../modules/orders/views/orders_page.dart';
 import '../modules/product/views/product_detail.dart';
 import '../modules/cart/view/shopping_cart_page.dart';
@@ -25,6 +26,7 @@ class Routes {
   static const filter = '/filter';
   static const checkout = '/checkout';
   static const orders = '/orders';
+  static const order = '/order';
   static const billing = '/billing';
   static const login = '/login';
   static const profile = '/profile';
@@ -68,6 +70,7 @@ class Routes {
       GetPage( name: login,  page: () => LoginPage()),
       GetPage( name: register,  page: () => RegisterPage()),
       GetPage( name: billboard,  page: () => AdBillBoard()),
+      GetPage( name: order,  page: () => PreviewOrderPage()),
     ];
   }
 }
