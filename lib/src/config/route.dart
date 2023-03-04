@@ -10,6 +10,7 @@ import '../modules/orders/views/orders_page.dart';
 import '../modules/product/views/product_detail.dart';
 import '../modules/cart/view/shopping_cart_page.dart';
 import '../modules/profile/middleware/auth_middleware.dart';
+import '../modules/profile/views/addresses.dart';
 import '../modules/profile/views/login.dart';
 import '../modules/profile/views/profile.dart';
 import '../modules/profile/views/register.dart';
@@ -35,6 +36,7 @@ class Routes {
   static const confirmation = '/confirmation';
   static const product = '/product';
   static const billboard = '/billboard';
+  static const addresses = '/addresses';
 
 
   static getRoute() {
@@ -71,6 +73,7 @@ class Routes {
       GetPage( name: register,  page: () => RegisterPage()),
       GetPage( name: billboard,  page: () => AdBillBoard()),
       GetPage( name: order,  page: () => PreviewOrderPage()),
+      GetPage( name: addresses,  page: () => AddressPage()),
     ];
   }
 }

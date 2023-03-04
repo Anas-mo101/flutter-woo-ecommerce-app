@@ -65,11 +65,9 @@ class ProfilePage extends StatelessWidget {
                                             )
                                         ),
                                         child: ListTile(
-                                          title: Text('Track Orders'),
+                                          title: Text('Addresses'),
                                           leading: Icon(Icons.local_shipping),
-                                          onTap: (){
-
-                                          },
+                                          onTap: () => Get.toNamed(Routes.addresses),
                                         ),
                                       ),
                                       SizedBox(height: 20),
@@ -112,7 +110,6 @@ class ProfilePage extends StatelessWidget {
                                           },
                                         ),
                                       )
-
                                     ],
                                   ),
                                 ),
@@ -126,7 +123,6 @@ class ProfilePage extends StatelessWidget {
                 );
               }
           )
-
       ),
     );
   }

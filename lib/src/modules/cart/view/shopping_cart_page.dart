@@ -20,7 +20,7 @@ class ShoppingCartPage extends StatelessWidget {
   final cartController = Get.put(CartController());
   final currencyCode = Get.find<WooStoreService>().storeCurrency.code ?? '\$';
 
-  List<Widget> _cartItems(BuildContext context, List<CartItemProduct> items) {
+  List<Widget> _cartItems(List<CartItemProduct> items) {
     if (items.isEmpty) return [];
     return items.map((e) => _item(e)).toList();
   }
@@ -255,7 +255,7 @@ class ShoppingCartPage extends StatelessWidget {
                                 SingleChildScrollView(
                                   child: Column(
                                     children: [
-                                      ..._cartItems(context, items),
+                                      ..._cartItems(items),
                                     ],
                                   ),
                                 ),
