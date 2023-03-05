@@ -4,7 +4,11 @@ class EndPoints {
     login(),
     loginValid(),
     register(),
-    orderTotals()
+    orderTotals(),
+    createComplain(),
+    respondComplain(),
+    getComplains(''),
+    getComplain(''),
   ];
 
   /// WORDPRESS AUTH
@@ -88,9 +92,16 @@ class EndPoints {
     return baseURL + 'wp-json/wc/v3/orders?' + params;
   }
 
+  /// complains
+  static createComplain() => baseURL + 'wp-json/app-utility/v1/complain';
+  static respondComplain() => baseURL + 'wp-json/app-utility/v1/complain/responed';
+  static getComplains(String id) => baseURL + 'wp-json/app-utility/v1/complains?user_id=$id';
+  static getComplain(String cid) => baseURL + 'wp-json/app-utility/v1/complain/single?complain_id=$cid';
+
+
   static bool isCacheable(String url){
     return avoidCache.firstWhere(
-       (element) => element == url, orElse: () => ''
+       (element) => url.contains(element), orElse: () => ''
     ) == '' ? true : false;
   }
 }

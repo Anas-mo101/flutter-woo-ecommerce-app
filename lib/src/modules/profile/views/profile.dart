@@ -85,9 +85,7 @@ class ProfilePage extends StatelessWidget {
                                         child: ListTile(
                                           title: Text('Complains'),
                                           leading: Icon(Icons.settings),
-                                          onTap: (){
-
-                                          },
+                                          onTap: () => Get.toNamed(Routes.complains),
                                         ),
                                       ),
                                       SizedBox(height: 20),

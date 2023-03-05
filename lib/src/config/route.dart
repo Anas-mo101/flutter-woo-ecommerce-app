@@ -5,6 +5,8 @@ import '../modules/ads/views/ads_bill_board.dart';
 import '../modules/checkout/views/billing_page.dart';
 import '../modules/checkout/views/checkout_page.dart';
 import '../modules/checkout/views/confirmation_page.dart';
+import '../modules/complains/views/complain_page.dart';
+import '../modules/complains/views/complains_page.dart';
 import '../modules/orders/views/order_page.dart';
 import '../modules/orders/views/orders_page.dart';
 import '../modules/product/views/product_detail.dart';
@@ -37,6 +39,8 @@ class Routes {
   static const product = '/product';
   static const billboard = '/billboard';
   static const addresses = '/addresses';
+  static const complains = '/complains';
+  static const complain = '/complain';
 
 
   static getRoute() {
@@ -74,6 +78,8 @@ class Routes {
       GetPage( name: billboard,  page: () => AdBillBoard()),
       GetPage( name: order,  page: () => PreviewOrderPage()),
       GetPage( name: addresses,  page: () => AddressPage()),
+      GetPage( name: complains,  page: () => ComplainsPage()),
+      GetPage( name: complain,  page: () => ComplainPage()),
     ];
   }
 }
