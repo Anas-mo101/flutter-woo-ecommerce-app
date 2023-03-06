@@ -92,11 +92,16 @@ class EndPoints {
     return baseURL + 'wp-json/wc/v3/orders?' + params;
   }
 
-  /// complains
+  /// complains wp-json/app-utility/v1/ads/all
   static createComplain() => baseURL + 'wp-json/app-utility/v1/complain';
   static respondComplain() => baseURL + 'wp-json/app-utility/v1/complain/responed';
   static getComplains(String id) => baseURL + 'wp-json/app-utility/v1/complains?user_id=$id';
   static getComplain(String cid) => baseURL + 'wp-json/app-utility/v1/complain/single?complain_id=$cid';
+
+  /// Ads
+  static allAds() => baseURL + 'wp-json/app-utility/v1/ads/all';
+  static ads() => baseURL + '/wp-json/app-utility/v1/ads';
+  static adsSettings() => baseURL + 'wp-json/app-utility/v1/ads/settings';
 
 
   static bool isCacheable(String url){

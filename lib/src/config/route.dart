@@ -1,6 +1,6 @@
 import 'package:flutter_ecommerce_app/src/modules/home/views/main_page.dart';
 import 'package:get/get.dart';
-import '../modules/ads/ads_middleware.dart';
+import '../modules/ads/middleware/ads_middleware.dart';
 import '../modules/ads/views/ads_bill_board.dart';
 import '../modules/checkout/views/billing_page.dart';
 import '../modules/checkout/views/checkout_page.dart';
