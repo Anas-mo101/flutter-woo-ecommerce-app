@@ -239,6 +239,8 @@ class ProductController extends GetxController  {
           isliked: true
       );
 
+
+
       await getProductVars(_products.id);
 
       isLoading = false;

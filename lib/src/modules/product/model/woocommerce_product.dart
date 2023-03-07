@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class WooCommerceProduct {
   int id;
   String name;
@@ -55,6 +57,7 @@ class WooCommerceProduct {
   List<Categories> categories;
   List<Images> images;
   List<WooAttributes> attributes;
+  List<MetaData> metaData;
 
   WooCommerceProduct(
       {this.id,
@@ -112,7 +115,9 @@ class WooCommerceProduct {
         this.purchaseNote,
         this.categories,
         this.images,
-        this.attributes});
+        this.attributes,
+        this.metaData
+      });
 
   WooCommerceProduct.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -168,6 +173,12 @@ class WooCommerceProduct {
     averageRating = json['average_rating'];
     ratingCount = json['rating_count'];
     relatedIds = json['related_ids'].cast<int>();
+    if (json['meta_data'] != null) {
+      metaData = <MetaData>[];
+      json['meta_data'].MetaData((v) {
+        metaData.add(new MetaData.fromJson(v));
+      });
+    }
     parentId = json['parent_id'];
     purchaseNote = json['purchase_note'];
     if (json['categories'] != null) {
@@ -247,6 +258,9 @@ class WooCommerceProduct {
     data['related_ids'] = this.relatedIds;
     data['parent_id'] = this.parentId;
     data['purchase_note'] = this.purchaseNote;
+    if (this.metaData != null) {
+      data['meta_data'] = this.metaData.map((v) => v.toJson()).toList();
+    }
     if (this.categories != null) {
       data['categories'] = this.categories.map((v) => v.toJson()).toList();
     }
@@ -256,6 +270,28 @@ class WooCommerceProduct {
     if (this.attributes != null) {
       data['attributes'] = this.attributes.map((v) => v.toJson()).toList();
     }
+    return data;
+  }
+}
+
+class MetaData {
+  String id;
+  String key;
+  String value;
+
+  MetaData({this.id, this.key, this.value});
+
+  MetaData.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    key = json['key'];
+    value = json['value'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['key'] = this.key;
+    data['value'] = this.value;
     return data;
   }
 }
